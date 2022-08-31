@@ -13,10 +13,8 @@ namespace Explorus
         /// </summary>
         [STAThread]
         static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GameForm());
+       {
+            GameEngine ge = new GameEngine();
         }
     }
 }
