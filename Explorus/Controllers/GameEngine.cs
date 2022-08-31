@@ -12,6 +12,7 @@ namespace Explorus
     {
         GameView oView;
 
+
         public GameEngine()
         {
             oView = new GameView();
@@ -20,11 +21,38 @@ namespace Explorus
             oView.Show();
         }
 
+        private void ProcessInput()
+        {
+
+        }
+
+        private void Update(int elapseTime)
+        {
+            oView.framerate = 1000/elapseTime;
+        }
+
         private void GameLoop()
         {
-            oView.Render();
-            Thread.Sleep(5000);
-            oView.Close();
+            while (true)
+            {
+                int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
+                ProcessInput();
+                Update(17);
+
+                oView.Render();
+                int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
+                int waitTime = startFrameTime + 17 - endFrameTime;
+                Console.WriteLine(waitTime);
+
+                if(waitTime > 0)
+                {
+                    Thread.Sleep(waitTime);
+                }
+                else
+                {
+                    Thread.Sleep(1);
+                }
+            }
         }
     }
 }

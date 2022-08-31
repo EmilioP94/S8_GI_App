@@ -8,3 +8,4 @@ C:\Users\calm2302\source\repos\Explorus\Explorus\bin\Debug\Explorus.exe
 C:\Users\calm2302\source\repos\Explorus\Explorus\bin\Debug\Explorus.pdb
 C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.exe
 C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.pdb
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.GameForm.resources

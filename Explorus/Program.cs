@@ -14,6 +14,7 @@ namespace Explorus
         [STAThread]
         static void Main()
        {
+            Console.WriteLine("Hello");
             GameEngine ge = new GameEngine();
         }
     }
