@@ -1,6 +1,6 @@
 ﻿namespace Explorus
 {
-    partial class Form1
+    partial class GameForm
     {
         /// <summary>
         /// Variable nécessaire au concepteur.

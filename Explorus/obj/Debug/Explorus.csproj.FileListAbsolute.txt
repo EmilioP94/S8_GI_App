@@ -3,3 +3,8 @@ C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.Sugge
 C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.Properties.Resources.resources
 C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.GenerateResource.cache
 C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.CoreCompileInputs.cache
+C:\Users\calm2302\source\repos\Explorus\Explorus\bin\Debug\Explorus.exe.config
+C:\Users\calm2302\source\repos\Explorus\Explorus\bin\Debug\Explorus.exe
+C:\Users\calm2302\source\repos\Explorus\Explorus\bin\Debug\Explorus.pdb
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.exe
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.pdb
