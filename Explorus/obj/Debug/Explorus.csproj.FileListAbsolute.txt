@@ -1,0 +1,5 @@
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.AssemblyReference.cache
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.SuggestedBindingRedirects.cache
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.Properties.Resources.resources
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.GenerateResource.cache
+C:\Users\calm2302\source\repos\Explorus\Explorus\obj\Debug\Explorus.csproj.CoreCompileInputs.cache
