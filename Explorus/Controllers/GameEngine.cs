@@ -12,10 +12,14 @@ namespace Explorus
     {
         GameView oView;
 
+        private const int msPerFrame = 16;
+        private int lastGameLoop;
+
 
         public GameEngine()
         {
             oView = new GameView();
+            lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();
             oView.Show();
@@ -37,12 +41,12 @@ namespace Explorus
             {
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 ProcessInput();
-                Update(17);
+                Update(startFrameTime - lastGameLoop);
+                lastGameLoop = startFrameTime;
 
                 oView.Render();
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-                int waitTime = startFrameTime + 17 - endFrameTime;
-                Console.WriteLine(waitTime);
+                int waitTime = startFrameTime + msPerFrame - endFrameTime;
 
                 if(waitTime > 0)
                 {

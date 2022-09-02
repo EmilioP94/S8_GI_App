@@ -15,6 +15,7 @@ namespace Explorus
         public GameForm()
         {
             InitializeComponent();
+            DoubleBuffered = true;
         }
     }
 }

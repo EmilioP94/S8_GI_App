@@ -18,11 +18,12 @@ namespace Explorus.Models
     {
         private int _id;
         ImageType type;
+        string name;
         public Bitmap image;
 
-        public Image2D()
+        public Image2D(Bitmap image)
         {
-            image = new Bitmap(Properties.Resources.TilesSheet);
+           this.image = image;
         }
     }
 }

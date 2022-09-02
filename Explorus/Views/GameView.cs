@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -15,6 +16,7 @@ namespace Explorus
         private int x = 0;
         private int y = 0;
         private float _framerate = 0;
+        private bool firstRender = false;
 
         public float framerate
         {
@@ -40,7 +42,6 @@ namespace Explorus
 
         public void Render()
         {
-            Console.WriteLine("Render");
             if (oGameForm.Visible)
                 oGameForm.BeginInvoke((MethodInvoker)delegate
                 {
@@ -81,20 +82,24 @@ namespace Explorus
             {
                 ++y;
             }
-            Console.WriteLine(x);
-            Console.WriteLine(y);
+            //Console.WriteLine(x);
+            //Console.WriteLine(y);
         }
 
         private void GameRenderer(object sender, PaintEventArgs e) 
         {
+
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
+            Flyweight myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
+            e.Graphics.DrawImage(myImage.sprite.image, 0, 0);
+
+            
             //Pen pen = new Pen(Color.Yellow);
             //Rectangle rect = new Rectangle(x, y, 20, 20);
             //g.DrawRectangle(pen, rect);
 
-            Image2D myImage = new Image2D();
-            e.Graphics.DrawImage(myImage.image, 0,0);
+            
 
             oGameForm.Text = String.Format("Explorus - FPS {0}", framerate.ToString());
         }

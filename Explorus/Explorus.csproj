@@ -44,6 +44,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\GameEngine.cs" />
@@ -53,7 +54,10 @@
     <Compile Include="GameForm.Designer.cs">
       <DependentUpon>GameForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Models\Image2D.cs" />
+    <Compile Include="Models\Flyweight.cs" />
+    <Compile Include="Models\SpriteFactory.cs" />
     <Compile Include="Views\GameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
