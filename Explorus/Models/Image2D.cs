@@ -19,11 +19,12 @@ namespace Explorus.Models
         private int _id;
         ImageType type;
         string name;
-        public Bitmap image;
+        public Bitmap image { get; private set; }
 
-        public Image2D(Bitmap image)
+        public Image2D(Bitmap image, ImageType type)
         {
            this.image = image;
+            this.type = type;
         }
     }
 }

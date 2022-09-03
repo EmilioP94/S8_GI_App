@@ -16,7 +16,6 @@ namespace Explorus
         private int x = 0;
         private int y = 0;
         private float _framerate = 0;
-        private bool firstRender = false;
 
         public float framerate
         {
@@ -91,8 +90,8 @@ namespace Explorus
 
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
-            Flyweight myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
-            e.Graphics.DrawImage(myImage.sprite.image, 0, 0);
+            Image2D myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
+            e.Graphics.DrawImage(myImage.image, 0, 0);
 
             
             //Pen pen = new Pen(Color.Yellow);
