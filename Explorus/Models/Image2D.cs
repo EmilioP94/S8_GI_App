@@ -24,7 +24,7 @@ namespace Explorus.Models
         public Image2D(Bitmap image, ImageType type)
         {
            this.image = image;
-            this.type = type;
+           this.type = type;
         }
     }
 }

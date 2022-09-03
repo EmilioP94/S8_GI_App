@@ -63,23 +63,23 @@ namespace Explorus
             {
                if(x > 0)
                 {
-                    --x;
+                   x -= Constants.unit;
                 }
             }
             if (e.KeyValue == (char)Keys.Up)
             {
                 if (y > 0)
                 {
-                    --y;
+                    y -= Constants.unit;
                 }
             }
             if (e.KeyValue == (char)Keys.Right)
             {
-                ++x;
+                x += Constants.unit;
             }
             if (e.KeyValue == (char)Keys.Down)
             {
-                ++y;
+                y += Constants.unit;
             }
             //Console.WriteLine(x);
             //Console.WriteLine(y);
@@ -91,7 +91,7 @@ namespace Explorus
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
             Image2D myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
-            e.Graphics.DrawImage(myImage.image, 0, 0);
+            e.Graphics.DrawImage(myImage.image, x, y);
 
             
             //Pen pen = new Pen(Color.Yellow);
