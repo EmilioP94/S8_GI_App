@@ -26,6 +26,9 @@ namespace Explorus.Models
                 case Sprites.slimusDownLarge:
                     return ImageType.Player;
 
+                case Sprites.empty:
+                    return ImageType.Nothing;
+
                 case Sprites.poppedBubble:
                 case Sprites.smallBubble:
                 case Sprites.title:

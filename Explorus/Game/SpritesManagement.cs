@@ -23,6 +23,7 @@ namespace Explorus.Game
                 { Sprites.gem, new Rectangle(Constants.unit * 11, 0, Constants.unit, Constants.unit) },
                 { Sprites.key, new Rectangle(Constants.unit * 12, 0, Constants.unit, Constants.unit) },
                 { Sprites.slimusDownLarge, new Rectangle(0, Constants.unit * 2, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.empty, new Rectangle(97, 50, 1, 1) },
             };
             return spritesRegions;
         }

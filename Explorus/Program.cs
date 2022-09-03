@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Explorus.Controllers;
+using Explorus.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +17,8 @@ namespace Explorus
         static void Main()
        {
             Console.WriteLine("Hello");
-            GameEngine ge = new GameEngine();
+            ILabyrinth lab = new Labyrinth();
+            GameEngine ge = new GameEngine(lab);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,20 +15,22 @@ namespace Explorus
 
         private const int msPerFrame = 16;
         private int lastGameLoop;
+        ILabyrinth labyrinth;
 
 
-        public GameEngine()
+        public GameEngine(ILabyrinth lab)
         {
-            oView = new GameView();
+            labyrinth = lab;
+            oView = new GameView(ProcessInput, lab);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();
             oView.Show();
         }
 
-        private void ProcessInput()
+        private void ProcessInput(object sender, KeyEventArgs e)
         {
-
+            Console.WriteLine(e.KeyValue);
         }
 
         private void Update(int elapseTime)
@@ -40,7 +43,6 @@ namespace Explorus
             while (true)
             {
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-                ProcessInput();
                 Update(startFrameTime - lastGameLoop);
                 lastGameLoop = startFrameTime;
 
