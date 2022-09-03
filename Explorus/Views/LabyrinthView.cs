@@ -12,35 +12,45 @@ namespace Explorus.Views
 {
     internal class LabyrinthView : IRenderableComponent, IObserver<Sprites[,]>
     {
-        private Sprites[,] _Sprites = new Sprites[Constants.LabyrinthWidth, Constants.LabyrinthHeight];
-        public LabyrinthView(ILabyrinth lab)
+        private ILabyrinth lab;
+        private IDisposable unsubscriber;
+
+        public LabyrinthView(ILabyrinth labyrinthe)
         {
-            _Sprites = lab.map;
+            lab = labyrinthe;
         }
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            this.Unsubscribe();
         }
 
         public void OnError(Exception error)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("Labyrinth observer error");
         }
 
         public void OnNext(Sprites[,] value)
         {
-            throw new NotImplementedException();
+            //_Sprites = value;
         }
 
         public void Render(object sender, PaintEventArgs e)
         {
-            for (int i = 0; i < Constants.LabyrinthHeight; i++)
+            if (lab != null)
             {
-                for(int j = 0; j < Constants.LabyrinthWidth; j++)
+                for (int i = 0; i < Constants.LabyrinthHeight; i++)
                 {
-                    e.Graphics.DrawImage(SpriteFactory.GetInstance().GetSprite(_Sprites[i, j]).image, Constants.unit * j * 2, Constants.unit * i * 2);
+                    for (int j = 0; j < Constants.LabyrinthWidth; j++)
+                    {
+                        e.Graphics.DrawImage(SpriteFactory.GetInstance().GetSprite(lab.map[i, j]).image, Constants.unit * j * 2, Constants.unit * i * 2);
+                    }
                 }
             }
+        }
+
+        public virtual void Unsubscribe()
+        {
+            unsubscriber?.Dispose();
         }
     }
 }

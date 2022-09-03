@@ -15,11 +15,9 @@ namespace Explorus
 {
     internal class GameView
     {
-        private int x = 0;
-        private int y = 0;
         private float _framerate = 0;
         public delegate void HandleInput(object sender, KeyEventArgs e);
-        private List<IRenderableComponent> _renderers = new List<IRenderableComponent>();
+        private LabyrinthView labyrinthView;
 
         public float framerate
         {
@@ -39,7 +37,7 @@ namespace Explorus
             oGameForm = new GameForm();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
-            _renderers.Add(new LabyrinthView(lab));
+            labyrinthView = new LabyrinthView(lab);
         }
 
         public void Show() { Application.Run(oGameForm); }
@@ -97,10 +95,7 @@ namespace Explorus
             g.Clear(Color.Black);
             /*Image2D myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
             e.graphics.drawimage(myimage.image, x, y);*/
-            foreach (IRenderableComponent renderer in _renderers)
-            {
-                renderer.Render(sender, e);
-            }
+            labyrinthView.Render(sender, e);
 
             // LOOP
             // sur chaque case du modele de labyrinthe

@@ -12,16 +12,16 @@ namespace Explorus
     internal class GameEngine
     {
         GameView oView;
+        LabyrinthController labyrinthController;
 
         private const int msPerFrame = 16;
         private int lastGameLoop;
-        ILabyrinth labyrinth;
 
 
-        public GameEngine(ILabyrinth lab)
+        public GameEngine()
         {
-            labyrinth = lab;
-            oView = new GameView(ProcessInput, lab);
+            labyrinthController = new LabyrinthController();
+            oView = new GameView(ProcessInput, labyrinthController.lab);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();
@@ -31,6 +31,7 @@ namespace Explorus
         private void ProcessInput(object sender, KeyEventArgs e)
         {
             Console.WriteLine(e.KeyValue);
+            labyrinthController.ProcessInput(e);
         }
 
         private void Update(int elapseTime)

@@ -17,8 +17,7 @@ namespace Explorus
         static void Main()
        {
             Console.WriteLine("Hello");
-            ILabyrinth lab = new Labyrinth();
-            GameEngine ge = new GameEngine(lab);
+            GameEngine ge = new GameEngine();
         }
     }
 }

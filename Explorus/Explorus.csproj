@@ -50,6 +50,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\GameEngine.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
+    <Compile Include="Controllers\LabyrinthController.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,8 +59,12 @@
     </Compile>
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
+    <Compile Include="Models\AnimatedLabyrinthComponent.cs" />
+    <Compile Include="Models\IAnimatedComponent.cs" />
+    <Compile Include="Models\ILabyrinthComponent.cs" />
     <Compile Include="Models\Image2D.cs" />
     <Compile Include="Models\Labyrinth.cs" />
+    <Compile Include="Models\LabyrinthComponent.cs" />
     <Compile Include="Models\Slimus.cs" />
     <Compile Include="Models\SpriteFactory.cs" />
     <Compile Include="Models\SpritesToImageType.cs" />

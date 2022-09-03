@@ -22,5 +22,7 @@ namespace Explorus
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall},
         };
+
+        public static readonly int[] initialSlimusPosition = { 4, 1 };
     }
 }
