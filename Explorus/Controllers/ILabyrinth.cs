@@ -11,5 +11,10 @@ namespace Explorus.Controllers
     {
         Sprites[,] map { get; }
         int[] slimusPosition { get; set; }
+
+        List<ILabyrinthComponent> labyrinthComponentList { get; set; }
+
+        ILabyrinthComponent playerCharacter { get; set; }
+
     }
 }

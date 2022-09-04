@@ -38,14 +38,11 @@ namespace Explorus.Views
         {
             if (lab != null)
             {
-                for (int i = 0; i < Constants.LabyrinthHeight; i++)
+                foreach (ILabyrinthComponent component in lab.labyrinthComponentList)
                 {
-                    for (int j = 0; j < Constants.LabyrinthWidth; j++)
-                    {
-                        e.Graphics.DrawImage(SpriteFactory.GetInstance().GetSprite(lab.map[i, j]).image, Constants.unit * j * 2, Constants.unit * i * 2);
-                    }
+                    component.Show(e);
                 }
-            }
+            }            
         }
 
         public virtual void Unsubscribe()

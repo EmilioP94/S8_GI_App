@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
@@ -12,8 +14,14 @@ namespace Explorus.Models
         private Sprites[,] _map;
         public Sprites[,] map { get { return _map; } private set { this._map = value; this.NotifyObservers(); } }
         public int[] slimusPosition { get; set; }
-   
-        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();
+
+        private List<ILabyrinthComponent> _labyrinthComponentList;
+        public List<ILabyrinthComponent> labyrinthComponentList { get { return _labyrinthComponentList; } set { this._labyrinthComponentList = value; } }
+
+        private ILabyrinthComponent _playerCharacter;
+        public ILabyrinthComponent playerCharacter { get { return _playerCharacter; } set { this._playerCharacter = value; } }
+
+        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();        
 
         private void NotifyObservers()
         {
@@ -26,8 +34,23 @@ namespace Explorus.Models
         public Labyrinth()
         {
             map = Constants.level_1;
+            labyrinthComponentList = new List<ILabyrinthComponent>();
             slimusPosition = Constants.initialSlimusPosition;
             NotifyObservers();
+
+            for (int i = 0; i < Constants.LabyrinthHeight; i++)
+            {
+                for (int j = 0; j < Constants.LabyrinthWidth; j++)
+                {
+                    LabyrinthComponent comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
+                    labyrinthComponentList.Add(comp);
+
+                    if (map[i,j]== Sprites.slimusDownLarge)
+                    {
+                        playerCharacter = comp;
+                    }
+                }
+            }
         }
 
         public IDisposable Subscribe(IObserver<Sprites[,]> observer)

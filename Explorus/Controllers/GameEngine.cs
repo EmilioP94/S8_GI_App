@@ -1,6 +1,7 @@
 ﻿using Explorus.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -46,7 +47,7 @@ namespace Explorus
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 Update(startFrameTime - lastGameLoop);
                 lastGameLoop = startFrameTime;
-
+                labyrinthController.ProcessMovement(lastGameLoop);
                 oView.Render();
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 int waitTime = startFrameTime + msPerFrame - endFrameTime;

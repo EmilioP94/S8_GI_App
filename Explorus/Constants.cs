@@ -14,6 +14,9 @@ namespace Explorus
         public const int LabyrinthWidth = 5;
         public const int LabyrinthHeight = 5;
 
+        public const double playerSpeed = 5.0 / 100000000;
+        public const int snapDistance = 5; //quand la distance en pixel entre slimus et sa destination est inferieur a cette valeur, il 'snap' vers la destination
+
         public static readonly Models.Sprites[,] level_1 =
         {
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
