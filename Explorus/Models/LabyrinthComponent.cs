@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,8 +28,14 @@ namespace Explorus.Models
             this.y = y;
             this.image = image;
 
-            //TODO - for now we can only collide with wall, we need to add gem and other stuff
-            if(image.type == ImageType.Wall)
+            if (image.type == ImageType.Collectible)
+            {
+                this.x += Constants.unit / 2;
+                this.y += Constants.unit / 2;
+                hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+            }
+
+            if(image.type == ImageType.Wall || image.type == ImageType.Door)
             {
                 isSolid = true;
                 hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
@@ -36,7 +44,18 @@ namespace Explorus.Models
 
         public void Show(PaintEventArgs e)
         {
-            e.Graphics.DrawImage(image.image, x, y);
+            if(image.type == ImageType.Door)
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = 0.5f;
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                e.Graphics.DrawImage(image.image, new Rectangle(x, y, image.image.Width, image.image.Height), 0, 0, image.image.Width, image.image.Height,GraphicsUnit.Pixel, attributes);
+            }
+            else
+            {
+                e.Graphics.DrawImage(image.image, x, y);
+            }
         }
     }
 }

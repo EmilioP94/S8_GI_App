@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\GameEngine.cs" />
+    <Compile Include="Controllers\GemController.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
     <Compile Include="Controllers\LabyrinthController.cs" />
     <Compile Include="GameForm.cs">

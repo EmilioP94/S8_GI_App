@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Controllers
 {
@@ -19,23 +20,23 @@ namespace Explorus.Controllers
     }
     internal class LabyrinthController
     {
-        public ILabyrinth lab { get; private set; } = new Labyrinth();
-        public LabyrinthComponent[,] components;
-        public Direction currentDirection = Direction.None;
+        public ILabyrinth lab { get; private set; }
+        public Direction currentDirection;
         public Point PlayerDestinationPoint;
+        private GemController gemController;
 
 
         private int x, y = 0;
 
+        public LabyrinthController()
+        {
+            lab = new Labyrinth();
+            currentDirection = Direction.None;
+            gemController = new GemController(lab);
+        }
+
         public void ProcessInput(KeyEventArgs e)
         {
-
-            // find slimus position in x, y
-            // if target space is empty or contains collectible, move slimus, replace with empty
-            // else don't do shit
-
-            // slimusPosition[0] =­> x
-            // slimusPosition[1] => y
             if (currentDirection != Direction.None)
                 return;
 
@@ -78,13 +79,36 @@ namespace Explorus.Controllers
         private bool CheckForCollision(int newX, int newY)
         {
             Rectangle newPosition = new Rectangle(newX, newY, Constants.unit * 2, Constants.unit * 2);
+            int index = 0;
+            int replaceIndex = -1;
             foreach (LabyrinthComponent comp in lab.labyrinthComponentList)
             {
-                if(comp.isSolid)
+
+                if (comp.image.type == ImageType.Collectible)
+                {
+                    if (comp.hitbox.IntersectsWith(newPosition))
+                    {
+                        gemController.collectGem();
+                        replaceIndex = index;
+                    }
+                }
+
+                if (comp.image.type == ImageType.Door && gemController.openDoor())
+                {
+                    if (comp.hitbox.IntersectsWith(newPosition))
+                        return false;
+                }
+
+                if (comp.isSolid)
                 {
                     if (comp.hitbox.IntersectsWith(newPosition))
                         return true;
                 }
+                index++;
+            }
+            if (replaceIndex >= 0)
+            {
+                lab.labyrinthComponentList[replaceIndex] = new LabyrinthComponent(newX, newY, SpriteFactory.GetInstance().GetSprite(Sprites.empty));
             }
             return false;
         }

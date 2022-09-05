@@ -21,6 +21,9 @@ namespace Explorus.Models
         private ILabyrinthComponent _playerCharacter;
         public ILabyrinthComponent playerCharacter { get { return _playerCharacter; } set { this._playerCharacter = value; } }
 
+        private ILabyrinthComponent _door;
+        public ILabyrinthComponent door { get { return _door; } set { this._door = value; } }
+
         private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();        
 
         private void NotifyObservers()
@@ -48,6 +51,11 @@ namespace Explorus.Models
                     if (map[i,j]== Sprites.slimusDownLarge)
                     {
                         playerCharacter = comp;
+                    }
+
+                    if (map[i,j] == Sprites.door)
+                    {
+                        door = comp;
                     }
                 }
             }

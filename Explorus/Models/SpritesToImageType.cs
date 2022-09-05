@@ -29,6 +29,9 @@ namespace Explorus.Models
                 case Sprites.empty:
                     return ImageType.Nothing;
 
+                case Sprites.door:
+                    return ImageType.Door;
+
                 case Sprites.poppedBubble:
                 case Sprites.smallBubble:
                 case Sprites.title:

@@ -14,6 +14,7 @@ namespace Explorus
     {
         GameView oView;
         LabyrinthController labyrinthController;
+        GemController gemController;
 
         private const int msPerFrame = 16;
         private int lastGameLoop;
@@ -31,7 +32,6 @@ namespace Explorus
 
         private void ProcessInput(object sender, KeyEventArgs e)
         {
-            Console.WriteLine(e.KeyValue);
             labyrinthController.ProcessInput(e);
         }
 

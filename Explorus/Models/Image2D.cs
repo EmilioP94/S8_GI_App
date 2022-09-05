@@ -12,6 +12,7 @@ namespace Explorus.Models
         Wall,
         Player,
         Collectible,
+        Door,
         Other,
         Nothing
     }

@@ -20,12 +20,12 @@ namespace Explorus
         public static readonly Models.Sprites[,] level_1 =
         {
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
-            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.gem, Models.Sprites.empty, Models.Sprites.gem, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
-            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
-            {Models.Sprites.wall, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.door, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall},
         };
 
-        public static readonly int[] initialSlimusPosition = { 4, 1 };
+        public static readonly int[] initialSlimusPosition = { 3, 1 };
     }
 }
