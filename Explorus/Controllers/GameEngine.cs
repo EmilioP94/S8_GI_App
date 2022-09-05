@@ -14,7 +14,6 @@ namespace Explorus
     {
         GameView oView;
         LabyrinthController labyrinthController;
-        GemController gemController;
 
         private const int msPerFrame = 16;
         private int lastGameLoop;
