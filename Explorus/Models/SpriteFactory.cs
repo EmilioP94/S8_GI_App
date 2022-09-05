@@ -10,6 +10,7 @@ namespace Explorus.Models
 {
     enum Sprites
     {
+        empty,
         wall,
         title,
         heart,

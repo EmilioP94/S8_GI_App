@@ -12,12 +12,13 @@ namespace Explorus.Models
         Wall,
         Player,
         Collectible,
-        Other
+        Other,
+        Nothing
     }
     internal class Image2D
     {
         private int _id;
-        ImageType type;
+        public ImageType type { get; private set; }
         string name;
         public Bitmap image { get; private set; }
 

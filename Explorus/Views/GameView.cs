@@ -1,4 +1,6 @@
-﻿using Explorus.Models;
+﻿using Explorus.Controllers;
+using Explorus.Models;
+using Explorus.Views;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -13,9 +15,9 @@ namespace Explorus
 {
     internal class GameView
     {
-        private int x = 0;
-        private int y = 0;
         private float _framerate = 0;
+        public delegate void HandleInput(object sender, KeyEventArgs e);
+        private LabyrinthView labyrinthView;
 
         public float framerate
         {
@@ -30,11 +32,12 @@ namespace Explorus
         }
 
         GameForm oGameForm;
-        public GameView()
+        public GameView(HandleInput doHandle, ILabyrinth lab)
         {
             oGameForm = new GameForm();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
-            oGameForm.KeyDown += new KeyEventHandler(this.InputListener);
+            oGameForm.KeyDown += new KeyEventHandler(doHandle);
+            labyrinthView = new LabyrinthView(lab);
         }
 
         public void Show() { Application.Run(oGameForm); }
@@ -57,7 +60,7 @@ namespace Explorus
         }
 
         private void InputListener(object sender, KeyEventArgs e)
-        {
+        {/*
             Console.WriteLine(e.KeyValue);
             if(e.KeyValue == (char)Keys.Left)
             {
@@ -82,7 +85,7 @@ namespace Explorus
                 y += Constants.unit;
             }
             //Console.WriteLine(x);
-            //Console.WriteLine(y);
+            //Console.WriteLine(y);*/
         }
 
         private void GameRenderer(object sender, PaintEventArgs e) 
@@ -90,8 +93,13 @@ namespace Explorus
 
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
-            Image2D myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
-            e.Graphics.DrawImage(myImage.image, x, y);
+            /*Image2D myImage = SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge);
+            e.graphics.drawimage(myimage.image, x, y);*/
+            labyrinthView.Render(sender, e);
+
+            // LOOP
+            // sur chaque case du modele de labyrinthe
+            // afficher le truc qui y va
 
             
             //Pen pen = new Pen(Color.Yellow);
