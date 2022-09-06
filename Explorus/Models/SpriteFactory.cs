@@ -12,6 +12,7 @@ namespace Explorus.Models
     {
         empty,
         wall,
+        door,
         title,
         heart,
         bigBubble,
