@@ -73,8 +73,6 @@ namespace Explorus.Controllers
                     PlayerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2);
                 }
             }
-            //Console.WriteLine(lab.playerCharacter.x);
-            //Console.WriteLine(lab.playerCharacter.y);
         }
         private bool CheckForCollision(int newX, int newY)
         {
