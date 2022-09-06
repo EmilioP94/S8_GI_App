@@ -15,7 +15,7 @@ namespace Explorus
         GameView oView;
         LabyrinthController labyrinthController;
 
-        private const int msPerFrame = 16;
+        private const int msPerFrame = 14;
         private int lastGameLoop;
 
 
@@ -37,6 +37,7 @@ namespace Explorus
         private void Update(int elapseTime)
         {
             oView.framerate = 1000/elapseTime;
+            labyrinthController.ProcessMovement(elapseTime);
         }
 
         private void GameLoop()
@@ -46,7 +47,6 @@ namespace Explorus
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 Update(startFrameTime - lastGameLoop);
                 lastGameLoop = startFrameTime;
-                labyrinthController.ProcessMovement(lastGameLoop);
                 oView.Render();
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 int waitTime = startFrameTime + msPerFrame - endFrameTime;
