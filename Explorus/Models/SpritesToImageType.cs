@@ -11,6 +11,14 @@ namespace Explorus.Models
     {
         public static ImageType ConvertSpritesToImageType(Sprites sprite)
         {
+            switch(sprite)
+            {
+                case Sprites.heart:
+                    Console.WriteLine("returning heart");
+                    break;
+                    
+            }
+
             switch (sprite)
             {
                 case Sprites.wall:

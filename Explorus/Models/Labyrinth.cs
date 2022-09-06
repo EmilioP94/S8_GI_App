@@ -45,6 +45,7 @@ namespace Explorus.Models
             {
                 for (int j = 0; j < Constants.LabyrinthWidth; j++)
                 {
+                    Console.WriteLine("test");
                     LabyrinthComponent comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
                     labyrinthComponentList.Add(comp);
 

@@ -14,6 +14,6 @@ namespace Explorus.Models
         int y { get; set; }
         Image2D image { get; }
 
-        void Show(PaintEventArgs e);
+        void Show(PaintEventArgs e, int yOffset);
     }
 }

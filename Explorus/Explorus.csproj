@@ -61,6 +61,7 @@
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
     <Compile Include="Models\AnimatedLabyrinthComponent.cs" />
+    <Compile Include="Models\HeaderComponent.cs" />
     <Compile Include="Models\IAnimatedComponent.cs" />
     <Compile Include="Models\ILabyrinthComponent.cs" />
     <Compile Include="Models\Image2D.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Views\GameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\HeaderView.cs" />
     <Compile Include="Views\IRenderableComponent.cs" />
     <Compile Include="Views\LabyrinthView.cs" />
     <EmbeddedResource Include="GameForm.resx">
