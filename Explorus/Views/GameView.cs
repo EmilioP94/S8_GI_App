@@ -17,7 +17,11 @@ namespace Explorus
     {
         private float _framerate = 0;
         public delegate void HandleInput(object sender, KeyEventArgs e);
+        public delegate void HandleResize(object sender, EventArgs e);
         private LabyrinthView labyrinthView;
+        public double scaleFactor { get; set;}
+        public double originalSmallestSide { get; set;}
+       
 
         public float framerate
         {
@@ -27,16 +31,21 @@ namespace Explorus
             }
             set
             {
-                _framerate = value;
+                _framerate   = value;
             }
         }
 
         GameForm oGameForm;
         public GameView(HandleInput doHandle, ILabyrinth lab)
         {
+            //add header in calculation ( its 2 units )
+            this.originalSmallestSide = Math.Min(Constants.LabyrinthHeight, Constants.LabyrinthHeight) * Constants.unit;
             oGameForm = new GameForm();
+            //math.min heigth vs width
+            this.scaleFactor = this.computeScaleFactor(originalSmallestSide, oGameForm.ClientSize.Width);
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
+            oGameForm.ResizeEnd += new EventHandler(ProcessResize);
             labyrinthView = new LabyrinthView(lab);
         }
 
@@ -61,11 +70,25 @@ namespace Explorus
 
         private void GameRenderer(object sender, PaintEventArgs e) 
         {
-
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
+            g.ScaleTransform(1.0F,1.0F);//((float)this.scaleFactor,(float)this.scaleFactor);
             labyrinthView.Render(sender, e);
             oGameForm.Text = String.Format("Explorus - FPS {0}", framerate.ToString());
+        }
+
+        private void ProcessResize(object sender, EventArgs e)
+        {
+            int smallestWindowSide = Math.Min(oGameForm.ClientSize.Width, oGameForm.ClientSize.Height);
+            double newScaleFactor = this.computeScaleFactor(this.originalSmallestSide, (double)smallestWindowSide);
+            this.scaleFactor = newScaleFactor;
+        }
+
+        private double computeScaleFactor(double originalSideLength, double newSideLength)
+        {
+            double newScaleFactordelta = newSideLength / originalSideLength;
+            return 1 + (Math.Round(newScaleFactordelta, 2)/10);
+
         }
     }
 }
