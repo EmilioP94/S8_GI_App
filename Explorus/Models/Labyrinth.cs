@@ -24,7 +24,11 @@ namespace Explorus.Models
         private ILabyrinthComponent _door;
         public ILabyrinthComponent door { get { return _door; } set { this._door = value; } }
 
-        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();        
+        public Gems gems { get; set ; }
+
+        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();   
+        
+
 
         private void NotifyObservers()
         {
@@ -39,13 +43,13 @@ namespace Explorus.Models
             map = Constants.level_1;
             labyrinthComponentList = new List<ILabyrinthComponent>();
             slimusPosition = Constants.initialSlimusPosition;
+            gems = new Gems(map);
             NotifyObservers();
 
             for (int i = 0; i < Constants.LabyrinthHeight; i++)
             {
                 for (int j = 0; j < Constants.LabyrinthWidth; j++)
                 {
-                    Console.WriteLine("test");
                     LabyrinthComponent comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
                     labyrinthComponentList.Add(comp);
 
@@ -68,25 +72,7 @@ namespace Explorus.Models
             {
                 observers.Add(observer);
             }
-            return new Unsubscriber(observers, observer);
+            return new Unsubscriber<Sprites[,]>(observers, observer);
         }
-        private class Unsubscriber : IDisposable
-        {
-            private List<IObserver<Sprites[,]>> _observers;
-            private IObserver<Sprites[,]> _observer;
-
-            public Unsubscriber(List<IObserver<Sprites[,]>> observers, IObserver<Sprites[,]> observer)
-            {
-                this._observers = observers;
-                this._observer = observer;
-            }
-
-            public void Dispose()
-            {
-                if (_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-            }
-        }
-
     }
 }

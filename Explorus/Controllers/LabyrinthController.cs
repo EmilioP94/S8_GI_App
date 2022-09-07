@@ -23,7 +23,8 @@ namespace Explorus.Controllers
         public ILabyrinth lab { get; private set; }
         public Direction currentDirection;
         public Point PlayerDestinationPoint;
-        private GemController gemController;
+        public GemController gemController;
+        public Gems gems;
 
 
         private int x, y = 0;
@@ -31,6 +32,7 @@ namespace Explorus.Controllers
         public LabyrinthController()
         {
             lab = new Labyrinth();
+            gems = new Gems(lab.map);
             currentDirection = Direction.None;
             gemController = new GemController(lab);
         }

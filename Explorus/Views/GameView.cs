@@ -33,13 +33,13 @@ namespace Explorus
         }
 
         GameForm oGameForm;
-        public GameView(HandleInput doHandle, ILabyrinth lab)
+        public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
         {
             oGameForm = new GameForm();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
             labyrinthView = new LabyrinthView(lab);
-            headerView = new HeaderView();
+            headerView = new HeaderView(headerController);
         }
 
         public void Show() { Application.Run(oGameForm); }

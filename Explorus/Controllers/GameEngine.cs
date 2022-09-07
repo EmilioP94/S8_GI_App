@@ -14,6 +14,7 @@ namespace Explorus
     {
         GameView oView;
         LabyrinthController labyrinthController;
+        HeaderController headerController;
 
         private const int msPerFrame = 16;
         private int lastGameLoop;
@@ -22,7 +23,9 @@ namespace Explorus
         public GameEngine()
         {
             labyrinthController = new LabyrinthController();
-            oView = new GameView(ProcessInput, labyrinthController.lab);
+            headerController = new HeaderController(labyrinthController.lab);
+            labyrinthController.gemController.Subscribe(headerController);
+            oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();

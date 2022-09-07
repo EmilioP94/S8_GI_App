@@ -16,5 +16,7 @@ namespace Explorus.Controllers
 
         ILabyrinthComponent playerCharacter { get; set; }
 
+        Gems gems { get; set; }
+
     }
 }
