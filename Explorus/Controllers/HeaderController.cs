@@ -76,6 +76,10 @@ namespace Explorus.Controllers
                     position++;
                 }
                 components.Add(GetComponent(position, Sprites.rightBarTip, bar.barName, $"{bar.barName} right"));
+                if(bar.barName == Bars.yellow && bar.acquired == bar.total)
+                {
+                    components.Add(GetComponent(position, Sprites.key, bar.barName, $"{bar.barName} key", true));
+                }
             }
         }
 
