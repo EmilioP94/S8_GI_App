@@ -15,6 +15,5 @@ namespace Explorus.Models
         Sprites sprite { get; }
         Bars barName { get; }
         bool defaultFull { get; }
-        void Count();
     }
 }

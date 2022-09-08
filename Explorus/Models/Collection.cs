@@ -27,7 +27,7 @@ namespace Explorus.Models
             Count();
         }
 
-        public void Count()
+        private void Count()
         {
             int count = 0;
             for (int i = 0; i < map.GetLength(0); i++)
