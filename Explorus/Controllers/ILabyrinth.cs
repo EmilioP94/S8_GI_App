@@ -18,5 +18,7 @@ namespace Explorus.Controllers
 
         Collection gems { get; set; }
 
+        bool gameEnded { get; }
+
     }
 }

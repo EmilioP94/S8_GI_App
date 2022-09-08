@@ -19,11 +19,19 @@ namespace Explorus.Models
         public List<ILabyrinthComponent> labyrinthComponentList { get { return _labyrinthComponentList; } set { this._labyrinthComponentList = value; } }
         public Slimus playerCharacter { get; private set; }
 
+        public List<MiniSlime> miniSlimes { get; private set; }
+
         public Collection gems { get; set ; }
         public Collection hearts { get; set; }
         public Collection bubbles { get; set; }
 
-        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();   
+        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();
+
+        public bool gameEnded { get
+            {
+                return miniSlimes.All(slime => slime.isCollected);
+            } 
+        }
         
 
 
@@ -37,6 +45,7 @@ namespace Explorus.Models
 
         public Labyrinth()
         {
+            miniSlimes = new List<MiniSlime>();
             map = Constants.level_1;
             labyrinthComponentList = new List<ILabyrinthComponent>();
             //slimusPosition = Constants.initialSlimusPosition;
@@ -55,6 +64,10 @@ namespace Explorus.Models
             {
                 playerCharacter = player;
                 playerCharacter.SetCollections(gems, hearts, bubbles);
+            }
+            foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
+            {
+                miniSlimes.Add(slime);
             }
         }
 

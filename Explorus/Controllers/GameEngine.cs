@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows.Forms;
 
 namespace Explorus
@@ -45,6 +46,7 @@ namespace Explorus
 
         private void GameLoop()
         {
+            System.Timers.Timer endTimer = null;
             while (true)
             {
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
@@ -62,7 +64,18 @@ namespace Explorus
                 {
                     Thread.Sleep(1);
                 }
+                if (labyrinthController.lab.gameEnded && endTimer == null)
+                {
+                    endTimer = new System.Timers.Timer(3000);
+                    endTimer.Elapsed += OnGameEnded;
+                    endTimer.Start();
+                }
             }
+        }
+
+        private void OnGameEnded(Object source, ElapsedEventArgs e)
+        {
+            oView.Close();
         }
     }
 }

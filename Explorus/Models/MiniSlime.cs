@@ -9,6 +9,7 @@ namespace Explorus.Models
 {
     internal class MiniSlime : LabyrinthComponent
     {
+        public bool isCollected { get; private set; }
         public MiniSlime(int x, int y, Image2D image) : base(x, y, image)
         {
             this.x += Constants.unit / 2;
@@ -18,6 +19,7 @@ namespace Explorus.Models
 
         public override bool Collide(Slimus player)
         {
+            isCollected = true;
             image = null;
             return false;
         }
