@@ -7,7 +7,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
-    internal class Collection : ICollection, IObservable<Collection>
+    internal class Collection : ICollection, IObservable<ICollection>
     {
         public Sprites[,] map { get; private set; }
         public int total { get; private set ; }
@@ -16,7 +16,7 @@ namespace Explorus.Models
         public Bars barName { get; private set ; }
         public bool defaultFull { get; private set; }
 
-        private List<IObserver<Collection>> observers = new List<IObserver<Collection>>();
+        private List<IObserver<ICollection>> observers = new List<IObserver<ICollection>>();
 
         public Collection(Sprites[,] map, Sprites sprite, Bars barName, bool defaultFull)
         {
@@ -52,25 +52,28 @@ namespace Explorus.Models
 
         public void Acquire()
         {
-            acquired++;
-            NotifyObservers();
+            if(acquired < total)
+            {
+                acquired++;
+                NotifyObservers();
+            }
         }
 
         private void NotifyObservers()
         {
-            foreach (IObserver<Collection> observer in observers)
+            foreach (IObserver<ICollection> observer in observers)
             {
                 observer.OnNext(this);
             }
         }
 
-        public IDisposable Subscribe(IObserver<Collection> observer)
+        public IDisposable Subscribe(IObserver<ICollection> observer)
         {
             if (!observers.Contains(observer))
             {
                 observers.Add(observer);
             }
-            return new Unsubscriber<Collection>(observers, observer);
+            return new Unsubscriber<ICollection>(observers, observer);
         }
     }
 }

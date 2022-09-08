@@ -47,10 +47,9 @@ namespace Explorus
             //add header in calculation ( its 2 units )
             originalHeight = (lab.map.GetLength(0) + 1) * 2 * Constants.unit;
             originalWidth = lab.map.GetLength(1) * 2 * Constants.unit;
-            int originalSmallestSide = Math.Min(originalHeight, originalWidth);
             oGameForm = new GameForm();
             oGameForm.MinimumSize = new Size(600, 600);
-            this.scaleFactor = this.computeScaleFactor(originalSmallestSide, Math.Min(oGameForm.ClientSize.Width, oGameForm.ClientSize.Height));
+            DoProcessResize();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
             oGameForm.Resize += new EventHandler(ProcessResize);
@@ -89,16 +88,21 @@ namespace Explorus
 
         private void ProcessResize(object sender, EventArgs e)
         {
+            DoProcessResize();
+        }
+
+        private void DoProcessResize()
+        {
             float clientAspectRatio = (float)oGameForm.ClientSize.Width / (float)oGameForm.ClientSize.Height;
             float labyrinthAspectRatio = (float)originalWidth / (float)originalHeight;
             if (clientAspectRatio >= labyrinthAspectRatio)
             {
                 double newScaleFactor = this.computeScaleFactor(originalHeight, (double)oGameForm.ClientSize.Height);
                 this.scaleFactor = newScaleFactor;
-                int horizontalPadding = (int)(oGameForm.ClientSize.Width - (double)originalWidth * scaleFactor)/2;
+                int horizontalPadding = (int)(oGameForm.ClientSize.Width - (double)originalWidth * scaleFactor) / 2;
                 offset = new Point(horizontalPadding, 0);
             }
-            if(labyrinthAspectRatio >= clientAspectRatio)
+            if (labyrinthAspectRatio >= clientAspectRatio)
             {
                 double newScaleFactor = this.computeScaleFactor(originalWidth, (double)oGameForm.ClientSize.Width);
                 this.scaleFactor = newScaleFactor;

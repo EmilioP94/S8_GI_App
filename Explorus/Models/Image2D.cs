@@ -19,9 +19,7 @@ namespace Explorus.Models
     }
     internal class Image2D
     {
-        private int _id;
         public ImageType type { get; private set; }
-        string name;
         public Bitmap image { get; private set; }
 
         public Image2D(Bitmap image, ImageType type)

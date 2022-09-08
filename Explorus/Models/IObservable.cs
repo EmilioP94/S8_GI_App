@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal interface IAnimatedComponent: ILabyrinthComponent
+    internal interface IObservable<T>
     {
-        void Animate();
+        IDisposable Subscribe(IObserver<T> observer);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal interface ILabyrinth: IObservable<Sprites[,]>
+    internal interface ILabyrinth: Models.IObservable<Sprites[,]>
     {
         Sprites[,] map { get; }
         //int[] slimusPosition { get; set; }
