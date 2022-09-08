@@ -46,9 +46,9 @@ namespace Explorus.Models
             slimusImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
         }
 
-        public override void Show(PaintEventArgs e)
+        public override void Show(PaintEventArgs e, int yOffset)
         {
-            e.Graphics.DrawImage(slimusImages[animationCycleIndex, (int)currentDirection].image, x, y);
+            e.Graphics.DrawImage(slimusImages[animationCycleIndex, (int)currentDirection].image, x, y+yOffset);
         }
 
         public void ChangeDirection(FacingDirection dir)
