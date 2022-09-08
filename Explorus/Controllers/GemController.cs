@@ -1,4 +1,5 @@
 ﻿using Explorus.Models;
+using Explorus.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,44 +8,45 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal class GemController
+    internal class GemController : IObservable<Collectible>
     {
-        public int gemTotal { get; private set; }
-        public int acquiredGems { get; private set; }
-
         private readonly ILabyrinth lab;
+        private List<IObserver<Collectible>> observers = new List<IObserver<Collectible>>();
 
         public GemController(ILabyrinth labyrinth)
         {
             lab = labyrinth;
-            gemTotal = CountGems();
-            acquiredGems = 0;
         }
 
-        private int CountGems()
-        {
-            int count = 0;
-            for (int i = 0; i < Constants.LabyrinthHeight; i++)
-            {
-                for (int j = 0; j < Constants.LabyrinthWidth; j++)
-                {
-                    if (lab.map[i, j] == Sprites.gem)
-                    {
-                        count ++;
-                    }
-                }
-            }
-            return count;
-        }
 
         public void collectGem()
         {
-            acquiredGems++;
+            lab.gems.Acquire();
+            NotifyObservers();
         }
 
         public bool openDoor()
         {
-            return acquiredGems == gemTotal;
+            return lab.gems.acquired == lab.gems.total;
         }
+
+        private void NotifyObservers()
+        {
+            foreach (IObserver<Collectible> observer in observers)
+            {
+                observer.OnNext(lab.gems);
+            }
+        }
+
+        public IDisposable Subscribe(IObserver<Collectible> observer)
+        {
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
+            return new Unsubscriber<Collectible>(observers, observer);
+        }
+
+
     }
 }

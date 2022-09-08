@@ -40,7 +40,7 @@ namespace Explorus.Views
             {
                 foreach (ILabyrinthComponent component in lab.labyrinthComponentList)
                 {
-                    component.Show(e);
+                    component.Show(e, Constants.unit * 2);
                 }
             }            
         }

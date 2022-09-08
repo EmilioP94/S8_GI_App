@@ -50,6 +50,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\GameEngine.cs" />
     <Compile Include="Controllers\GemController.cs" />
+    <Compile Include="Controllers\HeaderController.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
     <Compile Include="Controllers\LabyrinthController.cs" />
     <Compile Include="GameForm.cs">
@@ -61,17 +62,21 @@
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
     <Compile Include="Models\AnimatedLabyrinthComponent.cs" />
+    <Compile Include="Models\Collectible.cs" />
+    <Compile Include="Models\HeaderComponent.cs" />
     <Compile Include="Models\IAnimatedComponent.cs" />
+    <Compile Include="Models\ICollectible.cs" />
     <Compile Include="Models\ILabyrinthComponent.cs" />
     <Compile Include="Models\Image2D.cs" />
     <Compile Include="Models\Labyrinth.cs" />
     <Compile Include="Models\LabyrinthComponent.cs" />
-    <Compile Include="Models\Slimus.cs" />
     <Compile Include="Models\SpriteFactory.cs" />
     <Compile Include="Models\SpritesToImageType.cs" />
+    <Compile Include="Models\Unsubscriber.cs" />
     <Compile Include="Views\GameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\HeaderView.cs" />
     <Compile Include="Views\IRenderableComponent.cs" />
     <Compile Include="Views\LabyrinthView.cs" />
     <EmbeddedResource Include="GameForm.resx">
@@ -100,7 +105,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="Resources\TilesSheet.png" />
   </ItemGroup>

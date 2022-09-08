@@ -32,7 +32,7 @@ namespace Explorus.Models
             this.y = y;
             this.image = image;
 
-            if (image.type == ImageType.Collectible)
+            if (image.type == ImageType.Collectible || image.type == ImageType.MiniSlime)
             {
                 this.x += Constants.unit / 2;
                 this.y += Constants.unit / 2;
@@ -46,7 +46,8 @@ namespace Explorus.Models
             }
         }
 
-        public virtual void Show(PaintEventArgs e)
+
+        public virtual void Show(PaintEventArgs e, int yOffset)
         {
             if(image.type == ImageType.Door)
             {
@@ -54,11 +55,11 @@ namespace Explorus.Models
                 matrix.Matrix33 = 0.5f;
                 ImageAttributes attributes = new ImageAttributes();
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                e.Graphics.DrawImage(image.image, new Rectangle(x, y, image.image.Width, image.image.Height), 0, 0, image.image.Width, image.image.Height,GraphicsUnit.Pixel, attributes);
+                e.Graphics.DrawImage(image.image, new Rectangle(x, y + yOffset, image.image.Width, image.image.Height), 0, 0, image.image.Width, image.image.Height,GraphicsUnit.Pixel, attributes);
             }
             else
             {
-                e.Graphics.DrawImage(image.image, x, y);
+                e.Graphics.DrawImage(image.image, x, y + yOffset);
             }
         }
     }

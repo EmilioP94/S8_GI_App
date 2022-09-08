@@ -31,7 +31,17 @@ namespace Explorus.Models
         slimusRightSmall,
         slimusLeftLarge,
         slimusLeftMedium,
-        slimusLeftSmall
+        slimusLeftSmall,
+        leftBarTip,
+        redBarFull,
+        redBarHalf,
+        blueBarFull,
+        blueBarHalf,
+        yellowBarFull,
+        yellowBarHalf,
+        emptyBar,
+        rightBarTip,
+        miniSlime
     }
     internal class SpriteFactory
     {
