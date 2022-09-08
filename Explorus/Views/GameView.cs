@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus
 {
@@ -20,7 +21,9 @@ namespace Explorus
         public delegate void HandleResize(object sender, EventArgs e);
         private LabyrinthView labyrinthView;
         public double scaleFactor { get; set;}
-        public double originalSmallestSide { get; set;}
+        private int originalWidth { get; set;}
+
+        private int originalHeight { get; set; }
        
         private HeaderView headerView;
 
@@ -40,7 +43,9 @@ namespace Explorus
         public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
         {
             //add header in calculation ( its 2 units )
-            this.originalSmallestSide = Math.Min(Constants.LabyrinthHeight, Constants.LabyrinthHeight) * Constants.unit * 2;
+            originalHeight = (lab.map.GetLength(0) + 1) * 2 * Constants.unit;
+            originalWidth = lab.map.GetLength(1) * 2 * Constants.unit;
+            int originalSmallestSide = Math.Min(originalHeight, originalWidth);
             oGameForm = new GameForm();
             this.scaleFactor = this.computeScaleFactor(originalSmallestSide, Math.Min(oGameForm.ClientSize.Width,oGameForm.ClientSize.Height));
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
@@ -83,14 +88,14 @@ namespace Explorus
         {
             if(oGameForm.ClientSize.Width >= oGameForm.ClientSize.Height)
             {
-                double newScaleFactor = this.computeScaleFactor(this.originalSmallestSide, (double)oGameForm.ClientSize.Height);
+                double newScaleFactor = this.computeScaleFactor(originalHeight, (double)oGameForm.ClientSize.Height);
                 this.scaleFactor = newScaleFactor;
                 int horizontalPadding = (oGameForm.ClientSize.Width - oGameForm.ClientSize.Height)/2;
                 //oGameForm.Padding = new System.Windows.Forms.Padding(horizontalPadding,0,horizontalPadding,0);
             }
             if(oGameForm.ClientSize.Height >= oGameForm.ClientSize.Width)
             {
-                double newScaleFactor = this.computeScaleFactor(this.originalSmallestSide, (double)oGameForm.ClientSize.Width);
+                double newScaleFactor = this.computeScaleFactor(originalWidth, (double)oGameForm.ClientSize.Width);
                 this.scaleFactor = newScaleFactor;
                 int verticalPadding = (oGameForm.ClientSize.Height - oGameForm.ClientSize.Width)/2;
                 //oGameForm.Padding = new System.Windows.Forms.Padding(0,verticalPadding,0,verticalPadding);
