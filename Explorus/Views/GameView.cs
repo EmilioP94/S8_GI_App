@@ -26,6 +26,7 @@ namespace Explorus
         private int originalHeight { get; set; }
        
         private HeaderView headerView;
+        private Point offset { get; set; }
 
         public float framerate
         {
@@ -42,12 +43,15 @@ namespace Explorus
         GameForm oGameForm;
         public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
         {
+            offset = new Point(0, 0);
             //add header in calculation ( its 2 units )
             originalHeight = (lab.map.GetLength(0) + 1) * 2 * Constants.unit;
             originalWidth = lab.map.GetLength(1) * 2 * Constants.unit;
             int originalSmallestSide = Math.Min(originalHeight, originalWidth);
             oGameForm = new GameForm();
-            this.scaleFactor = this.computeScaleFactor(originalSmallestSide, Math.Min(oGameForm.ClientSize.Width,oGameForm.ClientSize.Height));
+            oGameForm.Width = originalWidth;
+            oGameForm.Height = originalHeight;
+            this.scaleFactor = this.computeScaleFactor(originalSmallestSide, Math.Min(oGameForm.ClientSize.Width, oGameForm.ClientSize.Height));
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
             oGameForm.Resize += new EventHandler(ProcessResize);
@@ -79,26 +83,28 @@ namespace Explorus
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
             g.ScaleTransform((float)this.scaleFactor,(float)this.scaleFactor);
-            headerView.Render(sender, e);
-            labyrinthView.Render(sender, e);
+            headerView.Render(sender, e, offset);
+            labyrinthView.Render(sender, e, offset);
             oGameForm.Text = String.Format("Explorus - FPS {0}", framerate.ToString());
         }
 
         private void ProcessResize(object sender, EventArgs e)
         {
-            if(oGameForm.ClientSize.Width >= oGameForm.ClientSize.Height)
+            float clientAspectRatio = (float)oGameForm.ClientSize.Width / (float)oGameForm.ClientSize.Height;
+            float labyrinthAspectRatio = (float)originalWidth / (float)originalHeight;
+            if (clientAspectRatio >= labyrinthAspectRatio)
             {
                 double newScaleFactor = this.computeScaleFactor(originalHeight, (double)oGameForm.ClientSize.Height);
                 this.scaleFactor = newScaleFactor;
-                int horizontalPadding = (oGameForm.ClientSize.Width - oGameForm.ClientSize.Height)/2;
-                //oGameForm.Padding = new System.Windows.Forms.Padding(horizontalPadding,0,horizontalPadding,0);
+                int horizontalPadding = (int)(oGameForm.ClientSize.Width - (double)originalWidth * scaleFactor)/2;
+                offset = new Point(horizontalPadding, 0);
             }
-            if(oGameForm.ClientSize.Height >= oGameForm.ClientSize.Width)
+            if(labyrinthAspectRatio >= clientAspectRatio)
             {
                 double newScaleFactor = this.computeScaleFactor(originalWidth, (double)oGameForm.ClientSize.Width);
                 this.scaleFactor = newScaleFactor;
-                int verticalPadding = (oGameForm.ClientSize.Height - oGameForm.ClientSize.Width)/2;
-                //oGameForm.Padding = new System.Windows.Forms.Padding(0,verticalPadding,0,verticalPadding);
+                int verticalPadding = (int)(oGameForm.ClientSize.Height - (double)originalHeight * scaleFactor) / 2;
+                offset = new Point(0, verticalPadding);
             }
         }
 

@@ -17,14 +17,9 @@ namespace Explorus.Models
 
         private List<ILabyrinthComponent> _labyrinthComponentList;
         public List<ILabyrinthComponent> labyrinthComponentList { get { return _labyrinthComponentList; } set { this._labyrinthComponentList = value; } }
+        public Slimus playerCharacter { get; private set; }
 
-        private Slimus _playerCharacter;
-        public Slimus playerCharacter { get { return _playerCharacter; } set { this._playerCharacter = value; } }
-
-        private ILabyrinthComponent _door;
-        public ILabyrinthComponent door { get { return _door; } set { this._door = value; } }
-
-        public Collectible gems { get; set ; }
+        public Collection gems { get; set ; }
 
         private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();   
         
@@ -43,35 +38,20 @@ namespace Explorus.Models
             map = Constants.level_1;
             labyrinthComponentList = new List<ILabyrinthComponent>();
             //slimusPosition = Constants.initialSlimusPosition;
-            gems = new Collectible(map, Sprites.gem, Bars.yellow, false);
+            gems = new Collection(map, Sprites.gem, Bars.yellow, false);
             NotifyObservers();
 
             for (int i = 0; i < map.GetLength(0); i++)
             {
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
-                    LabyrinthComponent comp;                    
-
-                    if (map[i,j]== Sprites.slimusDownLarge)
-                    {
-                        playerCharacter = new Slimus(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
-                        comp = playerCharacter;
-                    }
-
-                    else if (map[i,j] == Sprites.door)
-                    {
-                        //TODO: this should probably be a 'door' object instead of a generic labyrinthcomponent
-                        comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
-                        door = comp;
-                    }
-
-                    else
-                    {
-                        comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
-                    }
-
+                    ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
                     labyrinthComponentList.Add(comp);
                 }
+            }
+            foreach(Slimus player in labyrinthComponentList.OfType<Slimus>())
+            {
+                playerCharacter = player;
             }
         }
 

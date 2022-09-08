@@ -14,9 +14,9 @@ namespace Explorus.Controllers
 
         List<ILabyrinthComponent> labyrinthComponentList { get; set; }
 
-        Slimus playerCharacter { get; set; }
+        Slimus playerCharacter { get; }
 
-        Collectible gems { get; set; }
+        Collection gems { get; set; }
 
     }
 }

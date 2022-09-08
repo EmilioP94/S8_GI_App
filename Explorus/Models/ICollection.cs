@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal interface ICollectible
+    internal interface ICollection
     {
         Sprites[,] map { get; set; }
         int total { get; set; }

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal class Collectible : LabyrinthComponent
+    internal class MiniSlime : LabyrinthComponent
     {
-        public Collectible(int x, int y, Image2D image) : base(x, y, image)
+        public MiniSlime(int x, int y, Image2D image) : base(x, y, image)
         {
             this.x += Constants.unit / 2;
             this.y += Constants.unit / 2;

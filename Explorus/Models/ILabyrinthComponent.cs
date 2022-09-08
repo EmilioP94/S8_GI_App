@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,16 +11,13 @@ namespace Explorus.Models
 {
     internal interface ILabyrinthComponent
     {
-        int x { get; set; }
-        int y { get; set; }
+        int x { get; }
+        int y { get; }
         Image2D image { get; }
+        ImageAttributes attributes { get; }
 
+        bool isSolid { get; }
 
-        bool isSolid { get; set; }
-
-        Rectangle hitbox { get; set; }
-
-        void Show(PaintEventArgs e, int yOffset);
-
+        Rectangle hitbox { get; }
     }
 }

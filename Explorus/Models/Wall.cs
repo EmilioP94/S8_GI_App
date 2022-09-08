@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal class Collectible : LabyrinthComponent
+    internal class Wall : LabyrinthComponent
     {
-        public Collectible(int x, int y, Image2D image) : base(x, y, image)
+        public Wall(int x, int y, Image2D image) : base(x, y, image)
         {
-            this.x += Constants.unit / 2;
-            this.y += Constants.unit / 2;
+            isSolid = true;
             hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
         }
     }
