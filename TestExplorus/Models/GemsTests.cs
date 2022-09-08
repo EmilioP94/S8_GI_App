@@ -17,7 +17,7 @@ namespace TestExplorus.Models
             Collection collectionGems = new Collection(testMap, Sprites.gem, Bars.yellow, false);
 
             Slimus slimus = new Slimus(0, 0);
-            slimus.SetCollections(collectionGems, collectionGems, collectionGems);
+            slimus.SetCollections(collectionGems);
 
             Assert.AreEqual(1, slimus.gems.total);
             Assert.AreEqual(0, slimus.gems.acquired);

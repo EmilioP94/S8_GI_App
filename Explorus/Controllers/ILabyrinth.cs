@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal interface ILabyrinth: Models.IObservable<Sprites[,]>
+    internal interface ILabyrinth
     {
         Sprites[,] map { get; }
         //int[] slimusPosition { get; set; }
 
-        List<ILabyrinthComponent> labyrinthComponentList { get; set; }
+        List<ILabyrinthComponent> labyrinthComponentList { get; }
 
         Slimus playerCharacter { get; }
 
-        Collection gems { get; set; }
+        Collection gems { get; }
 
         bool gameEnded { get; }
 

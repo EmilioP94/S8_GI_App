@@ -1,18 +1,10 @@
 ﻿using Explorus.Controllers;
-using Explorus.Models;
-using Explorus.Views;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
-namespace Explorus
+
+namespace Explorus.Views
 {
     internal class GameView
     {

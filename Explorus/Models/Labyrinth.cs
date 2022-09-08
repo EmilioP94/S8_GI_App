@@ -1,31 +1,18 @@
 ﻿using Explorus.Controllers;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
     internal class Labyrinth: ILabyrinth
     {
-        private Sprites[,] _map;
-        public Sprites[,] map { get { return _map; } private set { this._map = value; this.NotifyObservers(); } }
-        //public int[] slimusPosition { get; set; }
-
-        private List<ILabyrinthComponent> _labyrinthComponentList;
-        public List<ILabyrinthComponent> labyrinthComponentList { get { return _labyrinthComponentList; } set { this._labyrinthComponentList = value; } }
+        public Sprites[,] map { get; private set; }
+        public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
         public Slimus playerCharacter { get; private set; }
 
         public List<MiniSlime> miniSlimes { get; private set; }
 
-        public Collection gems { get; set ; }
-        public Collection hearts { get; set; }
-        public Collection bubbles { get; set; }
-
-        private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();
+        public Collection gems { get; private set ; }
 
         public bool gameEnded { get
             {
@@ -35,22 +22,12 @@ namespace Explorus.Models
         
 
 
-        private void NotifyObservers()
-        {
-            foreach (IObserver<Sprites[,]> observer in observers)
-            {
-                observer.OnNext(map);
-            }
-        }
-
-        public Labyrinth()
+        public Labyrinth(Sprites[,] map)
         {
             miniSlimes = new List<MiniSlime>();
-            map = Constants.level_1;
+            this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
-            //slimusPosition = Constants.initialSlimusPosition;
             gems = new Collection(map, Sprites.gem, Bars.yellow, false);
-            NotifyObservers();
 
             for (int i = 0; i < map.GetLength(0); i++)
             {
@@ -63,21 +40,12 @@ namespace Explorus.Models
             foreach(Slimus player in labyrinthComponentList.OfType<Slimus>())
             {
                 playerCharacter = player;
-                playerCharacter.SetCollections(gems, hearts, bubbles);
+                playerCharacter.SetCollections(gems);
             }
             foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
             {
                 miniSlimes.Add(slime);
             }
-        }
-
-        public IDisposable Subscribe(IObserver<Sprites[,]> observer)
-        {
-            if (!observers.Contains(observer))
-            {
-                observers.Add(observer);
-            }
-            return new Unsubscriber<Sprites[,]>(observers, observer);
         }
     }
 }

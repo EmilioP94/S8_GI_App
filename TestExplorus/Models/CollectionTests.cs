@@ -23,7 +23,7 @@ namespace TestExplorus.Models
             Assert.AreEqual<int>(0, collection.acquired);
             collection.Acquire();
             Assert.AreEqual<int>(0, collection.acquired);
-            Labyrinth lab = new Labyrinth();
+            Labyrinth lab = new Labyrinth(TestConstants.level_1);
             HeaderController observer = new HeaderController(lab);
             collection = new Collection(TestConstants.level_1, Sprites.gem, Bars.yellow, false);
             Assert.AreEqual(3, collection.total);

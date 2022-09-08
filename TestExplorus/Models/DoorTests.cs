@@ -19,7 +19,7 @@ namespace TestExplorus.Models
             Collection gems = new Collection(testMap, Sprites.gem, Bars.yellow, false);
 
             Slimus slimus = new Slimus(0, 0);
-            slimus.SetCollections(gems, gems, gems);
+            slimus.SetCollections(gems);
             door.Collide(slimus);            
         }
 
@@ -35,7 +35,7 @@ namespace TestExplorus.Models
             Collection gems = new Collection(testMap, Sprites.gem, Bars.yellow, true);
 
             Slimus slimus = new Slimus(0, 0);
-            slimus.SetCollections(gems, gems, gems);            
+            slimus.SetCollections(gems);            
             door.Collide(slimus);
             door.Collide(slimus);
 

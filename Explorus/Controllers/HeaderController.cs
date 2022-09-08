@@ -10,7 +10,6 @@ namespace Explorus.Controllers
 {
     internal class HeaderController: Models.IObserver<ICollection>, Models.IObservable<List<HeaderComponent>>
     {
-        private ILabyrinth lab;
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
