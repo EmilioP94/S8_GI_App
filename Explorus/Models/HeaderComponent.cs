@@ -30,10 +30,5 @@ namespace Explorus.Models
             this.barName = barName;
             this.name = name;
         }
-
-        public void Show(PaintEventArgs e, int yOffset)
-        {
-            e.Graphics.DrawImage(image.image, x + Constants.unit, y + yOffset);
-        }
     }
 }

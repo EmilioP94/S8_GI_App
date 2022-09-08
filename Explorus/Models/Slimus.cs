@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Explorus.Controllers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
@@ -18,12 +20,24 @@ namespace Explorus.Models
     }
     internal class Slimus : LabyrinthComponent
     {
-        Image2D [,] slimusImages;
+        private Image2D[,] slimusImages;
+
+        public Collection gems { get; private set; }
+
+        public Collection hearts { get; private set; }
+
+        public Collection bubbles { get; private set; }
+
+        public override Image2D image { get
+            {
+                return slimusImages[animationCycleIndex, (int)currentDirection];
+            }
+        }
 
         FacingDirection currentDirection;
         int animationCycleIndex = 0;
 
-        public Slimus(int x, int y, Image2D image) : base(x, y, image)
+        public Slimus(int x, int y) : base(x, y, null)
         {
             slimusImages = new Image2D[3, 4];
 
@@ -46,9 +60,47 @@ namespace Explorus.Models
             slimusImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
         }
 
-        public override void Show(PaintEventArgs e, int yOffset)
+        public Direction Move(Direction currentDirection, double distance, Point destinationPoint, int deltaT)
         {
-            e.Graphics.DrawImage(slimusImages[animationCycleIndex, (int)currentDirection].image, x, y+yOffset);
+            Direction newDirection = currentDirection;
+            if (currentDirection == Direction.None)
+            {
+                SetAnimationState(0);
+                return currentDirection;
+            }
+
+            if (distance < Constants.snapDistance)
+            {
+                newDirection = Direction.None;
+                x = destinationPoint.X;
+                y = destinationPoint.Y;
+            }
+            else if (currentDirection == Direction.Up)
+            {
+                y -= (int)(deltaT * Constants.playerSpeed);
+            }
+            else if (currentDirection == Direction.Right)
+            {
+                x += (int)(deltaT * Constants.playerSpeed);
+            }
+            else if (currentDirection == Direction.Down)
+            {
+                y += (int)(deltaT * Constants.playerSpeed);
+            }
+            else if (currentDirection == Direction.Left)
+            {
+                x -= (int)(deltaT * Constants.playerSpeed);
+            }
+
+            if (distance > Constants.animationChangeThreshold)
+            {
+                SetAnimationState(1);
+            }
+            else
+            {
+                SetAnimationState(2);
+            }
+            return newDirection;
         }
 
         public void ChangeDirection(FacingDirection dir)
@@ -58,6 +110,13 @@ namespace Explorus.Models
         public void SetAnimationState(int index)
         {
             animationCycleIndex = index;
+        }
+
+        public void SetCollections(Collection gems, Collection hearts, Collection bubbles)
+        {
+            this.gems = gems;
+            this.hearts = hearts;
+            this.bubbles = bubbles;
         }
     }
 }

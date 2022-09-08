@@ -24,18 +24,12 @@ namespace Explorus.Controllers
     {
         public ILabyrinth lab { get; private set; }
         public Direction currentDirection;
-        public Point PlayerDestinationPoint;
-        public GemController gemController { get; private set; }
-        private int animationTimer;
-        public Collectible gems;
-        private int x, y = 0;
+        public Point playerDestinationPoint;
 
         public LabyrinthController()
         {
             lab = new Labyrinth();
-            gems = new Collectible(lab.map, Sprites.gem, Bars.yellow, false);
             currentDirection = Direction.None;
-            gemController = new GemController(lab);
         }
 
         public void ProcessInput(KeyEventArgs e)
@@ -49,7 +43,7 @@ namespace Explorus.Controllers
                 if (!CheckForCollision(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2))
                 {
                     currentDirection = Direction.Up;
-                    PlayerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2);
+                    playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2);
                 }
                     
             }
@@ -59,7 +53,7 @@ namespace Explorus.Controllers
                 if (!CheckForCollision(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y))
                 {
                     currentDirection = Direction.Left;
-                    PlayerDestinationPoint = new Point(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y);
+                    playerDestinationPoint = new Point(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y);
                 }
             }
             if (e.KeyValue == (char)Keys.Right)
@@ -68,7 +62,7 @@ namespace Explorus.Controllers
                 if (!CheckForCollision(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y))
                 {
                     currentDirection = Direction.Right;
-                    PlayerDestinationPoint = new Point(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y);
+                    playerDestinationPoint = new Point(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y);
                 }
             }
             if (e.KeyValue == (char)Keys.Down)
@@ -77,7 +71,7 @@ namespace Explorus.Controllers
                 if (!CheckForCollision(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2))
                 {
                     currentDirection = Direction.Down;
-                    PlayerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2);
+                    playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2);
                 }
             }
         }
@@ -85,51 +79,53 @@ namespace Explorus.Controllers
         {
             Rectangle newPosition = new Rectangle(newX, newY, Constants.unit * 2, Constants.unit * 2);
             int index = 0;
-            int replaceIndex = -1;
             foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
             {
-
+                if (comp.hitbox.IntersectsWith(newPosition))
+                {
+                    return comp.Collide(lab.playerCharacter);
+                }
+                /*
                 if (comp.image.type == ImageType.Collectible)
                 {
-                    if (comp.hitbox.IntersectsWith(newPosition))
-                    {
-                        gemController.collectGem();
-                        replaceIndex = index;
-                    }
-                }
 
+                }
                 if (comp.image.type == ImageType.Door && gemController.openDoor())
                 {
                     if (comp.hitbox.IntersectsWith(newPosition))
+                    {
+                        ReplaceComponent(index, newX, newY);
                         return false;
+                    }
                 }
-
                 if (comp.isSolid)
                 {
                     if (comp.hitbox.IntersectsWith(newPosition))
                         return true;
                 }
-
                 if (comp.image.type == ImageType.MiniSlime)
                 {
                     if (comp.hitbox.IntersectsWith(newPosition))
                     {
                         // what to do once collected to be implemented
-                        replaceIndex = index;
+                        ReplaceComponent(index, newX, newY);
+                        return false;
                     }
-                }
+                }*/
                 index++;
-            }
-            if (replaceIndex >= 0)
-            {
-                lab.labyrinthComponentList[replaceIndex] = new LabyrinthComponent(newX, newY, SpriteFactory.GetInstance().GetSprite(Sprites.empty));
             }
             return false;
         }
+
+        private void ReplaceComponent(int index, int newX, int newY)
+        {
+            lab.labyrinthComponentList[index] = LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.empty, newX, newY);
+        }
+
         private double GetCurrentDistanceWithDestinationPoint()
         {
-            double xDiff = PlayerDestinationPoint.X - lab.playerCharacter.x;
-            double yDiff = PlayerDestinationPoint.Y - lab.playerCharacter.y;
+            double xDiff = playerDestinationPoint.X - lab.playerCharacter.x;
+            double yDiff = playerDestinationPoint.Y - lab.playerCharacter.y;
 
             if(xDiff==0)
             {
@@ -150,37 +146,7 @@ namespace Explorus.Controllers
             }
 
             double distance = GetCurrentDistanceWithDestinationPoint();
-            if (distance < Constants.snapDistance)
-            {
-                currentDirection = Direction.None;
-                lab.playerCharacter.x = PlayerDestinationPoint.X;
-                lab.playerCharacter.y = PlayerDestinationPoint.Y;
-            }
-            else if(currentDirection == Direction.Up)
-            {
-                lab.playerCharacter.y -= (int)(deltaT * Constants.playerSpeed);
-            }
-            else if (currentDirection == Direction.Right)
-            {
-                lab.playerCharacter.x += (int)(deltaT * Constants.playerSpeed);
-            }
-            else if (currentDirection == Direction.Down)
-            {
-                lab.playerCharacter.y += (int)(deltaT * Constants.playerSpeed);
-            }
-            else if (currentDirection == Direction.Left)
-            {
-                lab.playerCharacter.x -= (int)(deltaT * Constants.playerSpeed);
-            }
-
-            if(distance > Constants.animationChangeThreshold)
-            {
-                lab.playerCharacter.SetAnimationState(1);
-            }
-            else
-            {
-                lab.playerCharacter.SetAnimationState(2);
-            }
+            currentDirection = lab.playerCharacter.Move(currentDirection, distance, playerDestinationPoint, deltaT);
         }
     }
 }

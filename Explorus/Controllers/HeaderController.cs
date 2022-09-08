@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal class HeaderController: IObserver<ICollectible>, IObservable<List<HeaderComponent>>
+    internal class HeaderController: IObserver<ICollection>, IObservable<List<HeaderComponent>>
     {
         private ILabyrinth lab;
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
-        private List<ICollectible> barList = new List<ICollectible>(3);
-        private ICollectible redBar;
-        private ICollectible blueBar;
-        private ICollectible yellowBar;
+        private List<ICollection> barList = new List<ICollection>(3);
+        private ICollection redBar;
+        private ICollection blueBar;
+        private ICollection yellowBar;
         private List<IObserver<List<HeaderComponent>>> _observers = new List<IObserver<List<HeaderComponent>>>();
 
         public HeaderController(ILabyrinth lab)
         {
-            redBar = new Collectible(lab.map, Sprites.heart, Bars.red, true);
-            blueBar = new Collectible(lab.map, Sprites.bigBubble, Bars.blue, true);
+            redBar = new Collection(lab.map, Sprites.heart, Bars.red, true);
+            blueBar = new Collection(lab.map, Sprites.bigBubble, Bars.blue, true);
             yellowBar = lab.gems;
             barList.Add(redBar);
             barList.Add(blueBar);
@@ -59,7 +59,7 @@ namespace Explorus.Controllers
             components = new List<HeaderComponent>();
             components.Add(GetComponent(0, Sprites.title, Bars.none, "title"));
             int position = 4; // starts after the title position
-            foreach (ICollectible bar in barList)
+            foreach (ICollection bar in barList)
             {
                 components.Add(GetComponent(position, bar.sprite, bar.barName, $"{bar.barName} icon", true));
                 position++;
@@ -93,7 +93,7 @@ namespace Explorus.Controllers
             throw new NotImplementedException();
         }
 
-        public void OnNext(ICollectible value)
+        public void OnNext(ICollection value)
         {
             Console.WriteLine($"collected a {value.sprite}");
             if(value.sprite == Sprites.gem)

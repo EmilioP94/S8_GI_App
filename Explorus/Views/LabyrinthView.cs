@@ -2,6 +2,7 @@
 using Explorus.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -34,15 +35,29 @@ namespace Explorus.Views
             //_Sprites = value;
         }
 
-        public void Render(object sender, PaintEventArgs e)
+        public void Render(object sender, PaintEventArgs e, Point offset)
         {
             if (lab != null)
             {
                 foreach (ILabyrinthComponent component in lab.labyrinthComponentList)
                 {
-                    component.Show(e, Constants.unit * 2);
+                    if(component.image != null)
+                    {
+                        e.Graphics.DrawImage(
+                        component.image.image,
+                        new Rectangle(component.x + offset.X,
+                        component.y + Constants.unit * 2 + offset.Y,
+                        component.image.image.Width,
+                        component.image.image.Height),
+                        0,
+                        0,
+                        component.image.image.Width,
+                        component.image.image.Height,
+                        GraphicsUnit.Pixel,
+                        component.attributes);
+                    }
                 }
-            }            
+            }
         }
 
         public virtual void Unsubscribe()

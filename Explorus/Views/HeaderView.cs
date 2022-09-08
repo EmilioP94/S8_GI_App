@@ -2,6 +2,7 @@
 using Explorus.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,11 +21,11 @@ namespace Explorus.Views
             headerController.Subscribe(this);
         }
 
-        public void Render(object sender, PaintEventArgs e)
+        public void Render(object sender, PaintEventArgs e, Point offset)
         {
             foreach (HeaderComponent component in _components)
             {
-                component.Show(e, 0);
+                e.Graphics.DrawImage(component.image.image, component.x + Constants.unit + offset.X, component.y + offset.Y);
             }
         }
 

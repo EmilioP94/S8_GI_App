@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,6 @@ namespace Explorus.Views
 {
     internal interface IRenderableComponent
     {
-        void Render(object sender, PaintEventArgs e);
+        void Render(object sender, PaintEventArgs e, Point offset);
     }
 }
