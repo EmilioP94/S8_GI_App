@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal class GemController : IObservable<Gems>
+    internal class GemController : IObservable<Collectible>
     {
         private readonly ILabyrinth lab;
-        private List<IObserver<Gems>> observers = new List<IObserver<Gems>>();
+        private List<IObserver<Collectible>> observers = new List<IObserver<Collectible>>();
 
         public GemController(ILabyrinth labyrinth)
         {
@@ -32,19 +32,19 @@ namespace Explorus.Controllers
 
         private void NotifyObservers()
         {
-            foreach (IObserver<Gems> observer in observers)
+            foreach (IObserver<Collectible> observer in observers)
             {
                 observer.OnNext(lab.gems);
             }
         }
 
-        public IDisposable Subscribe(IObserver<Gems> observer)
+        public IDisposable Subscribe(IObserver<Collectible> observer)
         {
             if (!observers.Contains(observer))
             {
                 observers.Add(observer);
             }
-            return new Unsubscriber<Gems>(observers, observer);
+            return new Unsubscriber<Collectible>(observers, observer);
         }
 
 

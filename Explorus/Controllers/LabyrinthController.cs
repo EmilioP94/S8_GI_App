@@ -25,7 +25,7 @@ namespace Explorus.Controllers
         public Direction currentDirection;
         public Point PlayerDestinationPoint;
         public GemController gemController;
-        public Gems gems;
+        public Collectible gems;
 
 
         private int x, y = 0;
@@ -33,7 +33,7 @@ namespace Explorus.Controllers
         public LabyrinthController()
         {
             lab = new Labyrinth();
-            gems = new Gems(lab.map);
+            gems = new Collectible(lab.map, Sprites.gem, Bars.yellow, false);
             currentDirection = Direction.None;
             gemController = new GemController(lab);
         }

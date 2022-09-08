@@ -15,15 +15,15 @@ namespace Explorus.Controllers
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
         private List<ICollectible> barList = new List<ICollectible>(3);
-        private Hearts redBar;
-        private Bubbles blueBar;
-        private Gems yellowBar;
+        private ICollectible redBar;
+        private ICollectible blueBar;
+        private ICollectible yellowBar;
         private List<IObserver<List<HeaderComponent>>> _observers = new List<IObserver<List<HeaderComponent>>>();
 
         public HeaderController(ILabyrinth lab)
         {
-            redBar = new Hearts(lab.map);
-            blueBar = new Bubbles(lab.map);
+            redBar = new Collectible(lab.map, Sprites.heart, Bars.red, true);
+            blueBar = new Collectible(lab.map, Sprites.bigBubble, Bars.blue, true);
             yellowBar = lab.gems;
             barList.Add(redBar);
             barList.Add(blueBar);
@@ -98,7 +98,7 @@ namespace Explorus.Controllers
             Console.WriteLine($"collected a {value.sprite}");
             if(value.sprite == Sprites.gem)
             {
-                yellowBar = (Gems)value;
+                yellowBar = value;
                 Console.WriteLine($"collected {yellowBar.acquired} of {yellowBar.total}");
             }
             GenerateBars();

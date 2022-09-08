@@ -24,7 +24,7 @@ namespace Explorus.Models
         private ILabyrinthComponent _door;
         public ILabyrinthComponent door { get { return _door; } set { this._door = value; } }
 
-        public Gems gems { get; set ; }
+        public Collectible gems { get; set ; }
 
         private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();   
         
@@ -43,7 +43,7 @@ namespace Explorus.Models
             map = Constants.level_1;
             labyrinthComponentList = new List<ILabyrinthComponent>();
             //slimusPosition = Constants.initialSlimusPosition;
-            gems = new Gems(map);
+            gems = new Collectible(map, Sprites.gem, Bars.yellow, false);
             NotifyObservers();
 
             for (int i = 0; i < map.GetLength(0); i++)

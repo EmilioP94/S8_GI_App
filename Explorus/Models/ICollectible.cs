@@ -14,6 +14,7 @@ namespace Explorus.Models
         int acquired { get; set; }
         Sprites sprite { get; set; }
         Bars barName { get; set; }
+        bool defaultFull { get; set; }
         void Count();
     }
 }
