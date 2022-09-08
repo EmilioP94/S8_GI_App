@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\CollectionTests.cs" />
+    <Compile Include="Models\DoorTests.cs" />
+    <Compile Include="Models\GemsTests.cs" />
     <Compile Include="Models\HeaderComponentTest.cs" />
     <Compile Include="Models\LabyrinthTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
