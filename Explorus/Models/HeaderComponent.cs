@@ -14,7 +14,7 @@ namespace Explorus.Models
         blue,
         yellow
     }
-    internal class HeaderComponent : ILabyrinthComponent
+    internal class HeaderComponent
     {
         public int x { get; set; }
         public int y { get; set; }

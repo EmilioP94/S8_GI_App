@@ -10,8 +10,14 @@ namespace Explorus
     internal static class Constants
     {
         public const int unit = 48;//48px
-        public const double playerSpeed = 0.5;
+        public const int LabyrinthWidth = 5;
+        public const int LabyrinthHeight = 5;
+
+        public const double playerSpeed = 0.4;
+
         public const int snapDistance = 15; //quand la distance en pixel entre slimus et sa destination est inferieur a cette valeur, il 'snap' vers la destination
+
+        public const int animationChangeThreshold = 60; //valeur entre 0 et 96 
 
         public static readonly Models.Sprites[,] level_1 =
         {

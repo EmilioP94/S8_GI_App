@@ -19,8 +19,12 @@ namespace Explorus.Models
 
         public Image2D image { get; private set; }
 
-        public bool isSolid = false;
-        public Rectangle hitbox { get; private set; }
+        bool _isSolid = false;
+        public bool isSolid { get { return _isSolid; } set { this._isSolid = value; } }
+
+
+        Rectangle _hitbox;
+        public Rectangle hitbox { get { return _hitbox; } set { this._hitbox = value; } }
 
         public LabyrinthComponent(int x, int y, Image2D image)
         {
@@ -32,17 +36,18 @@ namespace Explorus.Models
             {
                 this.x += Constants.unit / 2;
                 this.y += Constants.unit / 2;
-                hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+                _hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
             }
 
             if(image.type == ImageType.Wall || image.type == ImageType.Door)
             {
-                isSolid = true;
-                hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+                _isSolid = true;
+                _hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
             }
         }
 
-        public void Show(PaintEventArgs e, int yOffset)
+
+        public virtual void Show(PaintEventArgs e, int yOffset)
         {
             if(image.type == ImageType.Door)
             {

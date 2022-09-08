@@ -18,8 +18,8 @@ namespace Explorus.Models
         private List<ILabyrinthComponent> _labyrinthComponentList;
         public List<ILabyrinthComponent> labyrinthComponentList { get { return _labyrinthComponentList; } set { this._labyrinthComponentList = value; } }
 
-        private ILabyrinthComponent _playerCharacter;
-        public ILabyrinthComponent playerCharacter { get { return _playerCharacter; } set { this._playerCharacter = value; } }
+        private Slimus _playerCharacter;
+        public Slimus playerCharacter { get { return _playerCharacter; } set { this._playerCharacter = value; } }
 
         private ILabyrinthComponent _door;
         public ILabyrinthComponent door { get { return _door; } set { this._door = value; } }
@@ -50,18 +50,27 @@ namespace Explorus.Models
             {
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
-                    LabyrinthComponent comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
-                    labyrinthComponentList.Add(comp);
+                    LabyrinthComponent comp;                    
 
                     if (map[i,j]== Sprites.slimusDownLarge)
                     {
-                        playerCharacter = comp;
+                        playerCharacter = new Slimus(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
+                        comp = playerCharacter;
                     }
 
-                    if (map[i,j] == Sprites.door)
+                    else if (map[i,j] == Sprites.door)
                     {
+                        //TODO: this should probably be a 'door' object instead of a generic labyrinthcomponent
+                        comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
                         door = comp;
                     }
+
+                    else
+                    {
+                        comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
+                    }
+
+                    labyrinthComponentList.Add(comp);
                 }
             }
         }
