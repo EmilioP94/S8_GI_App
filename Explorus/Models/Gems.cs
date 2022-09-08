@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal class MiniSlime : LabyrinthComponent
+    internal class Gems : LabyrinthComponent
     {
-        public MiniSlime(int x, int y, Image2D image) : base(x, y, image)
+        private bool isCollected = false;
+        public Gems(int x, int y, Image2D image) : base(x, y, image)
         {
             this.x += Constants.unit / 2;
             this.y += Constants.unit / 2;
@@ -18,6 +19,12 @@ namespace Explorus.Models
 
         public override bool Collide(Slimus player)
         {
+            if (isCollected)
+            {
+                return false;
+            }
+            player.gems.Acquire();
+            isCollected = true;
             image = null;
             return false;
         }

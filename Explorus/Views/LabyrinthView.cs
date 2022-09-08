@@ -41,7 +41,9 @@ namespace Explorus.Views
             {
                 foreach (ILabyrinthComponent component in lab.labyrinthComponentList)
                 {
-                    e.Graphics.DrawImage(
+                    if(component.image != null)
+                    {
+                        e.Graphics.DrawImage(
                         component.image.image,
                         new Rectangle(component.x + offset.X,
                         component.y + Constants.unit * 2 + offset.Y,
@@ -53,6 +55,7 @@ namespace Explorus.Views
                         component.image.image.Height,
                         GraphicsUnit.Pixel,
                         component.attributes);
+                    }
                 }
             }
         }

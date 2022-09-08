@@ -19,5 +19,7 @@ namespace Explorus.Models
         bool isSolid { get; }
 
         Rectangle hitbox { get; }
+
+        bool Collide(Slimus player);
     }
 }

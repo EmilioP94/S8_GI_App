@@ -24,7 +24,7 @@ namespace Explorus
         {
             labyrinthController = new LabyrinthController();
             headerController = new HeaderController(labyrinthController.lab);
-            labyrinthController.gemController.Subscribe(headerController);
+            labyrinthController.lab.gems.Subscribe(headerController);
             oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             Thread thread = new Thread(new ThreadStart(GameLoop));

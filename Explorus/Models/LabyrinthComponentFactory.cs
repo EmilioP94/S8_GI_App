@@ -22,7 +22,7 @@ namespace Explorus.Models
                 case Sprites.miniSlime:
                     return new MiniSlime(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.miniSlime));
                 case Sprites.gem:
-                    return new Collectible(x, y, SpriteFactory.GetInstance().GetSprite(component));
+                    return new Gems(x, y, SpriteFactory.GetInstance().GetSprite(component));
                 default:
                     return new LabyrinthComponent(x, y, SpriteFactory.GetInstance().GetSprite(component));
             }

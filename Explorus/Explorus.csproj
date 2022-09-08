@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\GameEngine.cs" />
-    <Compile Include="Controllers\GemController.cs" />
     <Compile Include="Controllers\HeaderController.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
     <Compile Include="Controllers\LabyrinthController.cs" />
@@ -61,7 +60,7 @@
     </Compile>
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
-    <Compile Include="Models\Collectible.cs" />
+    <Compile Include="Models\Gems.cs" />
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Door.cs" />
     <Compile Include="Models\HeaderComponent.cs" />

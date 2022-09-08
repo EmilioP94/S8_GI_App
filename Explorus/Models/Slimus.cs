@@ -21,6 +21,13 @@ namespace Explorus.Models
     internal class Slimus : LabyrinthComponent
     {
         private Image2D[,] slimusImages;
+
+        public Collection gems { get; private set; }
+
+        public Collection hearts { get; private set; }
+
+        public Collection bubbles { get; private set; }
+
         public override Image2D image { get
             {
                 return slimusImages[animationCycleIndex, (int)currentDirection];
@@ -103,6 +110,13 @@ namespace Explorus.Models
         public void SetAnimationState(int index)
         {
             animationCycleIndex = index;
+        }
+
+        public void SetCollections(Collection gems, Collection hearts, Collection bubbles)
+        {
+            this.gems = gems;
+            this.hearts = hearts;
+            this.bubbles = bubbles;
         }
     }
 }

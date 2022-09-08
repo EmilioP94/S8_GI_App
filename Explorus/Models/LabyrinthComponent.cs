@@ -30,5 +30,10 @@ namespace Explorus.Models
             this.y = y;
             this.image = image;
         }
+
+        public virtual bool Collide(Slimus player)
+        {
+            return true;
+        }
     }
 }

@@ -25,17 +25,11 @@ namespace Explorus.Controllers
         public ILabyrinth lab { get; private set; }
         public Direction currentDirection;
         public Point playerDestinationPoint;
-        public GemController gemController { get; private set; }
-        private int animationTimer;
-        public Collection gems;
-        private int x, y = 0;
 
         public LabyrinthController()
         {
             lab = new Labyrinth();
-            gems = new Collection(lab.map, Sprites.gem, Bars.yellow, false);
             currentDirection = Direction.None;
-            gemController = new GemController(lab);
         }
 
         public void ProcessInput(KeyEventArgs e)
@@ -87,14 +81,14 @@ namespace Explorus.Controllers
             int index = 0;
             foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
             {
+                if (comp.hitbox.IntersectsWith(newPosition))
+                {
+                    return comp.Collide(lab.playerCharacter);
+                }
+                /*
                 if (comp.image.type == ImageType.Collectible)
                 {
-                    if (comp.hitbox.IntersectsWith(newPosition))
-                    {
-                        gemController.collectGem();
-                        ReplaceComponent(index, newX, newY);
-                        return false;
-                    }
+
                 }
                 if (comp.image.type == ImageType.Door && gemController.openDoor())
                 {
@@ -117,7 +111,7 @@ namespace Explorus.Controllers
                         ReplaceComponent(index, newX, newY);
                         return false;
                     }
-                }
+                }*/
                 index++;
             }
             return false;

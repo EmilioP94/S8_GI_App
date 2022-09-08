@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
-    internal class Collection : ICollection
+    internal class Collection : ICollection, IObservable<Collection>
     {
-        public Sprites[,] map { get; set; }
-        public int total { get; set ; }
-        public int acquired { get ; set ; }
-        public Sprites sprite { get; set ; }
-        public Bars barName { get; set ; }
-        public bool defaultFull { get; set; }
+        public Sprites[,] map { get; private set; }
+        public int total { get; private set ; }
+        public int acquired { get ; private set ; }
+        public Sprites sprite { get; private set ; }
+        public Bars barName { get; private set ; }
+        public bool defaultFull { get; private set; }
+
+        private List<IObserver<Collection>> observers = new List<IObserver<Collection>>();
 
         public Collection(Sprites[,] map, Sprites sprite, Bars barName, bool defaultFull)
         {
@@ -50,6 +53,24 @@ namespace Explorus.Models
         public void Acquire()
         {
             acquired++;
+            NotifyObservers();
+        }
+
+        private void NotifyObservers()
+        {
+            foreach (IObserver<Collection> observer in observers)
+            {
+                observer.OnNext(this);
+            }
+        }
+
+        public IDisposable Subscribe(IObserver<Collection> observer)
+        {
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
+            return new Unsubscriber<Collection>(observers, observer);
         }
     }
 }

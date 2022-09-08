@@ -49,8 +49,7 @@ namespace Explorus
             originalWidth = lab.map.GetLength(1) * 2 * Constants.unit;
             int originalSmallestSide = Math.Min(originalHeight, originalWidth);
             oGameForm = new GameForm();
-            oGameForm.Width = originalWidth;
-            oGameForm.Height = originalHeight;
+            oGameForm.MinimumSize = new Size(600, 600);
             this.scaleFactor = this.computeScaleFactor(originalSmallestSide, Math.Min(oGameForm.ClientSize.Width, oGameForm.ClientSize.Height));
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);

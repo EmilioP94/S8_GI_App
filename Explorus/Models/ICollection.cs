@@ -9,12 +9,12 @@ namespace Explorus.Models
 {
     internal interface ICollection
     {
-        Sprites[,] map { get; set; }
-        int total { get; set; }
-        int acquired { get; set; }
-        Sprites sprite { get; set; }
-        Bars barName { get; set; }
-        bool defaultFull { get; set; }
+        Sprites[,] map { get; }
+        int total { get; }
+        int acquired { get; }
+        Sprites sprite { get; }
+        Bars barName { get; }
+        bool defaultFull { get; }
         void Count();
     }
 }

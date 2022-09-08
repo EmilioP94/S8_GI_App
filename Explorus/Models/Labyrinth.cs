@@ -20,6 +20,8 @@ namespace Explorus.Models
         public Slimus playerCharacter { get; private set; }
 
         public Collection gems { get; set ; }
+        public Collection hearts { get; set; }
+        public Collection bubbles { get; set; }
 
         private List<IObserver<Sprites[,]>> observers = new List<IObserver<Sprites[,]>>();   
         
@@ -52,6 +54,7 @@ namespace Explorus.Models
             foreach(Slimus player in labyrinthComponentList.OfType<Slimus>())
             {
                 playerCharacter = player;
+                playerCharacter.SetCollections(gems, hearts, bubbles);
             }
         }
 
