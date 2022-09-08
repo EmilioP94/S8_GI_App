@@ -14,6 +14,12 @@ namespace Explorus.Models
         int y { get; set; }
         Image2D image { get; }
 
-        void Show(PaintEventArgs e);
+
+        bool isSolid { get; set; }
+
+        Rectangle hitbox { get; set; }
+
+        void Show(PaintEventArgs e, int yOffset);
+
     }
 }

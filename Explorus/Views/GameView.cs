@@ -22,6 +22,7 @@ namespace Explorus
         public double scaleFactor { get; set;}
         public double originalSmallestSide { get; set;}
        
+        private HeaderView headerView;
 
         public float framerate
         {
@@ -36,7 +37,7 @@ namespace Explorus
         }
 
         GameForm oGameForm;
-        public GameView(HandleInput doHandle, ILabyrinth lab)
+        public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
         {
             //add header in calculation ( its 2 units )
             this.originalSmallestSide = Math.Min(Constants.LabyrinthHeight, Constants.LabyrinthHeight) * Constants.unit * 2;
@@ -46,6 +47,7 @@ namespace Explorus
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
             oGameForm.Resize += new EventHandler(ProcessResize);
             labyrinthView = new LabyrinthView(lab);
+            headerView = new HeaderView(headerController);
         }
 
         public void Show() { Application.Run(oGameForm); }
@@ -72,6 +74,7 @@ namespace Explorus
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
             g.ScaleTransform((float)this.scaleFactor,(float)this.scaleFactor);
+            headerView.Render(sender, e);
             labyrinthView.Render(sender, e);
             oGameForm.Text = String.Format("Explorus - FPS {0}", framerate.ToString());
         }

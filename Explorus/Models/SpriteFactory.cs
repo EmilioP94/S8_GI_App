@@ -22,7 +22,26 @@ namespace Explorus.Models
         key,
         slimusDownLarge,
         slimusDownMedium,
-        slimusDownSmall
+        slimusDownSmall,
+        slimusUpLarge,
+        slimusUpMedium,
+        slimusUpSmall,
+        slimusRightLarge,
+        slimusRightMedium,
+        slimusRightSmall,
+        slimusLeftLarge,
+        slimusLeftMedium,
+        slimusLeftSmall,
+        leftBarTip,
+        redBarFull,
+        redBarHalf,
+        blueBarFull,
+        blueBarHalf,
+        yellowBarFull,
+        yellowBarHalf,
+        emptyBar,
+        rightBarTip,
+        miniSlime
     }
     internal class SpriteFactory
     {

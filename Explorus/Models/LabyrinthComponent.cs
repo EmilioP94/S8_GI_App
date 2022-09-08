@@ -19,8 +19,12 @@ namespace Explorus.Models
 
         public Image2D image { get; private set; }
 
-        public bool isSolid = false;
-        public Rectangle hitbox { get; private set; }
+        bool _isSolid = false;
+        public bool isSolid { get { return _isSolid; } set { this._isSolid = value; } }
+
+
+        Rectangle _hitbox;
+        public Rectangle hitbox { get { return _hitbox; } set { this._hitbox = value; } }
 
         public LabyrinthComponent(int x, int y, Image2D image)
         {
@@ -28,21 +32,22 @@ namespace Explorus.Models
             this.y = y;
             this.image = image;
 
-            if (image.type == ImageType.Collectible)
+            if (image.type == ImageType.Collectible || image.type == ImageType.MiniSlime)
             {
                 this.x += Constants.unit / 2;
                 this.y += Constants.unit / 2;
-                hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+                _hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
             }
 
             if(image.type == ImageType.Wall || image.type == ImageType.Door)
             {
-                isSolid = true;
-                hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+                _isSolid = true;
+                _hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
             }
         }
 
-        public void Show(PaintEventArgs e)
+
+        public virtual void Show(PaintEventArgs e, int yOffset)
         {
             if(image.type == ImageType.Door)
             {
@@ -50,11 +55,11 @@ namespace Explorus.Models
                 matrix.Matrix33 = 0.5f;
                 ImageAttributes attributes = new ImageAttributes();
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                e.Graphics.DrawImage(image.image, new Rectangle(x, y, image.image.Width, image.image.Height), 0, 0, image.image.Width, image.image.Height,GraphicsUnit.Pixel, attributes);
+                e.Graphics.DrawImage(image.image, new Rectangle(x, y + yOffset, image.image.Width, image.image.Height), 0, 0, image.image.Width, image.image.Height,GraphicsUnit.Pixel, attributes);
             }
             else
             {
-                e.Graphics.DrawImage(image.image, x, y);
+                e.Graphics.DrawImage(image.image, x, y + yOffset);
             }
         }
     }

@@ -21,6 +21,9 @@ namespace Explorus.Models
                 case Sprites.gem:
                     return ImageType.Collectible;
 
+                case Sprites.miniSlime:
+                    return ImageType.MiniSlime;
+
                 case Sprites.slimusDownSmall:
                 case Sprites.slimusDownMedium:
                 case Sprites.slimusDownLarge:
