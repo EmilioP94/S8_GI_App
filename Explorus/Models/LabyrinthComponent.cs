@@ -28,7 +28,7 @@ namespace Explorus.Models
             this.y = y;
             this.image = image;
 
-            if (image.type == ImageType.Collectible)
+            if (image.type == ImageType.Collectible || image.type == ImageType.MiniSlime)
             {
                 this.x += Constants.unit / 2;
                 this.y += Constants.unit / 2;

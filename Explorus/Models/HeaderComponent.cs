@@ -33,7 +33,7 @@ namespace Explorus.Models
 
         public void Show(PaintEventArgs e, int yOffset)
         {
-            e.Graphics.DrawImage(image.image, x, y + yOffset);
+            e.Graphics.DrawImage(image.image, x + Constants.unit, y + yOffset);
         }
     }
 }

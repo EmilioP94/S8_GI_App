@@ -13,7 +13,7 @@ namespace Explorus.Models
     {
         private Sprites[,] _map;
         public Sprites[,] map { get { return _map; } private set { this._map = value; this.NotifyObservers(); } }
-        public int[] slimusPosition { get; set; }
+        //public int[] slimusPosition { get; set; }
 
         private List<ILabyrinthComponent> _labyrinthComponentList;
         public List<ILabyrinthComponent> labyrinthComponentList { get { return _labyrinthComponentList; } set { this._labyrinthComponentList = value; } }
@@ -42,13 +42,13 @@ namespace Explorus.Models
         {
             map = Constants.level_1;
             labyrinthComponentList = new List<ILabyrinthComponent>();
-            slimusPosition = Constants.initialSlimusPosition;
+            //slimusPosition = Constants.initialSlimusPosition;
             gems = new Gems(map);
             NotifyObservers();
 
-            for (int i = 0; i < Constants.LabyrinthHeight; i++)
+            for (int i = 0; i < map.GetLength(0); i++)
             {
-                for (int j = 0; j < Constants.LabyrinthWidth; j++)
+                for (int j = 0; j < map.GetLength(1); j++)
                 {
                     LabyrinthComponent comp = new LabyrinthComponent(Constants.unit * j * 2, Constants.unit * i * 2, SpriteFactory.GetInstance().GetSprite(map[i, j]));
                     labyrinthComponentList.Add(comp);

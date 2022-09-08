@@ -95,10 +95,12 @@ namespace Explorus.Controllers
 
         public void OnNext(ICollectible value)
         {
-            Console.WriteLine("collected a collectible!");
-            Console.WriteLine(value);
-            yellowBar = (Gems)value;
-            Console.WriteLine($"collected {yellowBar.acquired} of {yellowBar.total}");
+            Console.WriteLine($"collected a {value.sprite}");
+            if(value.sprite == Sprites.gem)
+            {
+                yellowBar = (Gems)value;
+                Console.WriteLine($"collected {yellowBar.acquired} of {yellowBar.total}");
+            }
             GenerateBars();
             NotifyObservers();
 

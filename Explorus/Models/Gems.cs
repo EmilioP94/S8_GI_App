@@ -24,9 +24,9 @@ namespace Explorus.Models
         public void Count()
         {
             int count = 0;
-            for (int i = 0; i < Constants.LabyrinthHeight; i++)
+            for (int i = 0; i < map.GetLength(0); i++)
             {
-                for (int j = 0; j < Constants.LabyrinthWidth; j++)
+                for (int j = 0; j < map.GetLength(1); j++)
                 {
                     if (map[i, j] == Sprites.gem)
                     {

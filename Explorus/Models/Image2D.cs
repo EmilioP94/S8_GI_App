@@ -12,6 +12,7 @@ namespace Explorus.Models
         Wall,
         Player,
         Collectible,
+        MiniSlime,
         Door,
         Other,
         Nothing

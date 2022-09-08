@@ -30,12 +30,11 @@ namespace Explorus.Views
 
         public void OnNext(List<HeaderComponent> value)
         {
-            Console.WriteLine("tbnk");
             _components = value;
-            foreach(HeaderComponent component in _components)
-            {
-                Console.WriteLine($"component is {component.name}");
-            }
+            //foreach(HeaderComponent component in _components)
+            //{
+            //    Console.WriteLine($"component is {component.name}");
+            //}
         }
 
         public void OnError(Exception error)
