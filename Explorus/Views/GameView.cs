@@ -18,6 +18,7 @@ namespace Explorus
         private float _framerate = 0;
         public delegate void HandleInput(object sender, KeyEventArgs e);
         private LabyrinthView labyrinthView;
+        private HeaderView headerView;
 
         public float framerate
         {
@@ -32,12 +33,13 @@ namespace Explorus
         }
 
         GameForm oGameForm;
-        public GameView(HandleInput doHandle, ILabyrinth lab)
+        public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
         {
             oGameForm = new GameForm();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
             labyrinthView = new LabyrinthView(lab);
+            headerView = new HeaderView(headerController);
         }
 
         public void Show() { Application.Run(oGameForm); }
@@ -64,6 +66,7 @@ namespace Explorus
 
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
+            headerView.Render(sender, e);
             labyrinthView.Render(sender, e);
             oGameForm.Text = String.Format("Explorus - FPS {0}", framerate.ToString());
         }

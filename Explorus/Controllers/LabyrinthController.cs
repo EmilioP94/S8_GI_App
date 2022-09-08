@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -23,7 +24,8 @@ namespace Explorus.Controllers
         public ILabyrinth lab { get; private set; }
         public Direction currentDirection;
         public Point PlayerDestinationPoint;
-        private GemController gemController;
+        public GemController gemController;
+        public Collectible gems;
 
 
         private int x, y = 0;
@@ -31,6 +33,7 @@ namespace Explorus.Controllers
         public LabyrinthController()
         {
             lab = new Labyrinth();
+            gems = new Collectible(lab.map, Sprites.gem, Bars.yellow, false);
             currentDirection = Direction.None;
             gemController = new GemController(lab);
         }
@@ -101,6 +104,15 @@ namespace Explorus.Controllers
                 {
                     if (comp.hitbox.IntersectsWith(newPosition))
                         return true;
+                }
+
+                if (comp.image.type == ImageType.MiniSlime)
+                {
+                    if (comp.hitbox.IntersectsWith(newPosition))
+                    {
+                        // what to do once collected to be implemented
+                        replaceIndex = index;
+                    }
                 }
                 index++;
             }
