@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Drawing;
 using Explorus.Controllers;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
@@ -23,10 +15,6 @@ namespace Explorus.Models
         private Image2D[,] slimusImages;
 
         public Collection gems { get; private set; }
-
-        public Collection hearts { get; private set; }
-
-        public Collection bubbles { get; private set; }
 
         public override Image2D image { get
             {
@@ -112,11 +100,9 @@ namespace Explorus.Models
             animationCycleIndex = index;
         }
 
-        public void SetCollections(Collection gems, Collection hearts, Collection bubbles)
+        public void SetCollections(Collection gems)
         {
             this.gems = gems;
-            this.hearts = hearts;
-            this.bubbles = bubbles;
         }
     }
 }

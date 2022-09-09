@@ -11,28 +11,13 @@ using System.Windows.Forms;
 
 namespace Explorus.Views
 {
-    internal class LabyrinthView : IRenderableComponent, IObserver<Sprites[,]>
+    internal class LabyrinthView : IRenderableComponent
     {
         private ILabyrinth lab;
-        private IDisposable unsubscriber;
 
         public LabyrinthView(ILabyrinth labyrinthe)
         {
             lab = labyrinthe;
-        }
-        public void OnCompleted()
-        {
-            this.Unsubscribe();
-        }
-
-        public void OnError(Exception error)
-        {
-            Console.WriteLine("Labyrinth observer error");
-        }
-
-        public void OnNext(Sprites[,] value)
-        {
-            //_Sprites = value;
         }
 
         public void Render(object sender, PaintEventArgs e, Point offset)
@@ -58,11 +43,6 @@ namespace Explorus.Views
                     }
                 }
             }
-        }
-
-        public virtual void Unsubscribe()
-        {
-            unsubscriber?.Dispose();
         }
     }
 }

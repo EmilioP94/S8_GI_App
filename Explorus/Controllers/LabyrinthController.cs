@@ -28,7 +28,7 @@ namespace Explorus.Controllers
 
         public LabyrinthController()
         {
-            lab = new Labyrinth();
+            lab = new Labyrinth(Constants.level_1);
             currentDirection = Direction.None;
         }
 
@@ -78,48 +78,14 @@ namespace Explorus.Controllers
         private bool CheckForCollision(int newX, int newY)
         {
             Rectangle newPosition = new Rectangle(newX, newY, Constants.unit * 2, Constants.unit * 2);
-            int index = 0;
             foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
             {
                 if (comp.hitbox.IntersectsWith(newPosition))
                 {
                     return comp.Collide(lab.playerCharacter);
                 }
-                /*
-                if (comp.image.type == ImageType.Collectible)
-                {
-
-                }
-                if (comp.image.type == ImageType.Door && gemController.openDoor())
-                {
-                    if (comp.hitbox.IntersectsWith(newPosition))
-                    {
-                        ReplaceComponent(index, newX, newY);
-                        return false;
-                    }
-                }
-                if (comp.isSolid)
-                {
-                    if (comp.hitbox.IntersectsWith(newPosition))
-                        return true;
-                }
-                if (comp.image.type == ImageType.MiniSlime)
-                {
-                    if (comp.hitbox.IntersectsWith(newPosition))
-                    {
-                        // what to do once collected to be implemented
-                        ReplaceComponent(index, newX, newY);
-                        return false;
-                    }
-                }*/
-                index++;
             }
             return false;
-        }
-
-        private void ReplaceComponent(int index, int newX, int newY)
-        {
-            lab.labyrinthComponentList[index] = LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.empty, newX, newY);
         }
 
         private double GetCurrentDistanceWithDestinationPoint()

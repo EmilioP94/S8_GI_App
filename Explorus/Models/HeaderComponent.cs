@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
+﻿
 namespace Explorus.Models
 {
     enum Bars
@@ -25,7 +19,7 @@ namespace Explorus.Models
         public HeaderComponent(int x, int y, Image2D image, Bars barName, string name)
         {
             this.x = x;
-            this.y = y + Constants.unit / 2;
+            this.y = y;
             this.image = image;
             this.barName = barName;
             this.name = name;

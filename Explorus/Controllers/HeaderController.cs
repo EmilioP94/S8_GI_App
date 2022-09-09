@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal class HeaderController: IObserver<ICollection>, IObservable<List<HeaderComponent>>
+    internal class HeaderController: Models.IObserver<ICollection>, Models.IObservable<List<HeaderComponent>>
     {
-        private ILabyrinth lab;
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
@@ -18,7 +17,7 @@ namespace Explorus.Controllers
         private ICollection redBar;
         private ICollection blueBar;
         private ICollection yellowBar;
-        private List<IObserver<List<HeaderComponent>>> _observers = new List<IObserver<List<HeaderComponent>>>();
+        private List<Models.IObserver<List<HeaderComponent>>> _observers = new List<Models.IObserver<List<HeaderComponent>>>();
 
         public HeaderController(ILabyrinth lab)
         {
@@ -83,16 +82,6 @@ namespace Explorus.Controllers
             }
         }
 
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
         public void OnNext(ICollection value)
         {
             Console.WriteLine($"collected a {value.sprite}");
@@ -107,13 +96,13 @@ namespace Explorus.Controllers
         }
         private void NotifyObservers()
         {
-            foreach (IObserver<List<HeaderComponent>> observer in _observers)
+            foreach (Models.IObserver<List<HeaderComponent>> observer in _observers)
             {
                 observer.OnNext(components);
             }
         }
 
-        public IDisposable Subscribe(IObserver<List<HeaderComponent>> observer)
+        public IDisposable Subscribe(Models.IObserver<List<HeaderComponent>> observer)
         {
             if (!_observers.Contains(observer))
             {

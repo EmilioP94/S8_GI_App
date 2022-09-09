@@ -64,10 +64,11 @@
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Door.cs" />
     <Compile Include="Models\HeaderComponent.cs" />
-    <Compile Include="Models\IAnimatedComponent.cs" />
     <Compile Include="Models\ICollection.cs" />
     <Compile Include="Models\ILabyrinthComponent.cs" />
     <Compile Include="Models\Image2D.cs" />
+    <Compile Include="Models\IObservable.cs" />
+    <Compile Include="Models\IObserver.cs" />
     <Compile Include="Models\Labyrinth.cs" />
     <Compile Include="Models\LabyrinthComponent.cs" />
     <Compile Include="Models\LabyrinthComponentFactory.cs" />
