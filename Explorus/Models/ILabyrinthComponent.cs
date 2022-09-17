@@ -14,6 +14,8 @@ namespace Explorus.Models
 
         Rectangle hitbox { get; }
 
-        bool Collide(Slimus player);
+        bool Collide(ILabyrinthComponent comp);
+
+        bool IsValidDestination(Slimus playerCharacter);
     }
 }
