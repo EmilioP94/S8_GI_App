@@ -1,24 +1,38 @@
 ﻿using Explorus.Controllers;
+using Explorus.Models;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 
 namespace Explorus.Views
 {
-    internal class GameView
+    enum WindowEvents
+    {
+        Minimize,
+        Restore,
+        Focus,
+        Unfocus
+    }
+    internal class GameView : Models.IObservable<WindowEvents>
     {
         private float _framerate = 0;
         public delegate void HandleInput(object sender, KeyEventArgs e);
         public delegate void HandleResize(object sender, EventArgs e);
         private LabyrinthView labyrinthView;
-        public double scaleFactor { get; set;}
-        private int originalWidth { get; set;}
+        public double scaleFactor { get; set; }
+        private int originalWidth { get; set; }
 
         private int originalHeight { get; set; }
-       
+
         private HeaderView headerView;
         private Point offset { get; set; }
+        public int state;
+        public int level;
+        public bool running;
+
+        private List<Models.IObserver<WindowEvents>> observers = new List<Models.IObserver<WindowEvents>>();
 
         public float framerate
         {
@@ -28,7 +42,7 @@ namespace Explorus.Views
             }
             set
             {
-                _framerate   = value;
+                _framerate = value;
             }
         }
 
@@ -47,6 +61,11 @@ namespace Explorus.Views
             oGameForm.Resize += new EventHandler(ProcessResize);
             labyrinthView = new LabyrinthView(lab);
             headerView = new HeaderView(headerController);
+            oGameForm.FormClosing += new FormClosingEventHandler(Close);
+            oGameForm.Activated += new EventHandler(Focus);
+            oGameForm.Deactivate += new EventHandler(Unfocus);
+            running = true;
+
         }
 
         public void Show() { Application.Run(oGameForm); }
@@ -60,27 +79,48 @@ namespace Explorus.Views
                 });
         }
 
-        public void Close()
+        public void Close(object sender, FormClosingEventArgs e)
         {
             if (oGameForm.Visible)
-                oGameForm.BeginInvoke((MethodInvoker)delegate {
+            {
+                oGameForm.BeginInvoke((MethodInvoker)delegate
+                {
                     oGameForm.Close();
                 });
+                running = false;
+            }
         }
 
-        private void GameRenderer(object sender, PaintEventArgs e) 
+        public void Focus(object sender, EventArgs e)
+        {
+            NotifyObservers(WindowEvents.Focus);
+        }
+        public void Unfocus(object sender, EventArgs e)
+        {
+            NotifyObservers(WindowEvents.Unfocus);
+        }
+
+        // ceci devra être mis sur un thread
+        private void GameRenderer(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             g.Clear(Color.Black);
-            g.ScaleTransform((float)this.scaleFactor,(float)this.scaleFactor);
+            g.ScaleTransform((float)this.scaleFactor, (float)this.scaleFactor);
             headerView.Render(sender, e, offset);
             labyrinthView.Render(sender, e, offset);
-            oGameForm.Text = String.Format("Explorus - FPS {0}", framerate.ToString());
+            oGameForm.Text = String.Format("Explorus - FPS {0} - {1} - level {2}", framerate.ToString(), Enum.GetName(typeof(GameStates), state), level + 1);
         }
 
         private void ProcessResize(object sender, EventArgs e)
         {
-            DoProcessResize();
+            if (oGameForm.WindowState == FormWindowState.Minimized )
+            {
+                NotifyObservers(WindowEvents.Minimize);
+            }
+            else
+            {
+                DoProcessResize();
+            }
         }
 
         private void DoProcessResize()
@@ -108,6 +148,28 @@ namespace Explorus.Views
             double newScaleFactordelta = newSideLength / originalSideLength;
             return Math.Round(newScaleFactordelta, 2);
 
+        }
+
+        public FormWindowState GetWindowState()
+        {
+            return oGameForm.WindowState;
+        }
+
+        private void NotifyObservers(WindowEvents windowEvent)
+        {
+            foreach (Models.IObserver<WindowEvents> observer in observers)
+            {
+                observer.OnNext(windowEvent);
+            }
+        }
+
+        public IDisposable Subscribe(Models.IObserver<WindowEvents> observer)
+        {
+            if (!observers.Contains(observer))
+            {
+                observers.Add(observer);
+            }
+            return new Unsubscriber<WindowEvents>(observers, observer);
         }
     }
 }

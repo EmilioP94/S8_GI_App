@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
+    <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\Gems.cs" />
     <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Door.cs" />
@@ -72,6 +73,7 @@
     <Compile Include="Models\Labyrinth.cs" />
     <Compile Include="Models\LabyrinthComponent.cs" />
     <Compile Include="Models\LabyrinthComponentFactory.cs" />
+    <Compile Include="Models\Level.cs" />
     <Compile Include="Models\MiniSlime.cs" />
     <Compile Include="Models\Slimus.cs" />
     <Compile Include="Models\SpriteFactory.cs" />
