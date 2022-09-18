@@ -20,5 +20,7 @@ namespace Explorus.Controllers
 
         bool gameEnded { get; }
 
+        void CreateBubble();
+
     }
 }

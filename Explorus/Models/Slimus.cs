@@ -111,5 +111,11 @@ namespace Explorus.Models
         {
             this.gems = gems;
         }
+
+        public FacingDirection GetDirection()
+        {
+            return currentDirection;
+        }
+
     }
 }

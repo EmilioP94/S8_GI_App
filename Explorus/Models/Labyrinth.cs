@@ -47,5 +47,17 @@ namespace Explorus.Models
                 miniSlimes.Add(slime);
             }
         }
+        public void CreateBubble()
+        {
+            Bubble bubble = new Bubble(
+                playerCharacter.x,
+                playerCharacter.y,
+                SpriteFactory.GetInstance().GetSprite(Sprites.bigBubble),
+                SpriteFactory.GetInstance().GetSprite(Sprites.poppedBubble),
+                playerCharacter.GetDirection()
+                );
+
+            labyrinthComponentList.Add(bubble);
+        }
     }
 }

@@ -44,7 +44,7 @@ namespace Explorus.Views
 
                     if(Constants.showHitbox)
                     {
-                        if (component.GetType() == typeof(Slimus) || component.GetType() == typeof(Gems))
+                        if (component.GetType() != typeof(Wall) && component.GetType() != typeof(Door))
                         {
                             Pen pen = new Pen(Color.Red, 3);
 

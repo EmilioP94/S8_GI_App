@@ -14,5 +14,17 @@ namespace Explorus.Models
         {
             return false;
         }
+
+        public override bool Collide(ILabyrinthComponent comp)
+        {
+            if(comp.GetType() == typeof(Bubble))
+            {
+                Bubble bubble = (Bubble)comp;
+                bubble.PopBubble();
+
+            }
+
+            return true;
+        }
     }
 }
