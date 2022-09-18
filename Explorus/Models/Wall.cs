@@ -10,5 +10,9 @@ namespace Explorus.Models
             isSolid = true;
             hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
         }
+        public override bool IsValidDestination(Slimus playerCharacter)
+        {
+            return false;
+        }
     }
 }
