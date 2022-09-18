@@ -12,8 +12,14 @@ namespace Explorus.Models
     }
     internal class Slimus : Slime
     {
-        public Slimus(int x, int y) : base(x, y)
+        public Collection gems { get; private set; }
+        public Collection hearts { get; private set; }
+        public Collection bubbles { get; private set; }
+        public Slimus(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge))
         {
+            gems = new Collection(Sprites.gem, Bars.yellow, false);
+            hearts = new Collection(Sprites.heart, Bars.red, true);
+            bubbles = new Collection(Sprites.smallBubble, Bars.blue, true);
             animationImages = new Image2D[3, 4];
 
             var SFInstance = SpriteFactory.GetInstance();
@@ -34,5 +40,7 @@ namespace Explorus.Models
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
         }
+
+
     }
 }

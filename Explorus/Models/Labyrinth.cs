@@ -13,22 +13,21 @@ namespace Explorus.Models
 
         public List<MiniSlime> miniSlimes { get; private set; }
 
-        public Collection gems { get; private set ; }
-
         public bool gameEnded { get
             {
                 return miniSlimes.All(slime => slime.isCollected);
             } 
         }
-        
 
+        public List<ToxicSlime> toxicSlimes { get; private set; }
 
         public Labyrinth(Sprites[,] map)
         {
             miniSlimes = new List<MiniSlime>();
+            toxicSlimes = new List<ToxicSlime>();
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
-            gems = new Collection(map, Sprites.gem, Bars.yellow, false);
+            
 
             for (int i = 0; i < map.GetLength(0); i++)
             {
@@ -41,11 +40,14 @@ namespace Explorus.Models
             foreach(Slimus player in labyrinthComponentList.OfType<Slimus>())
             {
                 playerCharacter = player;
-                playerCharacter.SetCollections(gems);
             }
             foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
             {
                 miniSlimes.Add(slime);
+            }
+            foreach(ToxicSlime slime in labyrinthComponentList.OfType<ToxicSlime>())
+            {
+                toxicSlimes.Add(slime);
             }
         }
     }

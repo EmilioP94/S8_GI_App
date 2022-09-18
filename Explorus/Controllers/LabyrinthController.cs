@@ -13,11 +13,11 @@ namespace Explorus.Controllers
 {
     enum Direction
     {
-        None,
         Up,
         Right,
         Down,
-        Left
+        Left,
+        None
     }
     internal class LabyrinthController
     {
@@ -66,39 +66,34 @@ namespace Explorus.Controllers
 
             if (keyValue == (char)Keys.Up)
             {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Up);
+                lab.playerCharacter.ChangeDirection(Direction.Up);
                 if (CheckValidDestination(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2))
                 {
-                    currentDirection = Direction.Up;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2);
+                    lab.playerCharacter.Move(Direction.Up);
                 }
-
             }
             if (keyValue == (char)Keys.Left)
             {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Left);
+                lab.playerCharacter.ChangeDirection(Direction.Left);
                 if (CheckValidDestination(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y))
                 {
-                    currentDirection = Direction.Left;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y);
+                    lab.playerCharacter.Move(Direction.Left);
                 }
             }
             if (keyValue == (char)Keys.Right)
             {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Right);
+                lab.playerCharacter.ChangeDirection(Direction.Right);
                 if (CheckValidDestination(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y))
                 {
-                    currentDirection = Direction.Right;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y);
+                    lab.playerCharacter.Move(Direction.Right);
                 }
             }
             if (keyValue == (char)Keys.Down)
             {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Down);
+                lab.playerCharacter.ChangeDirection(Direction.Down);
                 if (CheckValidDestination(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2))
                 {
-                    currentDirection = Direction.Down;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2);
+                    lab.playerCharacter.Move(Direction.Down);
                 }
             }
         }
@@ -149,32 +144,10 @@ namespace Explorus.Controllers
             return true;
         }
 
-        private double GetCurrentDistanceWithDestinationPoint()
-        {
-            double xDiff = playerDestinationPoint.X - lab.playerCharacter.x;
-            double yDiff = playerDestinationPoint.Y - lab.playerCharacter.y;
-
-            if (xDiff == 0)
-            {
-                return Math.Abs(yDiff);
-            }
-            else
-            {
-                return Math.Abs(xDiff);
-            }
-        }
-
-        public void ProcessMovement(int deltaT)
+        public void ProcessMovement(int elapseTime)
         {
             CheckForCollision(lab.playerCharacter);
-            if (currentDirection == Direction.None)
-            {
-                lab.playerCharacter.SetAnimationState(0);
-                return;
-            }
-
-            double distance = GetCurrentDistanceWithDestinationPoint();
-            currentDirection = lab.playerCharacter.Move(currentDirection, distance, playerDestinationPoint, deltaT);
+            currentDirection = lab.playerCharacter.UpdatePosition(elapseTime);
         }
 
         public bool NextLevel()

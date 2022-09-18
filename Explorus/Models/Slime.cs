@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
@@ -14,28 +15,56 @@ namespace Explorus.Models
         private int hitboxXOffset;
         private int hitboxYOffset;
         protected Image2D[,] animationImages;
-
-        public Collection gems { get; private set; }
+        protected Point destinationPoint;
+        Direction currentDirection = Direction.None;
+        private Image2D _image;
 
         public override Image2D image
         {
             get
             {
-                return animationImages[animationCycleIndex, (int)currentDirection];
+                if(currentDirection != Direction.None)
+                {
+                    _image = animationImages[animationCycleIndex, (int)currentDirection];
+                }
+                return _image;
+            }
+        }
+        int animationCycleIndex = 0;
+
+        public Slime(int x, int y, Image2D image) : base(x, y, null)
+        {
+            _image = image;
+            hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
+            hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
+            destinationPoint = new Point(x, y);
+        }
+        public void Move(Direction direction)
+        {
+            currentDirection = direction;
+            switch (direction)
+            {
+                case Direction.Left:
+                    destinationPoint = new Point(x - Constants.unit * 2, y);
+                    break;
+                case Direction.Up:
+                    destinationPoint = new Point(x, y - Constants.unit * 2);
+                    break;
+                case Direction.Down:
+                    destinationPoint = new Point(x, y + Constants.unit * 2);
+                    break;
+                case Direction.Right:
+                    destinationPoint = new Point(x + Constants.unit * 2, y);
+                    break;
+                default:
+                    destinationPoint = new Point(x, y);
+                    break;
             }
         }
 
-        FacingDirection currentDirection;
-        int animationCycleIndex = 0;
-
-        public Slime(int x, int y) : base(x, y, null)
+        public Direction UpdatePosition(int deltaT)
         {
-            hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
-            hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
-        }
-
-        public Direction Move(Direction currentDirection, double distance, Point destinationPoint, int deltaT)
-        {
+            double distance = GetCurrentDistanceWithDestinationPoint();
             Direction newDirection = currentDirection;
             if (currentDirection == Direction.None)
             {
@@ -79,18 +108,31 @@ namespace Explorus.Models
             return newDirection;
         }
 
-        public void ChangeDirection(FacingDirection dir)
+        public void ChangeDirection(Direction dir)
         {
-            currentDirection = dir;
+            if(currentDirection == Direction.None)
+            {
+                currentDirection = dir;
+            }
         }
         public void SetAnimationState(int index)
         {
             animationCycleIndex = index;
         }
 
-        public void SetCollections(Collection gems)
+        private double GetCurrentDistanceWithDestinationPoint()
         {
-            this.gems = gems;
+            double xDiff = destinationPoint.X - x;
+            double yDiff = destinationPoint.Y - y;
+
+            if (xDiff == 0)
+            {
+                return Math.Abs(yDiff);
+            }
+            else
+            {
+                return Math.Abs(xDiff);
+            }
         }
     }
 }
