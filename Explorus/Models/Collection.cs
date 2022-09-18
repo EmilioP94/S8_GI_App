@@ -30,7 +30,7 @@ namespace Explorus.Models
             {
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
-                    if (map[i, j] == sprite)
+                    if (map[i, j] == Sprites.toxicSlimeDownLarge)
                     {
                         count++;
                     }
