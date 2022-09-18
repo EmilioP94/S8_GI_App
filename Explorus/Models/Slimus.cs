@@ -12,6 +12,8 @@ namespace Explorus.Models
     }
     internal class Slimus : LabyrinthComponent
     {
+        private int hitboxXOffset;
+        private int hitboxYOffset;
         private Image2D[,] slimusImages;
 
         public Collection gems { get; private set; }
@@ -27,6 +29,9 @@ namespace Explorus.Models
 
         public Slimus(int x, int y) : base(x, y, null)
         {
+            hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
+            hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
+
             slimusImages = new Image2D[3, 4];
 
             var SFInstance = SpriteFactory.GetInstance();
@@ -88,6 +93,8 @@ namespace Explorus.Models
             {
                 SetAnimationState(2);
             }
+
+            hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
             return newDirection;
         }
 

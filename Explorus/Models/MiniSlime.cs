@@ -12,7 +12,7 @@ namespace Explorus.Models
             hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
         }
 
-        public override bool Collide(Slimus player)
+        public override bool Collide(ILabyrinthComponent comp)
         {
             isCollected = true;
             image = null;
