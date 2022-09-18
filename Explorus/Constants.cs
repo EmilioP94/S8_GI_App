@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Models;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Explorus
     {
         public const int unit = 48;//48px
 
-        public const double playerSpeed = 0.4;
+        public const double playerSpeed = 1;
 
         public const int snapDistance = 15; //quand la distance en pixel entre slimus et sa destination est inferieur a cette valeur, il 'snap' vers la destination
 
@@ -34,7 +35,25 @@ namespace Explorus
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall},
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall},
         };
+        
+        public static readonly Models.Sprites[,] level_2 =
+        {
+            {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.miniSlime, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.gem, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.door, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.gem, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.gem, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall},
+        };
 
-        public static readonly int[] initialSlimusPosition = { 3, 1 };
+        public static readonly Models.Level[] levels =
+        {
+            new Level(level_1),
+            new Level(level_2),
+        };
+
     }
 }
