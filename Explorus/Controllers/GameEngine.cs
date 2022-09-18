@@ -39,7 +39,7 @@ namespace Explorus.Controllers
         private void Update(int elapseTime)
         {
             oView.framerate = 1000 / elapseTime;
-            oView.state = (int)labyrinthController.gameState.state;
+            oView.state = labyrinthController.gameState.state;
             oView.level = labyrinthController.gameState.level;
             labyrinthController.ProcessMovement(elapseTime);
         }
@@ -93,11 +93,12 @@ namespace Explorus.Controllers
 
         public void OnNext(WindowEvents value)
         {
-            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus)
+            Console.WriteLine(Enum.GetName(typeof(WindowEvents), value));
+            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && labyrinthController.gameState.state != GameStates.Pause)
             {
-                labyrinthController.gameState.Pause();
+                labyrinthController.gameState.Pause(false);
             }
-            else
+            else if(labyrinthController.gameState.state == GameStates.Pause && !labyrinthController.gameState.manual)
             {
                 labyrinthController.gameState.Resume();
             }

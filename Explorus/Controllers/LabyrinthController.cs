@@ -37,7 +37,6 @@ namespace Explorus.Controllers
 
         public void ProcessInput(KeyEventArgs e)
         {
-            Console.WriteLine(e.KeyValue);
             switch (gameState.state)
             {
                 case GameStates.Play:
@@ -45,6 +44,9 @@ namespace Explorus.Controllers
                     break;
                 case GameStates.Pause:
                     ProcessPauseControls((char)e.KeyValue);
+                    break; 
+                case GameStates.Resume:
+                    ProcessResumeControls((char)e.KeyValue);
                     break;
                 default:
                     break;
@@ -58,7 +60,7 @@ namespace Explorus.Controllers
             {
                 if (gameState.state == GameStates.Play)
                 {
-                    gameState.Pause();
+                    gameState.Pause(true);
                 }
             }
             if (currentDirection != Direction.None)
@@ -108,13 +110,18 @@ namespace Explorus.Controllers
         {
             if (keyValue == (char)Keys.R)
             {
-                if (gameState.state == GameStates.Pause)
-                {
-                    gameState.Resume();
-                }
+                gameState.Resume();
             }
             // add controls for sound menu here 
         }
+
+        private void ProcessResumeControls(char keyValue)
+        {
+            if(keyValue == (char)Keys.P)
+            {
+                gameState.Pause(true);
+            }
+        } 
 
         private bool CheckForCollision(int newX, int newY)
         {

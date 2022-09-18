@@ -3,6 +3,7 @@ using Explorus.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Windows.Forms;
 
 
@@ -27,8 +28,9 @@ namespace Explorus.Views
         private int originalHeight { get; set; }
 
         private HeaderView headerView;
+        private PauseView pauseView;
         private Point offset { get; set; }
-        public int state;
+        public GameStates state;
         public int level;
         public bool running;
 
@@ -55,6 +57,7 @@ namespace Explorus.Views
             originalWidth = lab.map.GetLength(1) * 2 * Constants.unit;
             oGameForm = new GameForm();
             oGameForm.MinimumSize = new Size(600, 600);
+            pauseView = new PauseView(originalWidth, originalHeight);
             DoProcessResize();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
@@ -65,8 +68,9 @@ namespace Explorus.Views
             oGameForm.Activated += new EventHandler(Focus);
             oGameForm.Deactivate += new EventHandler(Unfocus);
             running = true;
-
         }
+
+
 
         public void Show() { Application.Run(oGameForm); }
 
@@ -108,12 +112,18 @@ namespace Explorus.Views
             g.ScaleTransform((float)this.scaleFactor, (float)this.scaleFactor);
             headerView.Render(sender, e, offset);
             labyrinthView.Render(sender, e, offset);
-            oGameForm.Text = String.Format("Explorus - FPS {0} - {1} - level {2}", framerate.ToString(), Enum.GetName(typeof(GameStates), state), level + 1);
+            oGameForm.Text = string.Format("Explorus     - FPS {0} - {1} - level {2}", framerate.ToString(), Enum.GetName(typeof(GameStates), state), level + 1);
+
+            if (state == GameStates.Pause)
+            {
+                pauseView.Render(sender, e, offset);
+            }
+
         }
 
         private void ProcessResize(object sender, EventArgs e)
         {
-            if (oGameForm.WindowState == FormWindowState.Minimized )
+            if (oGameForm.WindowState == FormWindowState.Minimized)
             {
                 NotifyObservers(WindowEvents.Minimize);
             }
@@ -125,18 +135,21 @@ namespace Explorus.Views
 
         private void DoProcessResize()
         {
+            Console.WriteLine($"width: {oGameForm.ClientSize.Width}, height: {oGameForm.ClientSize.Height}");
+
             float clientAspectRatio = (float)oGameForm.ClientSize.Width / (float)oGameForm.ClientSize.Height;
             float labyrinthAspectRatio = (float)originalWidth / (float)originalHeight;
+            double newScaleFactor;
             if (clientAspectRatio >= labyrinthAspectRatio)
             {
-                double newScaleFactor = this.computeScaleFactor(originalHeight, (double)oGameForm.ClientSize.Height);
+                newScaleFactor = this.computeScaleFactor(originalHeight, (double)oGameForm.ClientSize.Height);
                 this.scaleFactor = newScaleFactor;
                 int horizontalPadding = (int)(oGameForm.ClientSize.Width - (double)originalWidth * scaleFactor) / 2;
                 offset = new Point(horizontalPadding, 0);
             }
             if (labyrinthAspectRatio >= clientAspectRatio)
             {
-                double newScaleFactor = this.computeScaleFactor(originalWidth, (double)oGameForm.ClientSize.Width);
+                newScaleFactor = this.computeScaleFactor(originalWidth, (double)oGameForm.ClientSize.Width);
                 this.scaleFactor = newScaleFactor;
                 int verticalPadding = (int)(oGameForm.ClientSize.Height - (double)originalHeight * scaleFactor) / 2;
                 offset = new Point(0, verticalPadding);

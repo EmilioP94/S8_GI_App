@@ -86,6 +86,7 @@
     <Compile Include="Views\HeaderView.cs" />
     <Compile Include="Views\IRenderableComponent.cs" />
     <Compile Include="Views\LabyrinthView.cs" />
+    <Compile Include="Views\PauseView.cs" />
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>

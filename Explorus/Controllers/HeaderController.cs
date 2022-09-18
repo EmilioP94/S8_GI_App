@@ -84,11 +84,11 @@ namespace Explorus.Controllers
 
         public void OnNext(ICollection value)
         {
-            Console.WriteLine($"collected a {value.sprite}");
+            //Console.WriteLine($"collected a {value.sprite}");
             if(value.sprite == Sprites.gem)
             {
                 yellowBar = value;
-                Console.WriteLine($"collected {yellowBar.acquired} of {yellowBar.total}");
+                //Console.WriteLine($"collected {yellowBar.acquired} of {yellowBar.total}");
             }
             GenerateBars();
             NotifyObservers();
