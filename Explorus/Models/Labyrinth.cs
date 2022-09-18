@@ -25,7 +25,6 @@ namespace Explorus.Models
 
         public Labyrinth(Sprites[,] map)
         {
-            Console.WriteLine("building new labyrinth caliss");
             miniSlimes = new List<MiniSlime>();
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
