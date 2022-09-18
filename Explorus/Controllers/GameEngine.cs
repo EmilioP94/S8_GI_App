@@ -4,7 +4,6 @@ using System;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
-using static System.Windows.Forms.AxHost;
 
 namespace Explorus.Controllers
 {
