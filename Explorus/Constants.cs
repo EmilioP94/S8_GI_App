@@ -26,13 +26,13 @@ namespace Explorus
         public static readonly Models.Sprites[,] level_1 =
         {
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
-            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.gem, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
-            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.miniSlime, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.miniSlime, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.door, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall},
-            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.gem, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.wall},
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall},
-            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.gem, Models.Sprites.empty, Models.Sprites.wall},
+            {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.slimusDownLarge, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall},
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall},
         };
         

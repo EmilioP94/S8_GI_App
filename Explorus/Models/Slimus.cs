@@ -10,106 +10,29 @@ namespace Explorus.Models
         Down,
         Left
     }
-    internal class Slimus : LabyrinthComponent
+    internal class Slimus : Slime
     {
-        private int hitboxXOffset;
-        private int hitboxYOffset;
-        private Image2D[,] slimusImages;
-
-        public Collection gems { get; private set; }
-
-        public override Image2D image { get
-            {
-                return slimusImages[animationCycleIndex, (int)currentDirection];
-            }
-        }
-
-        FacingDirection currentDirection;
-        int animationCycleIndex = 0;
-
-        public Slimus(int x, int y) : base(x, y, null)
+        public Slimus(int x, int y) : base(x, y)
         {
-            hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
-            hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
-
-            slimusImages = new Image2D[3, 4];
+            animationImages = new Image2D[3, 4];
 
             var SFInstance = SpriteFactory.GetInstance();
 
-            slimusImages[0, 0] = SFInstance.GetSprite(Sprites.slimusUpLarge);
-            slimusImages[1, 0] = SFInstance.GetSprite(Sprites.slimusUpMedium);
-            slimusImages[2, 0] = SFInstance.GetSprite(Sprites.slimusUpSmall);
+            animationImages[0, 0] = SFInstance.GetSprite(Sprites.slimusUpLarge);
+            animationImages[1, 0] = SFInstance.GetSprite(Sprites.slimusUpMedium);
+            animationImages[2, 0] = SFInstance.GetSprite(Sprites.slimusUpSmall);
 
-            slimusImages[0, 1] = SFInstance.GetSprite(Sprites.slimusRightLarge);
-            slimusImages[1, 1] = SFInstance.GetSprite(Sprites.slimusRightMedium);
-            slimusImages[2, 1] = SFInstance.GetSprite(Sprites.slimusRightSmall);
+            animationImages[0, 1] = SFInstance.GetSprite(Sprites.slimusRightLarge);
+            animationImages[1, 1] = SFInstance.GetSprite(Sprites.slimusRightMedium);
+            animationImages[2, 1] = SFInstance.GetSprite(Sprites.slimusRightSmall);
 
-            slimusImages[0, 2] = SFInstance.GetSprite(Sprites.slimusDownLarge);
-            slimusImages[1, 2] = SFInstance.GetSprite(Sprites.slimusDownMedium);
-            slimusImages[2, 2] = SFInstance.GetSprite(Sprites.slimusDownSmall);
+            animationImages[0, 2] = SFInstance.GetSprite(Sprites.slimusDownLarge);
+            animationImages[1, 2] = SFInstance.GetSprite(Sprites.slimusDownMedium);
+            animationImages[2, 2] = SFInstance.GetSprite(Sprites.slimusDownSmall);
 
-            slimusImages[0, 3] = SFInstance.GetSprite(Sprites.slimusLeftLarge);
-            slimusImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
-            slimusImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
-        }
-
-        public Direction Move(Direction currentDirection, double distance, Point destinationPoint, int deltaT)
-        {
-            Direction newDirection = currentDirection;
-            if (currentDirection == Direction.None)
-            {
-                SetAnimationState(0);
-                return currentDirection;
-            }
-
-            if (distance < Constants.snapDistance)
-            {
-                newDirection = Direction.None;
-                x = destinationPoint.X;
-                y = destinationPoint.Y;
-            }
-            else if (currentDirection == Direction.Up)
-            {
-                y -= (int)(deltaT * Constants.playerSpeed);
-            }
-            else if (currentDirection == Direction.Right)
-            {
-                x += (int)(deltaT * Constants.playerSpeed);
-            }
-            else if (currentDirection == Direction.Down)
-            {
-                y += (int)(deltaT * Constants.playerSpeed);
-            }
-            else if (currentDirection == Direction.Left)
-            {
-                x -= (int)(deltaT * Constants.playerSpeed);
-            }
-
-            if (distance > Constants.animationChangeThreshold)
-            {
-                SetAnimationState(1);
-            }
-            else
-            {
-                SetAnimationState(2);
-            }
-
-            hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
-            return newDirection;
-        }
-
-        public void ChangeDirection(FacingDirection dir)
-        {
-            currentDirection = dir;
-        }
-        public void SetAnimationState(int index)
-        {
-            animationCycleIndex = index;
-        }
-
-        public void SetCollections(Collection gems)
-        {
-            this.gems = gems;
+            animationImages[0, 3] = SFInstance.GetSprite(Sprites.slimusLeftLarge);
+            animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
+            animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
         }
     }
 }
