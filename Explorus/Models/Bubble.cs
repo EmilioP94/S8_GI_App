@@ -11,11 +11,11 @@ namespace Explorus.Models
 
     internal class Bubble : LabyrinthComponent
     {
-        FacingDirection direction;
+        Direction direction;
         Image2D poppedBubbleImage;
         bool isMoving;
 
-        public Bubble(int x, int y, Image2D defaultImage, Image2D poppedBubbleImage, FacingDirection dir) : base(x, y, defaultImage)
+        public Bubble(int x, int y, Image2D defaultImage, Image2D poppedBubbleImage, Direction dir) : base(x, y, defaultImage)
         {
             this.x += Constants.unit / 2;
             this.y += Constants.unit / 2;
@@ -58,19 +58,19 @@ namespace Explorus.Models
             if(!isMoving)
                 return;
 
-            if (direction == FacingDirection.Up)
+            if (direction == Direction.Up)
             {
                 y -= (int)(deltaT * Constants.playerSpeed * 2);
             }
-            else if (direction == FacingDirection.Right)
+            else if (direction == Direction.Right)
             {
                 x += (int)(deltaT * Constants.playerSpeed * 2);
             }
-            else if (direction == FacingDirection.Down)
+            else if (direction == Direction.Down)
             {
                 y += (int)(deltaT * Constants.playerSpeed * 2);
             }
-            else if (direction == FacingDirection.Left)
+            else if (direction == Direction.Left)
             {
                 x -= (int)(deltaT * Constants.playerSpeed * 2);
             }

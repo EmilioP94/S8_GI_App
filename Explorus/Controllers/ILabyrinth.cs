@@ -16,13 +16,13 @@ namespace Explorus.Controllers
 
         Slimus playerCharacter { get; }
 
-        Collection gems { get; }
+        List<ToxicSlime> toxicSlimes { get; }
 
         bool gameEnded { get; }
-
         void CreateBubble();
 
         void CreateGems(int x,int y);
+        void Reload();
 
     }
 }

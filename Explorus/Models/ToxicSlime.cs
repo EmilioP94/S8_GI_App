@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace Explorus.Models
     internal class ToxicSlime : Slime
     {
         private bool isDead;
-        public ToxicSlime(int x, int y) : base(x, y)
+        public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
             isDead = false;
             animationImages = new Image2D[3, 4];
@@ -33,16 +34,6 @@ namespace Explorus.Models
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftSmall);
         }
 
-        public override Image2D image
-        {
-            get
-            {
-                if (!isDead)
-                    return animationImages[animationCycleIndex, (int)currentDirection];
-                else
-                    return null;
-            }
-        }
 
         public override bool Collide(ILabyrinthComponent comp)
         {

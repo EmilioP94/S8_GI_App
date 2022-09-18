@@ -37,11 +37,19 @@ namespace Explorus.Models
             return false;
         }
 
-        public override bool IsValidDestination(Slimus player)
+        public override bool IsValidDestination(Slime player)
         {
-            if (player.gems.total == player.gems.acquired)
+            if(player is Slimus)
             {
-                return true;
+                Slimus slimus = (Slimus)player;
+                if (slimus.gems.total == slimus.gems.acquired)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {

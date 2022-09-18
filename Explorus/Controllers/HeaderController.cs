@@ -21,9 +21,9 @@ namespace Explorus.Controllers
 
         public HeaderController(ILabyrinth lab)
         {
-            redBar = new Collection(lab.map, Sprites.heart, Bars.red, true);
-            blueBar = new Collection(lab.map, Sprites.bigBubble, Bars.blue, true);
-            yellowBar = lab.gems;
+            redBar = new Collection(Sprites.heart, Bars.red, true);
+            blueBar = new Collection(Sprites.bigBubble, Bars.blue, true);
+            yellowBar = lab.playerCharacter.gems;
             barList.Add(redBar);
             barList.Add(blueBar);
             barList.Add(yellowBar);
@@ -64,12 +64,16 @@ namespace Explorus.Controllers
                 position++;
                 components.Add(GetComponent(position, Sprites.leftBarTip, bar.barName, $"{bar.barName} left"));
                 position++;
-                for (int i = 0; i < bar.acquired; i++)
+                for (int i = 0; i < bar.acquired/2; i++)
                 {
                     components.Add(GetComponent(position, GetBarSprite(bar.barName, true), bar.barName, $"{bar.barName} full"));
                     position++;
                 }
-                for (int j = 0; j < bar.total - bar.acquired; j++)
+                if(bar.acquired%2 != 0)
+                {
+                    components.Add(GetComponent(position, GetBarSprite(bar.barName, false), bar.barName, $"{bar.barName} full"));
+                }
+                for (int j = 0; j < (bar.total - bar.acquired)/2; j++)
                 {
                     components.Add(GetComponent(position, Sprites.emptyBar, bar.barName, $"{bar.barName} empty"));
                     position++;

@@ -28,7 +28,7 @@ namespace Explorus.Models
             return false;
         }
 
-        public virtual bool IsValidDestination(Slimus playerCharacter)
+        public virtual bool IsValidDestination(Slime playerCharacter)
         {
             return true;
         }
