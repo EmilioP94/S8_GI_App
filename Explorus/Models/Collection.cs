@@ -47,5 +47,18 @@ namespace Explorus.Models
             }
             return new Unsubscriber<ICollection>(observers, observer);
         }
+
+        public void Decrement()
+        {
+            if(acquired > 0)
+            {
+                acquired--;
+            }
+        }
+
+        public void Empty()
+        {
+            acquired = 0;
+        }
     }
 }

@@ -3,13 +3,6 @@ using Explorus.Controllers;
 
 namespace Explorus.Models
 {
-    enum FacingDirection
-    {        
-        Up,
-        Right,
-        Down,
-        Left
-    }
     internal class Slimus : Slime
     {
         public Collection gems { get; private set; }
@@ -39,6 +32,14 @@ namespace Explorus.Models
             animationImages[0, 3] = SFInstance.GetSprite(Sprites.slimusLeftLarge);
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
+        }
+        public void NewLevel(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+            currentDirection = Direction.None;
+            destinationPoint = new Point(x, y);
+            gems.Empty();
         }
     }
 }

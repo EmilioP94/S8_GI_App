@@ -7,5 +7,9 @@ namespace Explorus.Models
         int acquired { get; }
         Sprites sprite { get; }
         Bars barName { get; }
+
+        void Decrement();
+        void Empty();
+        void Acquire();
     }
 }

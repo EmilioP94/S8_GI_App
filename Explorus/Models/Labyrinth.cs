@@ -50,5 +50,39 @@ namespace Explorus.Models
                 toxicSlimes.Add(slime);
             }
         }
+
+        public void Reload()
+        {
+            labyrinthComponentList = new List<ILabyrinthComponent>();
+
+
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    if(map[i, j] != Sprites.slimusDownLarge)
+                    {
+                        ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
+                        labyrinthComponentList.Add(comp);
+                    }
+                    else
+                    {
+                        if(playerCharacter != null)
+                        {
+                            playerCharacter.NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
+                            labyrinthComponentList.Add(playerCharacter);
+                        }
+                    }
+                }
+            }
+            foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
+            {
+                miniSlimes.Add(slime);
+            }
+            foreach (ToxicSlime slime in labyrinthComponentList.OfType<ToxicSlime>())
+            {
+                toxicSlimes.Add(slime);
+            }
+        }
     }
 }
