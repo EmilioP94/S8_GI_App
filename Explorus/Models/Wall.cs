@@ -21,10 +21,8 @@ namespace Explorus.Models
             {
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();
-
             }
-
-            return true;
+            return false;
         }
     }
 }

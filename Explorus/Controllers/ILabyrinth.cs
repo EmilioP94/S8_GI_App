@@ -22,5 +22,7 @@ namespace Explorus.Controllers
 
         void CreateBubble();
 
+        void CreateGems(int x,int y);
+
     }
 }

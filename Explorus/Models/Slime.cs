@@ -26,12 +26,14 @@ namespace Explorus.Models
         }
 
         protected FacingDirection currentDirection;
-        int animationCycleIndex = 0;
+        protected int animationCycleIndex = 0;
 
         public Slime(int x, int y) : base(x, y, null)
         {
             hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
             hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
+
+            UpdateHitbox();
         }
 
         public Direction Move(Direction currentDirection, double distance, Point destinationPoint, int deltaT)
@@ -75,8 +77,13 @@ namespace Explorus.Models
                 SetAnimationState(2);
             }
 
-            hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
+            UpdateHitbox();
             return newDirection;
+        }
+
+        private void UpdateHitbox()
+        {
+            hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
         }
 
         public void ChangeDirection(FacingDirection dir)

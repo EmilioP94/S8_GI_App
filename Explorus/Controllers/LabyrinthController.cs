@@ -136,7 +136,12 @@ namespace Explorus.Controllers
 
                 if (comp.hitbox.IntersectsWith(srcComp.hitbox))
                 {
-                    return comp.Collide(srcComp);
+                    bool result = comp.Collide(srcComp);
+                    if(result) //true seulement si c'est une collision entre une bulle et un toxicSlime
+                    {
+                        lab.CreateGems(comp.x, comp.y);
+                    }
+                    return result;
                 }
             }
             return false;
@@ -175,12 +180,10 @@ namespace Explorus.Controllers
             //BubblesMovement
             foreach (Bubble bubble in lab.labyrinthComponentList.OfType<Bubble>().ToList())
             {
-                if (bubble.DeleteCheck())
-                {
-                    lab.labyrinthComponentList.Remove(bubble);
-                }
+                bubble.DeleteCheck();
                 bubble.Move(deltaT);
                 CheckForCollision(bubble);
+
             }
 
             //SlimusMovement

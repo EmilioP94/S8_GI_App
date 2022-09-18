@@ -60,5 +60,11 @@ namespace Explorus.Models
 
             labyrinthComponentList.Add(bubble);
         }
+
+        public void CreateGems(int x, int y)
+        {
+            ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.gem, x, y);
+            labyrinthComponentList.Add(comp);
+        }
     }
 }

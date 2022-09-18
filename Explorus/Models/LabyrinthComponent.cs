@@ -25,7 +25,7 @@ namespace Explorus.Models
 
         public virtual bool Collide(ILabyrinthComponent comp)
         {
-            return true;
+            return false;
         }
 
         public virtual bool IsValidDestination(Slimus playerCharacter)

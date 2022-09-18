@@ -8,8 +8,10 @@ namespace Explorus.Models
 {
     internal class ToxicSlime : Slime
     {
+        private bool isDead;
         public ToxicSlime(int x, int y) : base(x, y)
         {
+            isDead = false;
             animationImages = new Image2D[3, 4];
 
             var SFInstance = SpriteFactory.GetInstance();
@@ -29,6 +31,31 @@ namespace Explorus.Models
             animationImages[0, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftLarge);
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftSmall);
+        }
+
+        public override Image2D image
+        {
+            get
+            {
+                if (!isDead)
+                    return animationImages[animationCycleIndex, (int)currentDirection];
+                else
+                    return null;
+            }
+        }
+
+        public override bool Collide(ILabyrinthComponent comp)
+        {
+            if(comp.GetType() == typeof(Bubble))
+            {
+                Bubble bubble = (Bubble)comp;
+                bubble.PopBubble();
+
+                isDead = true;
+                hitbox = new System.Drawing.Rectangle();
+                return true;
+            }
+            return false;
         }
     }
 }

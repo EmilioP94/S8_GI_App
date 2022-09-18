@@ -29,7 +29,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            return true;
+            return false;
         }
 
         public void PopBubble()
