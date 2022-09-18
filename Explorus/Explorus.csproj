@@ -73,9 +73,11 @@
     <Compile Include="Models\LabyrinthComponent.cs" />
     <Compile Include="Models\LabyrinthComponentFactory.cs" />
     <Compile Include="Models\MiniSlime.cs" />
+    <Compile Include="Models\Slime.cs" />
     <Compile Include="Models\Slimus.cs" />
     <Compile Include="Models\SpriteFactory.cs" />
     <Compile Include="Models\SpritesToImageType.cs" />
+    <Compile Include="Models\ToxicSlime.cs" />
     <Compile Include="Models\Unsubscriber.cs" />
     <Compile Include="Models\Wall.cs" />
     <Compile Include="Views\GameView.cs" />

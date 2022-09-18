@@ -46,7 +46,19 @@ namespace Explorus.Game
                 { Sprites.yellowBarHalf, new Rectangle(unit * 8, unit, unit, unit) },
                 { Sprites.emptyBar, new Rectangle(unit * 9, unit, unit, unit) },
                 { Sprites.rightBarTip, new Rectangle(unit * 10, unit, unit, unit) },
-                { Sprites.miniSlime, new Rectangle(unit * 11, unit, unit, unit) }
+                { Sprites.miniSlime, new Rectangle(unit * 11, unit, unit, unit) },
+                { Sprites.toxicSlimeDownLarge, new Rectangle(0, unit * 2, unit * 2, unit * 2) },
+                { Sprites.toxicSlimeDownMedium, new Rectangle(Constants.unit * 2, Constants.unit * 6, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeDownSmall, new Rectangle(Constants.unit * 4, Constants.unit * 6, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeRightLarge, new Rectangle(Constants.unit * 6, Constants.unit * 6, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeRightMedium, new Rectangle(Constants.unit * 8, Constants.unit * 6, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeRightSmall, new Rectangle(Constants.unit * 10, Constants.unit * 6, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeUpLarge, new Rectangle(0, Constants.unit * 6, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeUpMedium, new Rectangle(Constants.unit * 2, Constants.unit * 8, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeUpSmall, new Rectangle(Constants.unit * 4, Constants.unit * 8, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeLeftLarge, new Rectangle(Constants.unit * 6, Constants.unit * 8, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeLeftMedium, new Rectangle(Constants.unit * 8, Constants.unit * 8, Constants.unit * 2, Constants.unit * 2) },
+                { Sprites.toxicSlimeLeftSmall, new Rectangle(Constants.unit * 10, Constants.unit * 8, Constants.unit * 2, Constants.unit * 2) },
             };
             return spritesRegions;
         }
