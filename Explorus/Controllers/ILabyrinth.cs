@@ -20,7 +20,7 @@ namespace Explorus.Controllers
 
         bool gameEnded { get; }
 
-        void Reload();
+        void Reload(Sprites[,] map);
 
     }
 }
