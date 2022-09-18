@@ -41,6 +41,22 @@ namespace Explorus.Views
                         GraphicsUnit.Pixel,
                         component.attributes);
                     }
+
+                    if(Constants.showHitbox)
+                    {
+                        if (component.GetType() == typeof(Slimus) || component.GetType() == typeof(Gems))
+                        {
+                            Pen pen = new Pen(Color.Red, 3);
+
+                            Rectangle rect = new Rectangle(
+                                component.hitbox.X + offset.X,
+                                component.hitbox.Y + Constants.unit * 2 + offset.Y,
+                                component.hitbox.Width,
+                                component.hitbox.Height
+                                );
+                            e.Graphics.DrawRectangle(pen, rect);
+                        }
+                    }
                 }
             }
         }

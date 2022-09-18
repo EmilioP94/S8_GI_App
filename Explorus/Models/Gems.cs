@@ -10,11 +10,16 @@ namespace Explorus.Models
         {
             this.x += Constants.unit / 2;
             this.y += Constants.unit / 2;
-            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+            hitbox = new Rectangle(x + Constants.unit/2, y + Constants.unit/2, Constants.unit, Constants.unit);
         }
 
-        public override bool Collide(Slimus player)
+        public override bool Collide(ILabyrinthComponent comp)
         {
+            if (comp.GetType() != typeof(Slimus))
+                return false;
+
+            Slimus player = (Slimus)comp;
+
             if (isCollected)
             {
                 return false;

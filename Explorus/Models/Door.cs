@@ -18,8 +18,13 @@ namespace Explorus.Models
             hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
         }
 
-        public override bool Collide(Slimus player)
+        public override bool Collide(ILabyrinthComponent comp)
         {
+            if (comp.GetType() != typeof(Slimus))
+                return true;
+
+            Slimus player = (Slimus)comp;
+
             if (isOpen)
             {
                 return false;
@@ -35,6 +40,18 @@ namespace Explorus.Models
                 return false;
             }
             return true;
+        }
+
+        public override bool IsValidDestination(Slimus player)
+        {
+            if (player.gems.total == player.gems.acquired)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -23,7 +23,12 @@ namespace Explorus.Models
             this.image = image;
         }
 
-        public virtual bool Collide(Slimus player)
+        public virtual bool Collide(ILabyrinthComponent comp)
+        {
+            return true;
+        }
+
+        public virtual bool IsValidDestination(Slimus playerCharacter)
         {
             return true;
         }

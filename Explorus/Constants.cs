@@ -17,6 +17,11 @@ namespace Explorus
 
         public const int animationChangeThreshold = 60; //valeur entre 0 et 96 
 
+        public const int slimusHitboxHeight = 50;
+        public const int slimusHitboxLength = 65;
+
+        public const bool showHitbox = false; //useful for debugging
+
         public static readonly Models.Sprites[,] level_1 =
         {
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
