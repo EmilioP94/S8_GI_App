@@ -18,13 +18,17 @@ namespace Explorus.Models
         protected Point destinationPoint;
         protected Direction currentDirection = Direction.None;
         protected Direction LastNotNoneDirection = Direction.Down;
-        private Image2D _image;
+        protected bool isDead = false;
+        private Image2D _image;        
 
         public override Image2D image
         {
             get
             {
-                return _image;
+                if (isDead)
+                    return null;
+                else
+                    return _image;
             }
         }
 
@@ -64,6 +68,8 @@ namespace Explorus.Models
 
         public void UpdatePosition(int deltaT)
         {
+            if (isDead)
+                return;
             double distance = GetCurrentDistanceWithDestinationPoint();
             if (currentDirection == Direction.None)
             {

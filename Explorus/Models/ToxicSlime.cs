@@ -9,7 +9,6 @@ namespace Explorus.Models
 {
     internal class ToxicSlime : Slime
     {
-        private bool isDead;
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
             isDead = false;
