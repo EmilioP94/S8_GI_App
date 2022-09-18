@@ -23,14 +23,9 @@ namespace Explorus.Models
         {
             get
             {
-                if(currentDirection != Direction.None)
-                {
-                    _image = animationImages[animationCycleIndex, (int)currentDirection];
-                }
                 return _image;
             }
         }
-        int animationCycleIndex = 0;
 
         public Slime(int x, int y, Image2D image) : base(x, y, null)
         {
@@ -41,8 +36,12 @@ namespace Explorus.Models
         }
         public void Move(Direction direction)
         {
+            if (currentDirection != Direction.None)
+            {
+                return;
+            }
             currentDirection = direction;
-            switch (direction)
+            switch (currentDirection)
             {
                 case Direction.Left:
                     destinationPoint = new Point(x - Constants.unit * 2, y);
@@ -62,21 +61,20 @@ namespace Explorus.Models
             }
         }
 
-        public Direction UpdatePosition(int deltaT)
+        public void UpdatePosition(int deltaT)
         {
             double distance = GetCurrentDistanceWithDestinationPoint();
-            Direction newDirection = currentDirection;
             if (currentDirection == Direction.None)
             {
-                SetAnimationState(0);
-                return currentDirection;
+                return;
             }
-
             if (distance < Constants.snapDistance)
             {
-                newDirection = Direction.None;
+                SetAnimationState(0);
+                currentDirection = Direction.None;
                 x = destinationPoint.X;
                 y = destinationPoint.Y;
+                return;
             }
             else if (currentDirection == Direction.Up)
             {
@@ -105,19 +103,18 @@ namespace Explorus.Models
             }
 
             hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
-            return newDirection;
         }
 
         public void ChangeDirection(Direction dir)
         {
-            if(currentDirection == Direction.None)
+            if(currentDirection == Direction.None && dir != Direction.None)
             {
-                currentDirection = dir;
+                _image = animationImages[0, (int)dir];
             }
         }
         public void SetAnimationState(int index)
         {
-            animationCycleIndex = index;
+            _image = animationImages[index, (int)currentDirection];
         }
 
         private double GetCurrentDistanceWithDestinationPoint()

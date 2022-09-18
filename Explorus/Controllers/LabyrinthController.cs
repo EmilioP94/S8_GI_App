@@ -22,7 +22,6 @@ namespace Explorus.Controllers
     internal class LabyrinthController
     {
         public ILabyrinth lab { get; private set; }
-        public Direction currentDirection;
         public Point playerDestinationPoint;
         public GameState gameState;
 
@@ -30,7 +29,6 @@ namespace Explorus.Controllers
         {
             gameState = new GameState();
             lab = new Labyrinth(Constants.levels[gameState.level].map);
-            currentDirection = Direction.None;
         }
 
         public void ProcessInput(KeyEventArgs e)
@@ -61,8 +59,6 @@ namespace Explorus.Controllers
                     gameState.Pause(true);
                 }
             }
-            if (currentDirection != Direction.None)
-                return;
 
             if (keyValue == (char)Keys.Up)
             {
@@ -147,7 +143,7 @@ namespace Explorus.Controllers
         public void ProcessMovement(int elapseTime)
         {
             CheckForCollision(lab.playerCharacter);
-            currentDirection = lab.playerCharacter.UpdatePosition(elapseTime);
+            lab.playerCharacter.UpdatePosition(elapseTime);
         }
 
         public bool NextLevel()
