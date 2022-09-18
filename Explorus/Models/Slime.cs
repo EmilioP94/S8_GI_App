@@ -16,7 +16,7 @@ namespace Explorus.Models
         private int hitboxYOffset;
         protected Image2D[,] animationImages;
         protected Point destinationPoint;
-        Direction currentDirection = Direction.None;
+        protected Direction currentDirection = Direction.None;
         private Image2D _image;
 
         public override Image2D image

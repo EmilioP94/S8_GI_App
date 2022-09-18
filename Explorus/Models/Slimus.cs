@@ -40,7 +40,5 @@ namespace Explorus.Models
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
         }
-
-
     }
 }
