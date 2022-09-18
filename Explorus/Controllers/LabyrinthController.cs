@@ -7,7 +7,6 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 
 namespace Explorus.Controllers
@@ -25,19 +24,47 @@ namespace Explorus.Controllers
         public ILabyrinth lab { get; private set; }
         public Direction currentDirection;
         public Point playerDestinationPoint;
+        public GameState gameState;
 
         public LabyrinthController()
         {
-            lab = new Labyrinth(Constants.level_1);
+            gameState = new GameState();
+            lab = new Labyrinth(Constants.levels[gameState.level].map);
             currentDirection = Direction.None;
         }
 
         public void ProcessInput(KeyEventArgs e)
         {
+            switch (gameState.state)
+            {
+                case GameStates.Play:
+                    ProcessPlayControls((char)e.KeyValue);
+                    break;
+                case GameStates.Pause:
+                    ProcessPauseControls((char)e.KeyValue);
+                    break; 
+                case GameStates.Resume:
+                    ProcessResumeControls((char)e.KeyValue);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // processes input when the game is in the "Play" state
+        private void ProcessPlayControls(char keyValue)
+        {
+            if (keyValue == (char)Keys.P)
+            {
+                if (gameState.state == GameStates.Play)
+                {
+                    gameState.Pause(true);
+                }
+            }
             if (currentDirection != Direction.None)
                 return;
 
-            if (e.KeyValue == (char)Keys.Up)
+            if (keyValue == (char)Keys.Up)
             {
                 lab.playerCharacter.ChangeDirection(FacingDirection.Up);
                 if (CheckValidDestination(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2))
@@ -45,9 +72,9 @@ namespace Explorus.Controllers
                     currentDirection = Direction.Up;
                     playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2);
                 }
-                    
+
             }
-            if (e.KeyValue == (char)Keys.Left)
+            if (keyValue == (char)Keys.Left)
             {
                 lab.playerCharacter.ChangeDirection(FacingDirection.Left);
                 if (CheckValidDestination(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y))
@@ -56,7 +83,7 @@ namespace Explorus.Controllers
                     playerDestinationPoint = new Point(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y);
                 }
             }
-            if (e.KeyValue == (char)Keys.Right)
+            if (keyValue == (char)Keys.Right)
             {
                 lab.playerCharacter.ChangeDirection(FacingDirection.Right);
                 if (CheckValidDestination(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y))
@@ -65,7 +92,7 @@ namespace Explorus.Controllers
                     playerDestinationPoint = new Point(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y);
                 }
             }
-            if (e.KeyValue == (char)Keys.Down)
+            if (keyValue == (char)Keys.Down)
             {
                 lab.playerCharacter.ChangeDirection(FacingDirection.Down);
                 if (CheckValidDestination(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2))
@@ -75,6 +102,25 @@ namespace Explorus.Controllers
                 }
             }
         }
+
+        // processes input when the game is in the "Pause" state
+        private void ProcessPauseControls(char keyValue)
+        {
+            if (keyValue == (char)Keys.R)
+            {
+                gameState.Resume();
+            }
+            // add controls for sound menu here 
+        }
+
+        private void ProcessResumeControls(char keyValue)
+        {
+            if(keyValue == (char)Keys.P)
+            {
+                gameState.Pause(true);
+            }
+        } 
+
         private bool CheckForCollision(ILabyrinthComponent srcComp)
         {
             foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
@@ -108,7 +154,7 @@ namespace Explorus.Controllers
             double xDiff = playerDestinationPoint.X - lab.playerCharacter.x;
             double yDiff = playerDestinationPoint.Y - lab.playerCharacter.y;
 
-            if(xDiff==0)
+            if (xDiff == 0)
             {
                 return Math.Abs(yDiff);
             }
@@ -129,6 +175,17 @@ namespace Explorus.Controllers
 
             double distance = GetCurrentDistanceWithDestinationPoint();
             currentDirection = lab.playerCharacter.Move(currentDirection, distance, playerDestinationPoint, deltaT);
+        }
+
+        public bool NextLevel()
+        {
+            if (gameState.level < gameState.maxLevel - 1)
+            {
+                gameState.NextLevel();
+                lab = new Labyrinth(Constants.levels[gameState.level].map);
+                return true;
+            }
+            else return false;
         }
     }
 }
