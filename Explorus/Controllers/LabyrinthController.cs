@@ -41,7 +41,7 @@ namespace Explorus.Controllers
                     break;
                 case GameStates.Pause:
                     ProcessPauseControls((char)e.KeyValue);
-                    break; 
+                    break;
                 case GameStates.Resume:
                     ProcessResumeControls((char)e.KeyValue);
                     break;
@@ -103,11 +103,11 @@ namespace Explorus.Controllers
 
         private void ProcessResumeControls(char keyValue)
         {
-            if(keyValue == (char)Keys.P)
+            if (keyValue == (char)Keys.P)
             {
                 gameState.Pause(true);
             }
-        } 
+        }
 
         private bool CheckForCollision(ILabyrinthComponent srcComp)
         {
@@ -118,8 +118,17 @@ namespace Explorus.Controllers
 
                 if (comp.hitbox.IntersectsWith(srcComp.hitbox))
                 {
-                    bool result = comp.Collide(srcComp);
-                    if(result) //true seulement si c'est une collision entre une bulle et un toxicSlime
+                    bool result = false;
+                    if (comp.GetType() == typeof(ToxicSlime) && srcComp.GetType() == typeof(Slimus))
+                    {
+                        result = srcComp.Collide(comp);
+                        if(lab.playerCharacter.hearts.acquired == 0)
+                        {
+                            gameState.GameOver();
+                        }
+                    }
+                    else result = comp.Collide(srcComp);
+                    if (result) //true seulement si c'est une collision entre une bulle et un toxicSlime
                     {
                         lab.CreateGems(comp.x, comp.y);
                     }
@@ -165,7 +174,7 @@ namespace Explorus.Controllers
 
         public void ProcessMovement(int elapseTime)
         {
-            if(gameState.state != GameStates.Play)
+            if (gameState.state != GameStates.Play)
             {
                 return;
             }
@@ -173,6 +182,7 @@ namespace Explorus.Controllers
             lab.playerCharacter.UpdatePosition(elapseTime);
             MoveToxicSlimes(elapseTime);
             MoveBubbles(elapseTime);
+            lab.playerCharacter.RechargeBubbles(elapseTime);
         }
 
         private void MoveBubbles(int elapseTime)

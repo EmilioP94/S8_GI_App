@@ -1,6 +1,7 @@
 ﻿using Explorus.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Explorus.Models
 {
     internal class ToxicSlime : Slime
     {
+        int hp = 2;
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
             isDead = false;
@@ -41,9 +43,18 @@ namespace Explorus.Models
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();
 
-                isDead = true;
+                hp--;
+                if(hp == 1)
+                {
+                    ColorMatrix matrix = new ColorMatrix();
+                    matrix.Matrix33 = 0.5f;
+                    ImageAttributes attributes = new ImageAttributes();
+                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                    this.attributes = attributes;
+                }
+                if (hp == 0) isDead = true;
                 hitbox = new System.Drawing.Rectangle();
-                return true;
+                return isDead;
             }
             return false;
         }

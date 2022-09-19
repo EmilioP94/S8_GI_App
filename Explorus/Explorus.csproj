@@ -83,6 +83,7 @@
     <Compile Include="Models\ToxicSlime.cs" />
     <Compile Include="Models\Unsubscriber.cs" />
     <Compile Include="Models\Wall.cs" />
+    <Compile Include="Views\GameOverView.cs" />
     <Compile Include="Views\GameView.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

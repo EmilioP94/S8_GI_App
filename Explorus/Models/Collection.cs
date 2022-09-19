@@ -31,6 +31,21 @@ namespace Explorus.Models
             }
         }
 
+        public void Decrement()
+        {
+            if (acquired > 0)
+            {
+                acquired--;
+                NotifyObservers();
+            }
+        }
+
+        public void Empty()
+        {
+            acquired = 0;
+            NotifyObservers();
+        }
+
         private void NotifyObservers()
         {
             foreach (IObserver<ICollection> observer in observers)
@@ -46,19 +61,6 @@ namespace Explorus.Models
                 observers.Add(observer);
             }
             return new Unsubscriber<ICollection>(observers, observer);
-        }
-
-        public void Decrement()
-        {
-            if(acquired > 0)
-            {
-                acquired--;
-            }
-        }
-
-        public void Empty()
-        {
-            acquired = 0;
         }
     }
 }

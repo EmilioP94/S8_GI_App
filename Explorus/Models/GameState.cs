@@ -11,7 +11,8 @@ namespace Explorus.Models
         Play,
         Pause,
         Resume,
-        Stop
+        Stop,
+        Over
     }
 
     internal class GameState
@@ -40,6 +41,11 @@ namespace Explorus.Models
         public void Stop()
         {
             state = GameStates.Stop;
+        }
+
+        public void GameOver()
+        {
+            state = GameStates.Over;
         }
 
         public void NextLevel()

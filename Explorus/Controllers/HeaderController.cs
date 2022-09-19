@@ -8,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace Explorus.Controllers
 {
-    internal class HeaderController: Models.IObserver<ICollection>, Models.IObservable<List<HeaderComponent>>
+    enum BarPieces
+    {
+        empty,
+        half,
+        full
+    }
+    internal class HeaderController : Models.IObserver<ICollection>, Models.IObservable<List<HeaderComponent>>
     {
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
@@ -21,8 +27,8 @@ namespace Explorus.Controllers
 
         public HeaderController(ILabyrinth lab)
         {
-            redBar = new Collection(Sprites.heart, Bars.red, true);
-            blueBar = new Collection(Sprites.bigBubble, Bars.blue, true);
+            redBar = lab.playerCharacter.hearts;
+            blueBar = lab.playerCharacter.bubbles;
             yellowBar = lab.playerCharacter.gems;
             barList.Add(redBar);
             barList.Add(blueBar);
@@ -60,26 +66,69 @@ namespace Explorus.Controllers
             int position = 4; // starts after the title position
             foreach (ICollection bar in barList)
             {
+                BarPieces[] barContents = new BarPieces[3];
+                switch (bar.acquired)
+                {
+                    case 0:
+                        barContents[0] = BarPieces.empty;
+                        barContents[1] = BarPieces.empty;
+                        barContents[2] = BarPieces.empty;
+                        break;
+                    case 1:
+                        barContents[0] = BarPieces.half;
+                        barContents[1] = BarPieces.empty;
+                        barContents[2] = BarPieces.empty;
+                        break;
+                    case 2:
+                        barContents[0] = BarPieces.full;
+                        barContents[1] = BarPieces.empty;
+                        barContents[2] = BarPieces.empty;
+                        break;
+                    case 3:
+                        barContents[0] = BarPieces.full;
+                        barContents[1] = BarPieces.half;
+                        barContents[2] = BarPieces.empty;
+                        break;
+                    case 4:
+                        barContents[0] = BarPieces.full;
+                        barContents[1] = BarPieces.full;
+                        barContents[2] = BarPieces.empty;
+                        break;
+                    case 5:
+                        barContents[0] = BarPieces.full;
+                        barContents[1] = BarPieces.full;
+                        barContents[2] = BarPieces.half;
+                        break;
+                    case 6:
+                        barContents[0] = BarPieces.full;
+                        barContents[1] = BarPieces.full;
+                        barContents[2] = BarPieces.full;
+                        break;
+                }
+
                 components.Add(GetComponent(position, bar.sprite, bar.barName, $"{bar.barName} icon", true));
                 position++;
                 components.Add(GetComponent(position, Sprites.leftBarTip, bar.barName, $"{bar.barName} left"));
                 position++;
-                for (int i = 0; i < bar.acquired/2; i++)
+                for (int i = 0; i < barContents.Length; i++)
                 {
-                    components.Add(GetComponent(position, GetBarSprite(bar.barName, true), bar.barName, $"{bar.barName} full"));
-                    position++;
-                }
-                if(bar.acquired%2 != 0)
-                {
-                    components.Add(GetComponent(position, GetBarSprite(bar.barName, false), bar.barName, $"{bar.barName} full"));
-                }
-                for (int j = 0; j < (bar.total - bar.acquired)/2; j++)
-                {
-                    components.Add(GetComponent(position, Sprites.emptyBar, bar.barName, $"{bar.barName} empty"));
+                    BarPieces barPiece = barContents[i];
+                    switch (barPiece)
+                    {
+                        case BarPieces.empty:
+                            components.Add(GetComponent(position, Sprites.emptyBar, bar.barName, $"{bar.barName} empty"));
+                            break;
+                        case BarPieces.half:
+                            components.Add(GetComponent(position, GetBarSprite(bar.barName, false), bar.barName, $"{bar.barName} half"));
+                            break;
+                        case BarPieces.full:
+                            components.Add(GetComponent(position, GetBarSprite(bar.barName, true), bar.barName, $"{bar.barName} full"));
+                            break;
+                    }
                     position++;
                 }
                 components.Add(GetComponent(position, Sprites.rightBarTip, bar.barName, $"{bar.barName} right"));
-                if(bar.barName == Bars.yellow && bar.acquired == bar.total)
+                if (bar.barName == Bars.yellow && bar.acquired == bar.total)
                 {
                     components.Add(GetComponent(position, Sprites.key, bar.barName, $"{bar.barName} key", true));
                 }
@@ -88,12 +137,19 @@ namespace Explorus.Controllers
 
         public void OnNext(ICollection value)
         {
-            //Console.WriteLine($"collected a {value.sprite}");
-            if(value.sprite == Sprites.gem)
+            Console.WriteLine($"collected a {value.sprite}");
+            switch (value.sprite)
             {
-                yellowBar = value;
-                //Console.WriteLine($"collected {yellowBar.acquired} of {yellowBar.total}");
+                case Sprites.gem:
+                    yellowBar = value;
+                    break;
+                case Sprites.smallBubble:
+                    blueBar = value;
+                    break;
+                default:
+                    break;
             }
+
             GenerateBars();
             NotifyObservers();
 
