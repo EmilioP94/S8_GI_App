@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using Explorus.Controllers;
@@ -129,7 +130,7 @@ namespace Explorus.Models
             }
             else return null;
         }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RechargeBubbles(int elapsedTime)
         {
             this.elapsedTime = this.elapsedTime + elapsedTime;

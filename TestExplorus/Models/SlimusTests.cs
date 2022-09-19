@@ -16,7 +16,7 @@ namespace TestExplorus.Models
             Assert.AreEqual(slimus.x, 0);
             Assert.AreEqual(slimus.y, 10);
 
-            slimus.Move(Explorus.Controllers.Direction.Up, 96, new System.Drawing.Point(0, 0), 16);
+            slimus.Move(Explorus.Controllers.Direction.Up);
 
             Assert.AreEqual(slimus.x, 0);
             Assert.AreEqual(slimus.y, 10 - (int)(16 * Constants.playerSpeed));
@@ -30,7 +30,7 @@ namespace TestExplorus.Models
             Assert.AreEqual(slimus.x, 0);
             Assert.AreEqual(slimus.y, 10);
 
-            slimus.Move(Explorus.Controllers.Direction.Down, 96, new System.Drawing.Point(0, 0), 16);
+            slimus.Move(Explorus.Controllers.Direction.Down);
 
             Assert.AreEqual(slimus.x, 0);
             Assert.AreEqual(slimus.y, 10 + (int)(16 * Constants.playerSpeed));
@@ -44,7 +44,7 @@ namespace TestExplorus.Models
             Assert.AreEqual(slimus.x, 0);
             Assert.AreEqual(slimus.y, 0);
 
-            slimus.Move(Explorus.Controllers.Direction.Right, 96, new System.Drawing.Point(0, 0), 16);
+            slimus.Move(Explorus.Controllers.Direction.Right);
 
             Assert.AreEqual(slimus.x, (int)(16 * Constants.playerSpeed));
             Assert.AreEqual(slimus.y, 0);
@@ -58,7 +58,7 @@ namespace TestExplorus.Models
             Assert.AreEqual(slimus.x, 10);
             Assert.AreEqual(slimus.y, 0);
 
-            slimus.Move(Explorus.Controllers.Direction.Left, 96, new System.Drawing.Point(0, 0), 16);
+            slimus.Move(Explorus.Controllers.Direction.Left);
 
             Assert.AreEqual(slimus.x, 10 - (int)(16 * Constants.playerSpeed));
             Assert.AreEqual(slimus.y, 0);
