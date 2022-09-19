@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Threading.Tasks;
+using System.Timers;
 using Explorus.Controllers;
 
 namespace Explorus.Models
@@ -14,9 +15,25 @@ namespace Explorus.Models
 
         private int rechargeTime = 500;
         private int elapsedTime = 0;
-        public bool invincible = false;
+        private bool _invincible = false;
+        private bool _isTransparent = true;
+        private Timer flickerTimer = new Timer(100);
+        public bool invincible
+        {
+            get
+            {
+                return _invincible;
+            }
+            private set
+            {
+                _invincible = value;
+            }
+        }
         public Slimus(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge))
         {
+            flickerTimer.Elapsed += (sender, e) => ToggleTransparency();
+            flickerTimer.AutoReset = true;
+            flickerTimer.Enabled = false;
             gems = new Collection(Sprites.gem, Bars.yellow, false);
             hearts = new Collection(Sprites.heart, Bars.red, true);
             bubbles = new Collection(Sprites.smallBubble, Bars.blue, true);
@@ -55,26 +72,43 @@ namespace Explorus.Models
             return LastNotNoneDirection;
         }
 
+        private void ToggleTransparency()
+        {
+            _isTransparent = !_isTransparent;
+            SetTransparency(_isTransparent);
+        }
+
+        private void SetTransparency(bool isTransparent)
+        {
+            ColorMatrix matrix = new ColorMatrix();
+            if (isTransparent)
+            {
+                matrix.Matrix33 = 0.5f;
+            }
+            else
+            {
+                matrix.Matrix33 = 1;
+            }
+            ImageAttributes attributes = new ImageAttributes();
+            attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+            this.attributes = attributes;
+        }
+
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if(!invincible && comp.GetType() == typeof(ToxicSlime))
+            if(!invincible && comp is ToxicSlime)
             {
-                ColorMatrix matrix = new ColorMatrix();
-                matrix.Matrix33 = 0.5f;
-                ImageAttributes attributes = new ImageAttributes();
-                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                this.attributes = attributes;
+                flickerTimer.Enabled = true;
+                _isTransparent = true;
+                SetTransparency(true);
                 invincible = true;
                 hearts.Decrement();
                 Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
                 {
                     // trouver une facon de flasher, live ca fait juste nous transparenter sti
                     invincible = false;
-                    matrix = new ColorMatrix();
-                    matrix.Matrix33 = 1;
-                    attributes = new ImageAttributes();
-                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                    this.attributes = attributes;
+                    flickerTimer.Enabled = false;
+                    SetTransparency(false);
                 });
             }
             return false;
