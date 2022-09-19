@@ -11,6 +11,7 @@ namespace Explorus.Models
     {
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
+            isDead = false;
             animationImages = new Image2D[3, 4];
 
             var SFInstance = SpriteFactory.GetInstance();
@@ -30,6 +31,21 @@ namespace Explorus.Models
             animationImages[0, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftLarge);
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftSmall);
+        }
+
+
+        public override bool Collide(ILabyrinthComponent comp)
+        {
+            if(comp.GetType() == typeof(Bubble))
+            {
+                Bubble bubble = (Bubble)comp;
+                bubble.PopBubble();
+
+                isDead = true;
+                hitbox = new System.Drawing.Rectangle();
+                return true;
+            }
+            return false;
         }
     }
 }

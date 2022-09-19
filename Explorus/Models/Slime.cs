@@ -17,13 +17,18 @@ namespace Explorus.Models
         protected Image2D[,] animationImages;
         protected Point destinationPoint;
         protected Direction currentDirection = Direction.None;
-        private Image2D _image;
+        protected Direction LastNotNoneDirection = Direction.Down;
+        protected bool isDead = false;
+        private Image2D _image;        
 
         public override Image2D image
         {
             get
             {
-                return _image;
+                if (isDead)
+                    return null;
+                else
+                    return _image;
             }
         }
 
@@ -63,6 +68,8 @@ namespace Explorus.Models
 
         public void UpdatePosition(int deltaT)
         {
+            if (isDead)
+                return;
             double distance = GetCurrentDistanceWithDestinationPoint();
             if (currentDirection == Direction.None)
             {
@@ -74,6 +81,7 @@ namespace Explorus.Models
                 currentDirection = Direction.None;
                 x = destinationPoint.X;
                 y = destinationPoint.Y;
+                UpdateHitbox();
                 return;
             }
             else if (currentDirection == Direction.Up)
@@ -102,6 +110,11 @@ namespace Explorus.Models
                 SetAnimationState(2);
             }
 
+            UpdateHitbox();
+        }
+
+        private void UpdateHitbox()
+        {
             hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
         }
 
@@ -110,6 +123,7 @@ namespace Explorus.Models
             if(currentDirection == Direction.None && dir != Direction.None)
             {
                 _image = animationImages[0, (int)dir];
+                LastNotNoneDirection = dir;
             }
         }
         public void SetAnimationState(int index)

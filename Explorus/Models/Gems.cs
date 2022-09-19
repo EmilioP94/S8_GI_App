@@ -27,6 +27,7 @@ namespace Explorus.Models
             player.gems.Acquire();
             isCollected = true;
             image = null;
+            hitbox = new Rectangle();
             return false;
         }
     }

@@ -87,5 +87,23 @@ namespace Explorus.Models
                 toxicSlimes.Add(slime);
             }
         }
+        public void CreateBubble()
+        {
+            Bubble bubble = new Bubble(
+                playerCharacter.x,
+                playerCharacter.y,
+                SpriteFactory.GetInstance().GetSprite(Sprites.bigBubble),
+                SpriteFactory.GetInstance().GetSprite(Sprites.poppedBubble),
+                playerCharacter.GetDirection()
+                );
+
+            labyrinthComponentList.Add(bubble);
+        }
+
+        public void CreateGems(int x, int y)
+        {
+            ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.gem, x, y);
+            labyrinthComponentList.Add(comp);
+        }
     }
 }

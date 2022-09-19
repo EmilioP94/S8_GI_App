@@ -42,5 +42,10 @@ namespace Explorus.Models
             destinationPoint = new Point(x, y);
             gems.Empty();
         }
+
+        public Direction GetDirection()
+        {
+            return LastNotNoneDirection;
+        }
     }
 }

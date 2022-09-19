@@ -85,6 +85,9 @@ namespace Explorus.Controllers
                 case (char)Keys.Down:
                     MoveToValidDestination(lab.playerCharacter, Direction.Down);
                     break;
+                case (char)Keys.Space:
+                    lab.CreateBubble();
+                    break;
             }
         }
 
@@ -115,7 +118,12 @@ namespace Explorus.Controllers
 
                 if (comp.hitbox.IntersectsWith(srcComp.hitbox))
                 {
-                    return comp.Collide(srcComp);
+                    bool result = comp.Collide(srcComp);
+                    if(result) //true seulement si c'est une collision entre une bulle et un toxicSlime
+                    {
+                        lab.CreateGems(comp.x, comp.y);
+                    }
+                    return result;
                 }
             }
             return false;
@@ -164,6 +172,17 @@ namespace Explorus.Controllers
             CheckForCollision(lab.playerCharacter);
             lab.playerCharacter.UpdatePosition(elapseTime);
             MoveToxicSlimes(elapseTime);
+            MoveBubbles(elapseTime);
+        }
+
+        private void MoveBubbles(int elapseTime)
+        {
+            foreach (Bubble bubble in lab.labyrinthComponentList.OfType<Bubble>().ToList())
+            {
+                bubble.DeleteCheck();
+                bubble.Move(elapseTime);
+                CheckForCollision(bubble);
+            }
         }
 
         public void MoveToxicSlimes(int elapseTime)
@@ -189,3 +208,4 @@ namespace Explorus.Controllers
         }
     }
 }
+

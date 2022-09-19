@@ -20,16 +20,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if (comp.GetType() != typeof(Slimus))
-                return true;
-
-            Slimus player = (Slimus)comp;
-
-            if (isOpen)
-            {
-                return false;
-            }
-            if(!isOpen && player.gems.total == player.gems.acquired)
+            if (comp.GetType() == typeof(Slimus))
             {
                 isOpen = true;
                 ColorMatrix matrix = new ColorMatrix();
@@ -37,9 +28,13 @@ namespace Explorus.Models
                 ImageAttributes attributes = new ImageAttributes();
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                 this.attributes = attributes;
-                return false;
             }
-            return true;
+            else if (comp.GetType() == typeof(Bubble))
+            {
+                Bubble bubble = (Bubble)comp;
+                bubble.PopBubble();
+            }
+            return false;
         }
 
         public override bool IsValidDestination(Slime player)

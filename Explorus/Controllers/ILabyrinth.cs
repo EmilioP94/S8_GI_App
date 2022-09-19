@@ -19,8 +19,9 @@ namespace Explorus.Controllers
         List<ToxicSlime> toxicSlimes { get; }
 
         bool gameEnded { get; }
+        void CreateBubble();
 
+        void CreateGems(int x,int y);
         void Reload(Sprites[,] map);
-
     }
 }

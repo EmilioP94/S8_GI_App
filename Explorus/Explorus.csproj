@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
+    <Compile Include="Models\Bubble.cs" />
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\Gems.cs" />
     <Compile Include="Models\Collection.cs" />
