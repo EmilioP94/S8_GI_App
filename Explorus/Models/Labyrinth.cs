@@ -51,9 +51,12 @@ namespace Explorus.Models
             }
         }
 
-        public void Reload()
+        public void Reload(Sprites[,] map)
         {
+            this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
+            miniSlimes = new List<MiniSlime>();
+            toxicSlimes = new List<ToxicSlime>();
 
 
             for (int i = 0; i < map.GetLength(0); i++)

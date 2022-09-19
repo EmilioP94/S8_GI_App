@@ -64,6 +64,9 @@ namespace Explorus.Controllers
         {
             switch (keyValue)
             {
+                case (char)Keys.V:
+                    lab.Reload(Constants.level_2);
+                    break;
                 case (char)Keys.P:
                     if (gameState.state == GameStates.Play)
                     {
@@ -198,7 +201,7 @@ namespace Explorus.Controllers
             if (gameState.level < gameState.maxLevel - 1)
             {
                 gameState.NextLevel();
-                lab = new Labyrinth(Constants.levels[gameState.level].map);
+                lab.Reload(Constants.levels[gameState.level].map);
                 return true;
             }
             else return false;

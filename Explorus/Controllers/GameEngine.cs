@@ -67,20 +67,14 @@ namespace Explorus.Controllers
                 {
                     // need to figure out how to reload the next level map when a level is completed 
 
-                    //if(labyrinthController.NextLevel())
-                    //{
-                    //    headerController = new HeaderController(labyrinthController.lab);
-                    //    labyrinthController.lab.gems.Subscribe(headerController);
-                    //    oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
-                    //    oView.Render();
-                    //}
-                    //else
-                    //{
-                    labyrinthController.gameState.Stop();
-                    endTimer = new System.Timers.Timer(3000);
-                    endTimer.Elapsed += OnGameEnded;
-                    endTimer.Start();
-                    //}
+                    if (!labyrinthController.NextLevel())
+                    {
+                        Console.WriteLine("Stop");
+                        labyrinthController.gameState.Stop();
+                        endTimer = new System.Timers.Timer(3000);
+                        endTimer.Elapsed += OnGameEnded;
+                        endTimer.Start();
+                    }
                 }
             }
         }

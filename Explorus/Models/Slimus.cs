@@ -37,6 +37,7 @@ namespace Explorus.Models
         {
             this.x = x;
             this.y = y;
+            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
             currentDirection = Direction.None;
             destinationPoint = new Point(x, y);
             gems.Empty();
