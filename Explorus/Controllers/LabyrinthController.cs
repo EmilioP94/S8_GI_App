@@ -118,7 +118,6 @@ namespace Explorus.Controllers
 
                 if (comp.hitbox.IntersectsWith(srcComp.hitbox))
                 {
-                    Console.WriteLine("collision!");
                     bool result = false;
                     if (comp.GetType() == typeof(ToxicSlime) && srcComp.GetType() == typeof(Slimus))
                     {
