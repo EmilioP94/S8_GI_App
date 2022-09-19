@@ -29,6 +29,7 @@ namespace Explorus.Views
 
         private HeaderView headerView;
         private PauseView pauseView;
+        private GameOverView gameOverView;
         private Point offset { get; set; }
         public GameStates state;
         public int level;
@@ -58,6 +59,7 @@ namespace Explorus.Views
             oGameForm = new GameForm();
             oGameForm.MinimumSize = new Size(600, 600);
             pauseView = new PauseView(originalWidth, originalHeight);
+            gameOverView = new GameOverView(originalWidth, originalHeight);
             DoProcessResize();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
             oGameForm.KeyDown += new KeyEventHandler(doHandle);
@@ -117,6 +119,11 @@ namespace Explorus.Views
             if (state == GameStates.Pause)
             {
                 pauseView.Render(sender, e, offset);
+            }
+
+            if(state == GameStates.Over)
+            {
+                gameOverView.Render(sender, e, offset);
             }
 
         }

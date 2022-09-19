@@ -22,6 +22,8 @@ namespace Explorus.Controllers
             labyrinthController = new LabyrinthController();
             headerController = new HeaderController(labyrinthController.lab);
             labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
+            labyrinthController.lab.playerCharacter.bubbles.Subscribe(headerController);
+            labyrinthController.lab.playerCharacter.hearts.Subscribe(headerController);
             oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();

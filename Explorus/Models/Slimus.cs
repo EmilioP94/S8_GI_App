@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Threading.Tasks;
 using Explorus.Controllers;
 
 namespace Explorus.Models
@@ -8,6 +11,10 @@ namespace Explorus.Models
         public Collection gems { get; private set; }
         public Collection hearts { get; private set; }
         public Collection bubbles { get; private set; }
+
+        private int rechargeTime = 500;
+        private int elapsedTime = 0;
+        public bool invincible = false;
         public Slimus(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge))
         {
             gems = new Collection(Sprites.gem, Bars.yellow, false);
@@ -46,6 +53,57 @@ namespace Explorus.Models
         public Direction GetDirection()
         {
             return LastNotNoneDirection;
+        }
+
+        public override bool Collide(ILabyrinthComponent comp)
+        {
+            if(!invincible && comp.GetType() == typeof(ToxicSlime))
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = 0.5f;
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                this.attributes = attributes;
+                invincible = true;
+                hearts.Decrement();
+                Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
+                {
+                    // trouver une facon de flasher, live ca fait juste nous transparenter sti
+                    invincible = false;
+                    matrix = new ColorMatrix();
+                    matrix.Matrix33 = 1;
+                    attributes = new ImageAttributes();
+                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                    this.attributes = attributes;
+                });
+            }
+            return false;
+        }
+
+        public Bubble Shoot()
+        {
+            if (bubbles.acquired == bubbles.total)
+            {
+                bubbles.Empty();
+                return new Bubble(
+                   x,
+                   y,
+                   SpriteFactory.GetInstance().GetSprite(Sprites.bigBubble),
+                   SpriteFactory.GetInstance().GetSprite(Sprites.poppedBubble),
+                   GetDirection()
+                   );
+            }
+            else return null;
+        }
+
+        public void RechargeBubbles(int elapsedTime)
+        {
+            this.elapsedTime = this.elapsedTime + elapsedTime;
+            if(this.elapsedTime > rechargeTime)
+            {
+                bubbles.Acquire();
+                this.elapsedTime = 0;
+            }
         }
     }
 }

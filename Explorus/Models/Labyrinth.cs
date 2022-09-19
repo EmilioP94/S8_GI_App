@@ -89,15 +89,11 @@ namespace Explorus.Models
         }
         public void CreateBubble()
         {
-            Bubble bubble = new Bubble(
-                playerCharacter.x,
-                playerCharacter.y,
-                SpriteFactory.GetInstance().GetSprite(Sprites.bigBubble),
-                SpriteFactory.GetInstance().GetSprite(Sprites.poppedBubble),
-                playerCharacter.GetDirection()
-                );
-
-            labyrinthComponentList.Add(bubble);
+            Bubble bubble = playerCharacter.Shoot();
+            if(bubble != null)
+            {
+                labyrinthComponentList.Add(bubble);
+            }
         }
 
         public void CreateGems(int x, int y)
