@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 
 namespace Explorus.Models
 {
@@ -13,7 +14,7 @@ namespace Explorus.Models
         bool isSolid { get; }
 
         Rectangle hitbox { get; }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         bool Collide(ILabyrinthComponent comp);
 
         bool IsValidDestination(Slime playerCharacter);

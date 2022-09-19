@@ -1,4 +1,5 @@
 ﻿using Explorus.Models;
+using Explorus.Threads;
 using Explorus.Views;
 using System;
 using System.Threading;
@@ -12,6 +13,7 @@ namespace Explorus.Controllers
         GameView oView;
         LabyrinthController labyrinthController;
         HeaderController headerController;
+        PhysicsThread physicsThread;
 
         private const int msPerFrame = 14;
         private int lastGameLoop;
@@ -27,6 +29,9 @@ namespace Explorus.Controllers
             oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
+            physicsThread = new PhysicsThread(labyrinthController.lab, labyrinthController.gameState);
+            physicsThread.Start();
+
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();
             oView.Show();
@@ -42,7 +47,7 @@ namespace Explorus.Controllers
             oView.framerate = 1000 / elapseTime;
             oView.state = labyrinthController.gameState.state;
             oView.level = labyrinthController.gameState.level;
-            labyrinthController.ProcessMovement(elapseTime);
+            //labyrinthController.ProcessMovement(elapseTime);
         }
 
         private void GameLoop()

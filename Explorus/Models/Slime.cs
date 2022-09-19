@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -39,6 +40,7 @@ namespace Explorus.Models
             hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
             destinationPoint = new Point(x, y);
         }
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void Move(Direction direction)
         {
             if (currentDirection != Direction.None)
@@ -65,7 +67,7 @@ namespace Explorus.Models
                     break;
             }
         }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void UpdatePosition(int deltaT)
         {
             if (isDead)
@@ -117,7 +119,7 @@ namespace Explorus.Models
         {
             hitbox = new Rectangle(x + hitboxXOffset, y + hitboxYOffset, Constants.slimusHitboxLength, Constants.slimusHitboxHeight);
         }
-
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void ChangeDirection(Direction dir)
         {
             if(currentDirection == Direction.None && dir != Direction.None)
@@ -143,6 +145,49 @@ namespace Explorus.Models
             else
             {
                 return Math.Abs(xDiff);
+            }
+        }
+
+        private bool CheckValidDestination(Direction direction, ILabyrinth lab)
+        {
+            int newX = x;
+            int newY = y;
+            switch (direction)
+            {
+                case Direction.Up:
+                    newX = x;
+                    newY = y - Constants.unit * 2;
+                    break;
+                case Direction.Down:
+                    newX = x;
+                    newY = y + Constants.unit * 2;
+                    break;
+                case Direction.Right:
+                    newX = x + Constants.unit * 2;
+                    newY = y;
+                    break;
+                case Direction.Left:
+                    newX = x - Constants.unit * 2;
+                    newY = y;
+                    break;
+            }
+            Rectangle newPosition = new Rectangle(newX, newY, Constants.unit * 2, Constants.unit * 2);
+            foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
+            {
+                if (comp.hitbox.IntersectsWith(newPosition))
+                {
+                    return comp.IsValidDestination(this);
+                }
+            }
+            return true;
+        }
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public void MoveToValidDestination(Direction direction, ILabyrinth lab)
+        {
+            ChangeDirection(direction);
+            if (CheckValidDestination(direction,  lab))
+            {
+                Move(direction);
             }
         }
     }
