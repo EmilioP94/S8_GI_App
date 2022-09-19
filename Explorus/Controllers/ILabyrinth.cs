@@ -16,9 +16,11 @@ namespace Explorus.Controllers
 
         Slimus playerCharacter { get; }
 
-        Collection gems { get; }
+        List<ToxicSlime> toxicSlimes { get; }
 
         bool gameEnded { get; }
+
+        void Reload(Sprites[,] map);
 
     }
 }

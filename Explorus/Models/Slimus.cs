@@ -3,17 +3,16 @@ using Explorus.Controllers;
 
 namespace Explorus.Models
 {
-    enum FacingDirection
-    {        
-        Up,
-        Right,
-        Down,
-        Left
-    }
     internal class Slimus : Slime
     {
-        public Slimus(int x, int y) : base(x, y)
+        public Collection gems { get; private set; }
+        public Collection hearts { get; private set; }
+        public Collection bubbles { get; private set; }
+        public Slimus(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge))
         {
+            gems = new Collection(Sprites.gem, Bars.yellow, false);
+            hearts = new Collection(Sprites.heart, Bars.red, true);
+            bubbles = new Collection(Sprites.smallBubble, Bars.blue, true);
             animationImages = new Image2D[3, 4];
 
             var SFInstance = SpriteFactory.GetInstance();
@@ -33,6 +32,15 @@ namespace Explorus.Models
             animationImages[0, 3] = SFInstance.GetSprite(Sprites.slimusLeftLarge);
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
+        }
+        public void NewLevel(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+            currentDirection = Direction.None;
+            destinationPoint = new Point(x, y);
+            gems.Empty();
         }
     }
 }

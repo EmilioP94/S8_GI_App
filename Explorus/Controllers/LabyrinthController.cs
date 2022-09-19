@@ -7,22 +7,22 @@ using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 
 namespace Explorus.Controllers
 {
     enum Direction
     {
-        None,
         Up,
         Right,
         Down,
-        Left
+        Left,
+        None
     }
     internal class LabyrinthController
     {
         public ILabyrinth lab { get; private set; }
-        public Direction currentDirection;
         public Point playerDestinationPoint;
         public GameState gameState;
 
@@ -30,7 +30,6 @@ namespace Explorus.Controllers
         {
             gameState = new GameState();
             lab = new Labyrinth(Constants.levels[gameState.level].map);
-            currentDirection = Direction.None;
         }
 
         public void ProcessInput(KeyEventArgs e)
@@ -51,55 +50,41 @@ namespace Explorus.Controllers
             }
         }
 
+        private void MoveToValidDestination(Slime slime, Direction direction)
+        {
+            slime.ChangeDirection(direction);
+            if (CheckValidDestination(direction, slime))
+            {
+                slime.Move(direction);
+            }
+        }
+
         // processes input when the game is in the "Play" state
         private void ProcessPlayControls(char keyValue)
         {
-            if (keyValue == (char)Keys.P)
+            switch (keyValue)
             {
-                if (gameState.state == GameStates.Play)
-                {
-                    gameState.Pause(true);
-                }
-            }
-            if (currentDirection != Direction.None)
-                return;
-
-            if (keyValue == (char)Keys.Up)
-            {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Up);
-                if (CheckValidDestination(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2))
-                {
-                    currentDirection = Direction.Up;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y - Constants.unit * 2);
-                }
-
-            }
-            if (keyValue == (char)Keys.Left)
-            {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Left);
-                if (CheckValidDestination(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y))
-                {
-                    currentDirection = Direction.Left;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x - Constants.unit * 2, lab.playerCharacter.y);
-                }
-            }
-            if (keyValue == (char)Keys.Right)
-            {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Right);
-                if (CheckValidDestination(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y))
-                {
-                    currentDirection = Direction.Right;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x + Constants.unit * 2, lab.playerCharacter.y);
-                }
-            }
-            if (keyValue == (char)Keys.Down)
-            {
-                lab.playerCharacter.ChangeDirection(FacingDirection.Down);
-                if (CheckValidDestination(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2))
-                {
-                    currentDirection = Direction.Down;
-                    playerDestinationPoint = new Point(lab.playerCharacter.x, lab.playerCharacter.y + Constants.unit * 2);
-                }
+                case (char)Keys.V:
+                    lab.Reload(Constants.level_2);
+                    break;
+                case (char)Keys.P:
+                    if (gameState.state == GameStates.Play)
+                    {
+                        gameState.Pause(true);
+                    }
+                    break;
+                case (char)Keys.Up:
+                    MoveToValidDestination(lab.playerCharacter, Direction.Up);
+                    break;
+                case (char)Keys.Left:
+                    MoveToValidDestination(lab.playerCharacter, Direction.Left);
+                    break;
+                case (char)Keys.Right:
+                    MoveToValidDestination(lab.playerCharacter, Direction.Right);
+                    break;
+                case (char)Keys.Down:
+                    MoveToValidDestination(lab.playerCharacter, Direction.Down);
+                    break;
             }
         }
 
@@ -136,45 +121,60 @@ namespace Explorus.Controllers
             return false;
         }
 
-        private bool CheckValidDestination(int newX, int newY)
+        private bool CheckValidDestination(Direction direction, Slime slime)
         {
+            int newX = slime.x;
+            int newY = slime.y;
+            switch (direction)
+            {
+                case Direction.Up:
+                    newX = slime.x;
+                    newY = slime.y - Constants.unit * 2;
+                    break;
+                case Direction.Down:
+                    newX = slime.x;
+                    newY = slime.y + Constants.unit * 2;
+                    break;
+                case Direction.Right:
+                    newX = slime.x + Constants.unit * 2;
+                    newY = slime.y;
+                    break;
+                case Direction.Left:
+                    newX = slime.x - Constants.unit * 2;
+                    newY = slime.y;
+                    break;
+            }
             Rectangle newPosition = new Rectangle(newX, newY, Constants.unit * 2, Constants.unit * 2);
             foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
             {
                 if (comp.hitbox.IntersectsWith(newPosition))
                 {
-                    return comp.IsValidDestination(lab.playerCharacter);
+                    return comp.IsValidDestination(slime);
                 }
             }
             return true;
         }
 
-        private double GetCurrentDistanceWithDestinationPoint()
+        public void ProcessMovement(int elapseTime)
         {
-            double xDiff = playerDestinationPoint.X - lab.playerCharacter.x;
-            double yDiff = playerDestinationPoint.Y - lab.playerCharacter.y;
-
-            if (xDiff == 0)
+            if(gameState.state != GameStates.Play)
             {
-                return Math.Abs(yDiff);
-            }
-            else
-            {
-                return Math.Abs(xDiff);
-            }
-        }
-
-        public void ProcessMovement(int deltaT)
-        {
-            CheckForCollision(lab.playerCharacter);
-            if (currentDirection == Direction.None)
-            {
-                lab.playerCharacter.SetAnimationState(0);
                 return;
             }
+            CheckForCollision(lab.playerCharacter);
+            lab.playerCharacter.UpdatePosition(elapseTime);
+            MoveToxicSlimes(elapseTime);
+        }
 
-            double distance = GetCurrentDistanceWithDestinationPoint();
-            currentDirection = lab.playerCharacter.Move(currentDirection, distance, playerDestinationPoint, deltaT);
+        public void MoveToxicSlimes(int elapseTime)
+        {
+            Random random = new Random();
+            foreach (ToxicSlime slime in lab.toxicSlimes)
+            {
+                Direction direction = (Direction)random.Next(0, 4);
+                MoveToValidDestination(slime, direction);
+                slime.UpdatePosition(elapseTime);
+            }
         }
 
         public bool NextLevel()
@@ -182,7 +182,7 @@ namespace Explorus.Controllers
             if (gameState.level < gameState.maxLevel - 1)
             {
                 gameState.NextLevel();
-                lab = new Labyrinth(Constants.levels[gameState.level].map);
+                lab.Reload(Constants.levels[gameState.level].map);
                 return true;
             }
             else return false;

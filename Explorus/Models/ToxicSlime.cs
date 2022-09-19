@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Controllers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Explorus.Models
 {
     internal class ToxicSlime : Slime
     {
-        public ToxicSlime(int x, int y) : base(x, y)
+        public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
             animationImages = new Image2D[3, 4];
 

@@ -15,7 +15,7 @@ namespace Explorus
         /// </summary>
         [STAThread]
         static void Main()
-       {
+     {
             GameEngine ge = new GameEngine();
         }
     }
