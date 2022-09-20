@@ -14,6 +14,7 @@ namespace Explorus.Controllers
         LabyrinthController labyrinthController;
         HeaderController headerController;
         PhysicsThread physicsThread;
+        AudioThread audioThread;
 
         private const int msPerFrame = 14;
         private int lastGameLoop;
@@ -31,6 +32,7 @@ namespace Explorus.Controllers
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             physicsThread = new PhysicsThread(labyrinthController.lab, labyrinthController.gameState);
             physicsThread.Start();
+            audioThread = AudioThread.GetInstance();
 
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();

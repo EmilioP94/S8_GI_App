@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Threads;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -94,6 +95,7 @@ namespace Explorus.Models
             {
                 labyrinthComponentList.Add(bubble);
             }
+            AudioThread.GetInstance().QueueSound(SoundTypes.sound15);
         }
 
         public void CreateGems(int x, int y)

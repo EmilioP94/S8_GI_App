@@ -83,6 +83,7 @@
     <Compile Include="Models\ToxicSlime.cs" />
     <Compile Include="Models\Unsubscriber.cs" />
     <Compile Include="Models\Wall.cs" />
+    <Compile Include="Threads\AudioThread.cs" />
     <Compile Include="Threads\PhysicsThread.cs" />
     <Compile Include="Views\GameOverView.cs" />
     <Compile Include="Views\GameView.cs" />
@@ -119,7 +120,28 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Audio\sound01.wav" />
+    <None Include="Resources\Audio\sound02.wav" />
+    <None Include="Resources\Audio\sound03.wav" />
+    <None Include="Resources\Audio\sound04.wav" />
+    <None Include="Resources\Audio\sound05.wav" />
+    <None Include="Resources\Audio\sound06.wav" />
+    <None Include="Resources\Audio\sound07.wav" />
+    <None Include="Resources\Audio\sound08.wav" />
+    <None Include="Resources\Audio\sound09.wav" />
+    <None Include="Resources\Audio\sound10.wav" />
+    <None Include="Resources\Audio\sound11.wav" />
+    <None Include="Resources\Audio\sound12.wav" />
+    <None Include="Resources\Audio\sound13.wav" />
+    <None Include="Resources\Audio\sound14.wav" />
+    <None Include="Resources\Audio\sound15.wav" />
+    <None Include="Resources\Audio\sound16.wav" />
+    <None Include="Resources\Audio\sound17.wav" />
+    <None Include="Resources\Audio\sound18.wav" />
+    <None Include="Resources\Audio\sound19.WAV" />
+    <None Include="Resources\Audio\sound20.WAV" />
     <Content Include="Resources\TilesSheet.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
