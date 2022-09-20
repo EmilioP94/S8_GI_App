@@ -42,6 +42,7 @@ namespace Explorus.Views
                         component.attributes);
                     }
 
+                    // unreachable code - debug purposes with the switch in Constants
                     if(Constants.showHitbox)
                     {
                         if (component.GetType() != typeof(Wall) && component.GetType() != typeof(Door))

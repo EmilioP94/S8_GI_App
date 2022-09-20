@@ -84,11 +84,13 @@ namespace Explorus.Controllers
                     }
                 }
             }
+            physicsThread.Stop();
         }
 
         private void OnGameEnded(Object source, ElapsedEventArgs e)
         {
             oView.Close(null, null);
+            physicsThread.Stop();
         }
 
         public void OnNext(WindowEvents value)

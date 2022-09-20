@@ -12,14 +12,9 @@ namespace TestExplorus.Models
         {
             Image2D image = new Image2D(null, ImageType.Wall);
             Door door = new Door(0, 0, image);
-            
             Sprites[,] testMap = new Sprites[1, 1];
             testMap[0, 0] = Sprites.gem;
-
-            Collection gems = new Collection(testMap, Sprites.gem, Bars.yellow, false);
-
             Slimus slimus = new Slimus(0, 0);
-            slimus.SetCollections(gems);
             door.Collide(slimus);            
         }
 
@@ -28,17 +23,12 @@ namespace TestExplorus.Models
         {
             Image2D image = new Image2D(null, ImageType.Wall);
             Door door = new Door(0, 0, image);
-
             Sprites[,] testMap = new Sprites[1, 1];
             testMap[0, 0] = Sprites.gem;
-
-            Collection gems = new Collection(testMap, Sprites.gem, Bars.yellow, true);
-
-            Slimus slimus = new Slimus(0, 0);
-            slimus.SetCollections(gems);            
+            Collection gems = new Collection(Sprites.gem, Bars.yellow, true);
+            Slimus slimus = new Slimus(0, 0);      
             door.Collide(slimus);
             door.Collide(slimus);
-
             Assert.IsTrue(door.isSolid);
             Assert.IsNotNull(door.hitbox);
         }
