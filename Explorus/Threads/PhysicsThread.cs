@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Messaging;
+using System.Collections.Concurrent;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Threads
@@ -18,11 +18,12 @@ namespace Explorus.Threads
         GameState gameState;
         int lastVerification;
         bool running;
-        MessageQueue eventQueue;
+        ConcurrentQueue<string> eventQueue;
 
-        public PhysicsThread(ILabyrinth lab, GameState gameState)
+
+        public PhysicsThread(ILabyrinth lab, GameState gameState, ConcurrentQueue<string> eventQueue)
         {
-            eventQueue = new MessageQueue(".//eventQueue");
+            this.eventQueue = eventQueue;
             this.lab = lab;
             this.gameState = gameState;
             lastVerification = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
@@ -83,8 +84,12 @@ namespace Explorus.Threads
         {
             while (running)
             {
-                Message messagefromEngine = eventQueue.Receive();
-                Console.WriteLine(messagefromEngine);
+                string eventMessage;
+                if(eventQueue.TryPeek(out eventMessage))
+                {
+                    Console.WriteLine(eventMessage);
+                    
+                };
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 if (gameState.state == GameStates.Play)
                 {

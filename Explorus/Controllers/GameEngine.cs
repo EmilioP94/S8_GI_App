@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
-using System.Messaging;
+using System.Collections.Concurrent;
 
 namespace Explorus.Controllers
 {
@@ -18,12 +18,12 @@ namespace Explorus.Controllers
 
         private const int msPerFrame = 14;
         private int lastGameLoop;
-        private MessageQueue eventQueue;
+        private ConcurrentQueue<string> eventQueue;
 
 
         public GameEngine()
         {
-            eventQueue = new MessageQueue(".//eventQueue");
+            eventQueue = new ConcurrentQueue<string>();
             labyrinthController = new LabyrinthController();
             headerController = new HeaderController(labyrinthController.lab);
             labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
@@ -32,7 +32,7 @@ namespace Explorus.Controllers
             oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-            physicsThread = new PhysicsThread(labyrinthController.lab, labyrinthController.gameState);
+            physicsThread = new PhysicsThread(labyrinthController.lab, labyrinthController.gameState, eventQueue);
             physicsThread.Start();
 
             Thread thread = new Thread(new ThreadStart(GameLoop));
@@ -65,7 +65,7 @@ namespace Explorus.Controllers
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 int waitTime = startFrameTime + msPerFrame - endFrameTime;
 
-                eventQueue.Send("the game has rendered");
+                eventQueue.Enqueue("first message");
                 if (waitTime > 0)
                 {
                     Thread.Sleep(waitTime);
