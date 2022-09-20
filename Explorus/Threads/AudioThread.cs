@@ -7,6 +7,8 @@ using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Media;
 
 namespace Explorus.Threads
 {
@@ -36,33 +38,33 @@ namespace Explorus.Threads
     internal class AudioThread
     {
         private static AudioThread _instance;
-        private readonly Dictionary<SoundTypes, UnmanagedMemoryStream> soundsList = new Dictionary<SoundTypes, UnmanagedMemoryStream> 
+        private readonly Dictionary<SoundTypes, string> soundsList = new Dictionary<SoundTypes, string> 
         { 
-            { SoundTypes.sound01, Properties.Resources.sound01 },
-            { SoundTypes.sound02, Properties.Resources.sound02 },
-            { SoundTypes.sound03, Properties.Resources.sound03 },
-            { SoundTypes.sound04, Properties.Resources.sound04 },
-            { SoundTypes.sound05, Properties.Resources.sound05 },
-            { SoundTypes.sound06, Properties.Resources.sound06 },
-            { SoundTypes.sound07, Properties.Resources.sound07 },
-            { SoundTypes.sound08, Properties.Resources.sound08 },
-            { SoundTypes.sound09, Properties.Resources.sound09 },
-            { SoundTypes.sound10, Properties.Resources.sound10 },
-            { SoundTypes.sound11, Properties.Resources.sound11 },
-            { SoundTypes.sound12, Properties.Resources.sound12 },
-            { SoundTypes.sound13, Properties.Resources.sound13 },
-            { SoundTypes.sound14, Properties.Resources.sound14 },
-            { SoundTypes.sound15, Properties.Resources.sound15 },
-            { SoundTypes.sound16, Properties.Resources.sound16 },
-            { SoundTypes.sound17, Properties.Resources.sound17 },
-            { SoundTypes.sound18, Properties.Resources.sound18 },
-            { SoundTypes.sound19, Properties.Resources.sound19 },
-            { SoundTypes.sound20, Properties.Resources.sound20 },
+            { SoundTypes.sound01, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound02, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound03, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound04, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound05, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound06, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound07, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound08, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound09, "\\Resources\\Audio\\sound01.wav" },
+            { SoundTypes.sound10, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound11, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound12, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound13, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound14, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound15, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound16, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound17, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound18, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound19, "\\Resources\\Audio\\sound10.wav" },
+            { SoundTypes.sound20, "\\Resources\\Audio\\sound10.wav" },
         };
         Thread thread;
         private ConcurrentQueue<SoundTypes> soundsQueue = new ConcurrentQueue<SoundTypes>();
-        private SoundPlayer musicPlayer;
-        private List<SoundPlayer> playingSounds = new List<SoundPlayer>();
+        private MediaPlayer musicPlayer;
+        private List<MediaPlayer> playingSounds = new List<MediaPlayer>();
         private readonly object playingSoundsListLock = new object();
 
         private bool _isPaused = false;
@@ -70,8 +72,14 @@ namespace Explorus.Threads
         {
             thread = new Thread(new ThreadStart(()=> PlaySounds()));
             thread.Start();
-            musicPlayer = new SoundPlayer(Properties.Resources.sound10);
-            musicPlayer.PlayLooping();
+            musicPlayer = new MediaPlayer();
+            musicPlayer.Open(new Uri(Application.StartupPath + soundsList[SoundTypes.sound01]));
+            musicPlayer.MediaEnded += (object sender, EventArgs e) =>
+            {
+                musicPlayer.Position = TimeSpan.Zero;
+                musicPlayer.Play();
+            };
+            musicPlayer.Play();
         }
 
         public static AudioThread GetInstance()
@@ -94,8 +102,9 @@ namespace Explorus.Threads
                         SoundTypes sound;
                         if (soundsQueue.TryDequeue(out sound))
                         {
-                            SoundPlayer player = new SoundPlayer(soundsList[sound]);
-                            player.Disposed += (object sender, EventArgs e) =>
+                            MediaPlayer player = new MediaPlayer();
+                            player.Open(new Uri(Application.StartupPath + soundsList[sound]));
+                            player.MediaEnded += (object sender, EventArgs e) =>
                             {
                                 lock (playingSoundsListLock)
                                 {
@@ -120,9 +129,12 @@ namespace Explorus.Threads
         {
             if (_isPaused)
             {
-                foreach(SoundPlayer player in playingSounds)
+                lock (playingSoundsListLock)
                 {
-                    player.Play();
+                    foreach (MediaPlayer player in playingSounds)
+                    {
+                        player.Play();
+                    }
                 }
             }
             _isPaused = false;
@@ -131,9 +143,12 @@ namespace Explorus.Threads
         {
             if (!_isPaused)
             {
-                foreach(SoundPlayer player in playingSounds)
+                lock (playingSoundsListLock)
                 {
-                    player.Stop();
+                    foreach (MediaPlayer player in playingSounds)
+                    {
+                        player.Stop();
+                    }
                 }
             }
             _isPaused = true;
