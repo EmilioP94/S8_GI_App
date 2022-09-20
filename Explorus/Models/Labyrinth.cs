@@ -1,6 +1,7 @@
 ﻿using Explorus.Controllers;
 using Explorus.Threads;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +10,7 @@ namespace Explorus.Models
     internal class Labyrinth: ILabyrinth
     {
         public Sprites[,] map { get; private set; }
-        public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
+        public BlockingCollection<ILabyrinthComponent> labyrinthComponentList { get; private set; }
         public Slimus playerCharacter { get; private set; }
 
         public List<MiniSlime> miniSlimes { get; private set; }
@@ -27,7 +28,7 @@ namespace Explorus.Models
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
             this.map = map;
-            labyrinthComponentList = new List<ILabyrinthComponent>();
+            labyrinthComponentList = new BlockingCollection<ILabyrinthComponent>();
             
 
             for (int i = 0; i < map.GetLength(0); i++)
@@ -55,7 +56,7 @@ namespace Explorus.Models
         public void Reload(Sprites[,] map)
         {
             this.map = map;
-            labyrinthComponentList = new List<ILabyrinthComponent>();
+            labyrinthComponentList = new BlockingCollection<ILabyrinthComponent>();
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
 

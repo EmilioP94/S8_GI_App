@@ -1,5 +1,6 @@
 ﻿using Explorus.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -13,7 +14,7 @@ namespace Explorus.Controllers
         Sprites[,] map { get; }
         //int[] slimusPosition { get; set; }
 
-        List<ILabyrinthComponent> labyrinthComponentList { get; }
+        BlockingCollection<ILabyrinthComponent> labyrinthComponentList { get; }
 
         Slimus playerCharacter { get; }
 
