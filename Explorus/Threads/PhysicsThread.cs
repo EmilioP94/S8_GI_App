@@ -85,7 +85,6 @@ namespace Explorus.Threads
                 if (gameState.state == GameStates.Play)
                 {
                     int elapseTime = startFrameTime - lastVerification;
-                    Console.WriteLine(elapseTime);
                     CheckForCollision(lab.playerCharacter);
                     lab.playerCharacter.UpdatePosition(elapseTime);
                     MoveToxicSlimes(elapseTime);

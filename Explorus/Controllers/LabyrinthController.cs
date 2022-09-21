@@ -20,27 +20,22 @@ namespace Explorus.Controllers
         Left,
         None
     }
-    internal class LabyrinthController
+    internal class LabyrinthController: IInputController
     {
         public ILabyrinth lab { get; private set; }
         public Point playerDestinationPoint;
-        public GameState gameState;
 
         public LabyrinthController()
         {
-            gameState = new GameState();
-            lab = new Labyrinth(Constants.levels[gameState.level].map);
+            lab = new Labyrinth(Constants.levels[GameState.GetInstance().level].map);
         }
 
-        public void ProcessInput(KeyEventArgs e)
+        public void ProcessInput(object sender, KeyEventArgs e)
         {
-            switch (gameState.state)
+            switch (GameState.GetInstance().state)
             {
                 case GameStates.Play:
                     ProcessPlayControls((char)e.KeyValue);
-                    break;
-                case GameStates.Pause:
-                    ProcessPauseControls((char)e.KeyValue);
                     break;
                 case GameStates.Resume:
                     ProcessResumeControls((char)e.KeyValue);
@@ -59,9 +54,9 @@ namespace Explorus.Controllers
                     lab.Reload(Constants.level_2);
                     break;
                 case (char)Keys.P:
-                    if (gameState.state == GameStates.Play)
+                    if (GameState.GetInstance().state == GameStates.Play)
                     {
-                        gameState.Pause(true);
+                        GameState.GetInstance().Pause(true);
                     }
                     break;
                 case (char)Keys.Up:
@@ -82,30 +77,20 @@ namespace Explorus.Controllers
             }
         }
 
-        // processes input when the game is in the "Pause" state
-        private void ProcessPauseControls(char keyValue)
-        {
-            if (keyValue == (char)Keys.R)
-            {
-                gameState.Resume();
-            }
-            // add controls for sound menu here 
-        }
-
         private void ProcessResumeControls(char keyValue)
         {
             if (keyValue == (char)Keys.P)
             {
-                gameState.Pause(true);
+                GameState.GetInstance().Pause(true);
             }
         }
 
         public bool NextLevel()
         {
-            if (gameState.level < gameState.maxLevel - 1)
+            if (GameState.GetInstance().level < GameState.GetInstance().maxLevel - 1)
             {
-                gameState.NextLevel();
-                lab.Reload(Constants.levels[gameState.level].map);
+                GameState.GetInstance().NextLevel();
+                lab.Reload(Constants.levels[GameState.GetInstance().level].map);
                 return true;
             }
             else return false;

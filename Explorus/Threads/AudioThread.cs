@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Views;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +42,10 @@ namespace Explorus.Threads
     {
         StopMusic,
         StopSounds,
+        IncrementSounds,
+        DecrementSounds,
+        IncrementMusic,
+        DecrementMusic,
         ResumeMusic,
         ResumeSounds,
     }
@@ -80,7 +85,8 @@ namespace Explorus.Threads
         private List<MediaPlayer> playingSounds = new List<MediaPlayer>();
         private readonly object playingSoundsListLock = new object();
 
-        private double soundVolume = 0.5;
+        public double musicVolume = 0.5;
+        public double soundVolume = 0.5;
 
         private bool _isPaused = false;
         private AudioThread()
@@ -102,6 +108,7 @@ namespace Explorus.Threads
         private void PlaySounds()
         {
             musicPlayer = new MediaPlayer();
+            musicPlayer.Volume = musicVolume;
             musicPlayer.Open(new Uri(Application.StartupPath + soundsList[SoundTypes.music]));
             musicPlayer.MediaEnded += (object sender, EventArgs e) =>
             {
@@ -109,12 +116,12 @@ namespace Explorus.Threads
                 musicPlayer.Play();
             };
             musicPlayer.Play();
-            while (!_isStopping && (soundsQueue.Count != 0 || soundsEventsQueue.Count != 0))
+            while (!_isStopping)
             {
+                int count = soundsQueue.Count;
                 if (!_isPaused)
                 {
                     //Create new sounds
-                    int count = soundsQueue.Count;
                     for (int i = 0; i < count; i++)
                     {
                         SoundTypes sound;
@@ -133,45 +140,56 @@ namespace Explorus.Threads
                             player.Play();
                         }
                     }
-                    count = soundsEventsQueue.Count;
-                    for (int i = 0; i < count; i++)
+                }
+                count = soundsEventsQueue.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    SoundsEvents newEvent;
+                    if (soundsEventsQueue.TryDequeue(out newEvent))
                     {
-                        SoundsEvents newEvent;
-                        if (soundsEventsQueue.TryDequeue(out newEvent))
+                        List<MediaPlayer> sounds;
+                        switch (newEvent)
                         {
-                            List<MediaPlayer> sounds;
-                            switch (newEvent)
-                            {
-                                case SoundsEvents.ResumeSounds:
-                                    lock (playingSounds)
-                                    {
-                                        sounds = playingSounds.ToList();
-                                    }
-                                    foreach(MediaPlayer sound in sounds)
-                                    {
-                                        sound.Play();
-                                    }
-                                    break;
-                                case SoundsEvents.StopMusic:
-                                    musicPlayer.Stop();
-                                    break;
-                                case SoundsEvents.ResumeMusic:
-                                    musicPlayer.Play();
-                                    break;
-                                case SoundsEvents.StopSounds:
-                                    lock (playingSounds)
-                                    {
-                                        sounds = playingSounds.ToList();
-                                    }
-                                    foreach (MediaPlayer sound in sounds)
-                                    {
-                                        sound.Stop();
-                                    }
-                                    break;
-                            }
+                            case SoundsEvents.ResumeSounds:
+                                lock (playingSounds)
+                                {
+                                    sounds = playingSounds.ToList();
+                                }
+                                foreach (MediaPlayer sound in sounds)
+                                {
+                                    sound.Play();
+                                }
+                                break;
+                            case SoundsEvents.StopMusic:
+                                musicPlayer.Stop();
+                                break;
+                            case SoundsEvents.ResumeMusic:
+                                musicPlayer.Play();
+                                break;
+                            case SoundsEvents.StopSounds:
+                                lock (playingSounds)
+                                {
+                                    sounds = playingSounds.ToList();
+                                }
+                                foreach (MediaPlayer sound in sounds)
+                                {
+                                    sound.Stop();
+                                }
+                                break;
+                            case SoundsEvents.IncrementSounds:
+                                IncrementSoundVolume();
+                                break;
+                            case SoundsEvents.DecrementSounds:
+                                DecrementSoundVolume();
+                                break;
+                            case SoundsEvents.IncrementMusic:
+                                IncrementMusicVolume();
+                                break;
+                            case SoundsEvents.DecrementMusic:
+                                DecrementMusicVolume();
+                                break;
                         }
                     }
-
                 }
                 Thread.Sleep(10);
             }
@@ -180,6 +198,10 @@ namespace Explorus.Threads
         public void QueueSound(SoundTypes sound)
         {
             soundsQueue.Enqueue(sound);
+        }
+
+        public void QueueEvent(SoundsEvents e) {
+            soundsEventsQueue.Enqueue(e);
         }
 
         public void Resume()
@@ -214,11 +236,42 @@ namespace Explorus.Threads
             StopMusic();
         }
 
-        public void SetMusicVolume(double newVolume)
+        private void IncrementMusicVolume()
+        {
+            if (musicVolume <= 1)
+            {
+                SetMusicVolume(musicVolume + 0.01);
+            }
+        }
+        private void IncrementSoundVolume()
+        {
+            if (soundVolume <= 1)
+            {
+                SetSoundsVolume(soundVolume + 0.01);
+            }
+        }
+        
+        private void DecrementMusicVolume()
+        {
+            if (musicVolume >= 0)
+            {
+                SetMusicVolume(musicVolume - 0.01);
+            }
+        }
+        private void DecrementSoundVolume()
+        {
+            if (soundVolume >= 0)
+            {
+                SetSoundsVolume(soundVolume - 0.01);
+            }
+        }
+
+        private void SetMusicVolume(double newVolume)
         {
             musicPlayer.Volume = newVolume;
+            musicVolume = newVolume;
         }
-        public void SetSoundsVolume(double newVolume)
+        private void SetSoundsVolume(double newVolume)
         {
             List<MediaPlayer> sounds;
             lock (playingSounds)

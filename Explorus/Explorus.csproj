@@ -51,8 +51,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\GameEngine.cs" />
     <Compile Include="Controllers\HeaderController.cs" />
+    <Compile Include="Controllers\IInputController.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
     <Compile Include="Controllers\LabyrinthController.cs" />
+    <Compile Include="Controllers\PauseMenuController.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>

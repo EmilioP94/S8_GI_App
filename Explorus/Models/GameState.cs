@@ -22,6 +22,19 @@ namespace Explorus.Models
         public int level { get; private set; } = 0;
         public int maxLevel = Constants.levels.Length;
         public bool manual;
+        public int menuIndex = 0;
+        public int maxMenuIndex = 1;
+
+        private static GameState _instance = null;
+
+        public static GameState GetInstance()
+        {
+            if(_instance == null)
+            {
+                _instance = new GameState();
+            }
+            return _instance;
+        }
         public void Pause(bool manual)
         {
             state = GameStates.Pause;
@@ -56,6 +69,14 @@ namespace Explorus.Models
         public void NextLevel()
         {
             level++;
+        }
+
+        public void NavigateMenu()
+        {
+            if (menuIndex == 0)
+            {
+                menuIndex = 1;
+            } else menuIndex = 0;
         }
     }
 }
