@@ -10,23 +10,19 @@ namespace TestExplorus.Models
         [TestMethod]
         public void TestMethod()
         {
-            Gems gems = new Gems(0, 0, null);
-
-            Sprites[,] testMap = new Sprites[1, 1];
-            testMap[0, 0] = Sprites.gem;
-            Collection collectionGems = new Collection(testMap, Sprites.gem, Bars.yellow, false);
+            Gems gem1 = new Gems(0, 0, null);
+            Gems gem2 = new Gems(0, 1, null);
 
             Slimus slimus = new Slimus(0, 0);
-            slimus.SetCollections(collectionGems);
 
-            Assert.AreEqual(1, slimus.gems.total);
+            Assert.AreEqual(6, slimus.gems.total);
             Assert.AreEqual(0, slimus.gems.acquired);
 
-            gems.Collide(slimus);
+            gem1.Collide(slimus);
             Assert.AreEqual(1, slimus.gems.acquired);
 
-            gems.Collide(slimus);
-            Assert.AreEqual(1, slimus.gems.acquired);
+            gem2.Collide(slimus);
+            Assert.AreEqual(2, slimus.gems.acquired);
         }
     }
 }

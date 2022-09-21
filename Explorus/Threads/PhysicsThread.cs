@@ -12,10 +12,11 @@ namespace Explorus.Threads
 {
     internal class PhysicsThread
     {
-        Thread thread;
+        public Thread thread;
         ILabyrinth lab;
         GameState gameState;
         int lastVerification;
+        bool running;
 
         public PhysicsThread(ILabyrinth lab, GameState gameState)
         {
@@ -23,6 +24,7 @@ namespace Explorus.Threads
             this.gameState = gameState;
             lastVerification = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             thread = new Thread(new ThreadStart(DoPhysics));
+            running = true;
         }
 
         private void MoveBubbles(int elapseTime)
@@ -76,19 +78,22 @@ namespace Explorus.Threads
 
         private void DoPhysics()
         {
-            while (true)
+            while (running)
             {
                 int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 if (gameState.state == GameStates.Play)
                 {
                     int elapseTime = startFrameTime - lastVerification;
-                    Console.WriteLine(elapseTime);
-                    CheckForCollision(lab.playerCharacter);
-                    lab.playerCharacter.UpdatePosition(elapseTime);
-                    MoveToxicSlimes(elapseTime);
-                    MoveBubbles(elapseTime);
-                    lab.playerCharacter.RechargeBubbles(elapseTime);
-                    lastVerification = startFrameTime;
+                    if (elapseTime >= 16)
+                    {
+                        Console.WriteLine(elapseTime);
+                        CheckForCollision(lab.playerCharacter);
+                        lab.playerCharacter.UpdatePosition(elapseTime);
+                        MoveToxicSlimes(elapseTime);
+                        MoveBubbles(elapseTime);
+                        lab.playerCharacter.RechargeBubbles(elapseTime);
+                        lastVerification = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
+                    }
                 }
                 Thread.Sleep(1);
             }
@@ -101,6 +106,11 @@ namespace Explorus.Threads
                 return;
             }
             thread.Start();
+        }
+
+        public void Stop()
+        {
+            running = false;
         }
     }
 }

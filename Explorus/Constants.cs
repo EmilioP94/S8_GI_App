@@ -52,7 +52,7 @@ namespace Explorus
         public static readonly Models.Level[] levels =
         {
             new Level(level_1),
-            new Level(level_2),
+            //new Level(level_2),
         };
 
     }

@@ -1,5 +1,6 @@
 using Explorus;
 using Explorus.Models;
+using Explorus.Controllers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -8,60 +9,78 @@ namespace TestExplorus.Models
     [TestClass]
     public class SlimusTests
     {
+        Slimus slimus;
+        int originalX = 0;
+        int originalY = 10;
+        int elapseTime = 16;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            slimus = new Slimus(originalX, originalY);
+        }
+
         [TestMethod]
         public void TestMoveUp()
         {
-            Slimus slimus = new Slimus(0, 10);
 
-            Assert.AreEqual(slimus.x, 0);
-            Assert.AreEqual(slimus.y, 10);
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
 
-            slimus.Move(Explorus.Controllers.Direction.Up);
+            slimus.Move(Direction.Up);
+            slimus.UpdatePosition(elapseTime);
 
-            Assert.AreEqual(slimus.x, 0);
-            Assert.AreEqual(slimus.y, 10 - (int)(16 * Constants.playerSpeed));
+            int expectedY = originalY - (int)(elapseTime * Constants.playerSpeed);
+
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(expectedY, slimus.y);
         }
 
         [TestMethod]
         public void TestMoveDown()
         {
-            Slimus slimus = new Slimus(0, 10);
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
 
-            Assert.AreEqual(slimus.x, 0);
-            Assert.AreEqual(slimus.y, 10);
+            slimus.Move(Direction.Down);
+            slimus.UpdatePosition(elapseTime);
 
-            slimus.Move(Explorus.Controllers.Direction.Down);
+            int expectedY = originalY + (int)(elapseTime * Constants.playerSpeed);
 
-            Assert.AreEqual(slimus.x, 0);
-            Assert.AreEqual(slimus.y, 10 + (int)(16 * Constants.playerSpeed));
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(expectedY, slimus.y);
         }
 
         [TestMethod]
         public void TestMoveRight()
         {
-            Slimus slimus = new Slimus(0, 0);
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
 
-            Assert.AreEqual(slimus.x, 0);
-            Assert.AreEqual(slimus.y, 0);
+            slimus.Move(Direction.Right);
+            slimus.UpdatePosition(elapseTime);
 
-            slimus.Move(Explorus.Controllers.Direction.Right);
+            int expectedX = originalX + (int)(elapseTime * Constants.playerSpeed);
 
-            Assert.AreEqual(slimus.x, (int)(16 * Constants.playerSpeed));
-            Assert.AreEqual(slimus.y, 0);
+            Assert.AreEqual(expectedX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
         }
 
         [TestMethod]
         public void TestMoveLeft()
         {
-            Slimus slimus = new Slimus(10, 0);
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
 
-            Assert.AreEqual(slimus.x, 10);
-            Assert.AreEqual(slimus.y, 0);
+            slimus.Move(Direction.Left);
+            slimus.UpdatePosition(elapseTime);
 
-            slimus.Move(Explorus.Controllers.Direction.Left);
 
-            Assert.AreEqual(slimus.x, 10 - (int)(16 * Constants.playerSpeed));
-            Assert.AreEqual(slimus.y, 0);
+            int expectedX = originalX - (int)(elapseTime * Constants.playerSpeed);
+
+
+            Assert.AreEqual(expectedX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
         }
     }
 }

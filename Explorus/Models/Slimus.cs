@@ -106,7 +106,6 @@ namespace Explorus.Models
                 hearts.Decrement();
                 Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
                 {
-                    // trouver une facon de flasher, live ca fait juste nous transparenter sti
                     invincible = false;
                     flickerTimer.Enabled = false;
                     SetTransparency(false);
