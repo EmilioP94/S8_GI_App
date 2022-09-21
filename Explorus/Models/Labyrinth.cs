@@ -95,8 +95,9 @@ namespace Explorus.Models
             if(bubble != null)
             {
                 labyrinthComponentList.Add(bubble);
+                AudioThread.GetInstance().QueueSound(SoundTypes.bubbleShoot);
             }
-            AudioThread.GetInstance().QueueSound(SoundTypes.sound15);
+
         }
 
         public void CreateGems(int x, int y)

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using Explorus.Controllers;
+using Explorus.Threads;
 
 namespace Explorus.Models
 {
@@ -57,6 +58,9 @@ namespace Explorus.Models
             animationImages[0, 3] = SFInstance.GetSprite(Sprites.slimusLeftLarge);
             animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
+
+            movementSound = SoundTypes.slimusMovement;
+            wallCollisionSound = SoundTypes.wallCollision;
         }
         public void NewLevel(int x, int y)
         {
@@ -103,6 +107,7 @@ namespace Explorus.Models
                 _isTransparent = true;
                 SetTransparency(true);
                 invincible = true;
+                AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
                 hearts.Decrement();
                 Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
                 {
@@ -129,7 +134,6 @@ namespace Explorus.Models
             }
             else return null;
         }
-        [MethodImpl(MethodImplOptions.Synchronized)]
         public void RechargeBubbles(int elapsedTime)
         {
             this.elapsedTime = this.elapsedTime + elapsedTime;
