@@ -86,6 +86,7 @@
     <Compile Include="Models\Wall.cs" />
     <Compile Include="Threads\AudioThread.cs" />
     <Compile Include="Threads\PhysicsThread.cs" />
+    <Compile Include="Threads\RenderThread.cs" />
     <Compile Include="Views\GameOverView.cs" />
     <Compile Include="Views\GameView.cs" />
     <Compile Include="Program.cs" />
