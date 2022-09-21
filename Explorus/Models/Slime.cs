@@ -196,7 +196,7 @@ namespace Explorus.Models
             {
                 Move(direction);
             }
-            if(wallCollisionSound != SoundTypes.None)
+            else if (wallCollisionSound != SoundTypes.None)
             {
                 AudioThread.GetInstance().QueueSound(wallCollisionSound);
             }
