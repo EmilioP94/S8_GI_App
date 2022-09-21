@@ -17,6 +17,7 @@ namespace Explorus.Threads
         GameState gameState;
         int lastVerification;
         bool running;
+        readonly int msPerFrame = 16;
 
         public PhysicsThread(ILabyrinth lab, GameState gameState)
         {
@@ -84,18 +85,24 @@ namespace Explorus.Threads
                 if (gameState.state == GameStates.Play)
                 {
                     int elapseTime = startFrameTime - lastVerification;
-                    if (elapseTime >= 16)
-                    {
-                        Console.WriteLine(elapseTime);
-                        CheckForCollision(lab.playerCharacter);
-                        lab.playerCharacter.UpdatePosition(elapseTime);
-                        MoveToxicSlimes(elapseTime);
-                        MoveBubbles(elapseTime);
-                        lab.playerCharacter.RechargeBubbles(elapseTime);
-                        lastVerification = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-                    }
+                    Console.WriteLine(elapseTime);
+                    CheckForCollision(lab.playerCharacter);
+                    lab.playerCharacter.UpdatePosition(elapseTime);
+                    MoveToxicSlimes(elapseTime);
+                    MoveBubbles(elapseTime);
+                    lab.playerCharacter.RechargeBubbles(elapseTime);
                 }
-                Thread.Sleep(1);
+                int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
+                int waitTime = startFrameTime + msPerFrame - endFrameTime;
+                lastVerification = startFrameTime;
+                if (waitTime > 0)
+                {
+                    Thread.Sleep(waitTime);
+                }
+                else
+                {
+                    Thread.Sleep(1);
+                }
             }
         }
 
