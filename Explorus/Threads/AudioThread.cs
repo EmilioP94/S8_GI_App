@@ -109,7 +109,7 @@ namespace Explorus.Threads
                 musicPlayer.Play();
             };
             musicPlayer.Play();
-            while (!_isStopping || soundsQueue.Count != 0 || soundsEventsQueue.Count != 0)
+            while (!_isStopping && (soundsQueue.Count != 0 || soundsEventsQueue.Count != 0))
             {
                 if (!_isPaused)
                 {
