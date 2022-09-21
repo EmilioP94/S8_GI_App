@@ -10,6 +10,8 @@ namespace Explorus
 {
     internal static class Constants
     {
+        public const int msPerFrame = 14;
+
         public const int unit = 48;//48px
 
         public const double playerSpeed = 0.4;

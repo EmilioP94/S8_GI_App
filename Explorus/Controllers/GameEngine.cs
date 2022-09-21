@@ -15,8 +15,8 @@ namespace Explorus.Controllers
         HeaderController headerController;
         PhysicsThread physicsThread;
         AudioThread audioThread;
+        RenderThread renderThread;
 
-        private const int msPerFrame = 14;
         private int lastGameLoop;
 
 
@@ -33,6 +33,8 @@ namespace Explorus.Controllers
             physicsThread = new PhysicsThread(labyrinthController.lab, labyrinthController.gameState);
             physicsThread.Start();
             audioThread = AudioThread.GetInstance();
+            renderThread = new RenderThread(oView, labyrinthController);
+            renderThread.Start();
 
             Thread thread = new Thread(new ThreadStart(GameLoop));
             thread.Start();
@@ -57,21 +59,6 @@ namespace Explorus.Controllers
             System.Timers.Timer endTimer = null;
             while (oView.running)
             {
-                int startFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-                Update(startFrameTime - lastGameLoop);
-                lastGameLoop = startFrameTime;
-                oView.Render();
-                int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-                int waitTime = startFrameTime + msPerFrame - endFrameTime;
-
-                if (waitTime > 0)
-                {
-                    Thread.Sleep(waitTime);
-                }
-                else
-                {
-                    Thread.Sleep(1);
-                }
                 if (labyrinthController.lab.gameEnded && endTimer == null)
                 {
                     // need to figure out how to reload the next level map when a level is completed 
@@ -88,6 +75,7 @@ namespace Explorus.Controllers
             }
             AudioThread.GetInstance().Stop();
             physicsThread.Stop();
+            renderThread.Stop();
         }
 
         private void OnGameEnded(Object source, ElapsedEventArgs e)
