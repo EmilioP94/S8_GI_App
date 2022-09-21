@@ -86,6 +86,7 @@ namespace Explorus.Controllers
                     }
                 }
             }
+            AudioThread.GetInstance().Stop();
             physicsThread.Stop();
         }
 
@@ -93,6 +94,7 @@ namespace Explorus.Controllers
         {
             oView.Close(null, null);
             physicsThread.Stop();
+            AudioThread.GetInstance().Stop();
         }
 
         public void OnNext(WindowEvents value)

@@ -37,9 +37,17 @@ namespace Explorus.Threads
         miniSlimeCollection,
         None,
     }
+    enum SoundsEvents
+    {
+        StopMusic,
+        StopSounds,
+        ResumeMusic,
+        ResumeSounds,
+    }
     internal class AudioThread
     {
         private static AudioThread _instance;
+        private bool _isStopping = false;
         private readonly Dictionary<SoundTypes, string> soundsList = new Dictionary<SoundTypes, string> 
         {
             { SoundTypes.music, "\\Resources\\Audio\\music.wav" },
@@ -67,23 +75,19 @@ namespace Explorus.Threads
         };
         Thread thread;
         private ConcurrentQueue<SoundTypes> soundsQueue = new ConcurrentQueue<SoundTypes>();
+        private ConcurrentQueue<SoundsEvents> soundsEventsQueue = new ConcurrentQueue<SoundsEvents>();
         private MediaPlayer musicPlayer;
         private List<MediaPlayer> playingSounds = new List<MediaPlayer>();
         private readonly object playingSoundsListLock = new object();
+
+        private double soundVolume = 0.5;
 
         private bool _isPaused = false;
         private AudioThread()
         {
             thread = new Thread(new ThreadStart(()=> PlaySounds()));
             thread.Start();
-            musicPlayer = new MediaPlayer();
-            musicPlayer.Open(new Uri(Application.StartupPath + soundsList[SoundTypes.music]));
-            musicPlayer.MediaEnded += (object sender, EventArgs e) =>
-            {
-                musicPlayer.Position = TimeSpan.Zero;
-                musicPlayer.Play();
-            };
-            musicPlayer.Play();
+
         }
 
         public static AudioThread GetInstance()
@@ -97,11 +101,21 @@ namespace Explorus.Threads
 
         private void PlaySounds()
         {
-            while (true)
+            musicPlayer = new MediaPlayer();
+            musicPlayer.Open(new Uri(Application.StartupPath + soundsList[SoundTypes.music]));
+            musicPlayer.MediaEnded += (object sender, EventArgs e) =>
+            {
+                musicPlayer.Position = TimeSpan.Zero;
+                musicPlayer.Play();
+            };
+            musicPlayer.Play();
+            while (!_isStopping || soundsQueue.Count != 0 || soundsEventsQueue.Count != 0)
             {
                 if (!_isPaused)
                 {
-                    for (int i = 0; i < soundsQueue.Count; i++)
+                    //Create new sounds
+                    int count = soundsQueue.Count;
+                    for (int i = 0; i < count; i++)
                     {
                         SoundTypes sound;
                         if (soundsQueue.TryDequeue(out sound))
@@ -115,10 +129,49 @@ namespace Explorus.Threads
                                     playingSounds.Remove(player);
                                 }
                             };
+                            player.Volume = soundVolume;
                             player.Play();
                         }
-
                     }
+                    count = soundsEventsQueue.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        SoundsEvents newEvent;
+                        if (soundsEventsQueue.TryDequeue(out newEvent))
+                        {
+                            List<MediaPlayer> sounds;
+                            switch (newEvent)
+                            {
+                                case SoundsEvents.ResumeSounds:
+                                    lock (playingSounds)
+                                    {
+                                        sounds = playingSounds.ToList();
+                                    }
+                                    foreach(MediaPlayer sound in sounds)
+                                    {
+                                        sound.Play();
+                                    }
+                                    break;
+                                case SoundsEvents.StopMusic:
+                                    musicPlayer.Stop();
+                                    break;
+                                case SoundsEvents.ResumeMusic:
+                                    musicPlayer.Play();
+                                    break;
+                                case SoundsEvents.StopSounds:
+                                    lock (playingSounds)
+                                    {
+                                        sounds = playingSounds.ToList();
+                                    }
+                                    foreach (MediaPlayer sound in sounds)
+                                    {
+                                        sound.Stop();
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+
                 }
                 Thread.Sleep(10);
             }
@@ -133,37 +186,50 @@ namespace Explorus.Threads
         {
             if (_isPaused)
             {
-                lock (playingSoundsListLock)
-                {
-                    foreach (MediaPlayer player in playingSounds)
-                    {
-                        player.Play();
-                    }
-                }
+                soundsEventsQueue.Enqueue(SoundsEvents.ResumeSounds);
             }
+
             _isPaused = false;
         }
         public void Pause()
         {
             if (!_isPaused)
             {
-                lock (playingSoundsListLock)
-                {
-                    foreach (MediaPlayer player in playingSounds)
-                    {
-                        player.Stop();
-                    }
-                }
+                soundsEventsQueue.Enqueue(SoundsEvents.StopSounds);
             }
             _isPaused = true;
         }
         public void StopMusic()
         {
-            musicPlayer.Stop();
+            soundsEventsQueue.Enqueue(SoundsEvents.StopMusic);
         }
         public void ResumeMusic()
         {
-            musicPlayer.Play();
+            soundsEventsQueue.Enqueue(SoundsEvents.ResumeMusic);
+        }
+
+        public void Stop()
+        {
+            _isStopping = true;
+            StopMusic();
+        }
+
+        public void SetMusicVolume(double newVolume)
+        {
+            musicPlayer.Volume = newVolume;
+        }
+        public void SetSoundsVolume(double newVolume)
+        {
+            List<MediaPlayer> sounds;
+            lock (playingSounds)
+            {
+                sounds = playingSounds.ToList();
+            }
+            foreach(MediaPlayer sound in sounds)
+            {
+                sound.Volume = newVolume;
+            }
+            soundVolume = newVolume;
         }
     }
 }
