@@ -14,6 +14,7 @@ namespace Explorus.Threads
 {
     enum SoundTypes
     {
+        music,
         sound01,
         sound02,
         sound03,
@@ -39,7 +40,8 @@ namespace Explorus.Threads
     {
         private static AudioThread _instance;
         private readonly Dictionary<SoundTypes, string> soundsList = new Dictionary<SoundTypes, string> 
-        { 
+        {
+            { SoundTypes.music, "\\Resources\\Audio\\music.wav" },
             { SoundTypes.sound01, "\\Resources\\Audio\\sound01.wav" },
             { SoundTypes.sound02, "\\Resources\\Audio\\sound01.wav" },
             { SoundTypes.sound03, "\\Resources\\Audio\\sound01.wav" },
@@ -73,7 +75,7 @@ namespace Explorus.Threads
             thread = new Thread(new ThreadStart(()=> PlaySounds()));
             thread.Start();
             musicPlayer = new MediaPlayer();
-            musicPlayer.Open(new Uri(Application.StartupPath + soundsList[SoundTypes.sound01]));
+            musicPlayer.Open(new Uri(Application.StartupPath + soundsList[SoundTypes.music]));
             musicPlayer.MediaEnded += (object sender, EventArgs e) =>
             {
                 musicPlayer.Position = TimeSpan.Zero;

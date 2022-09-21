@@ -14,7 +14,7 @@ namespace Explorus.Controllers
         Sprites[,] map { get; }
         //int[] slimusPosition { get; set; }
 
-        BlockingCollection<ILabyrinthComponent> labyrinthComponentList { get; }
+        List<ILabyrinthComponent> labyrinthComponentList { get; }
 
         Slimus playerCharacter { get; }
 
@@ -26,5 +26,7 @@ namespace Explorus.Controllers
         [MethodImpl(MethodImplOptions.Synchronized)]
         void CreateGems(int x,int y);
         void Reload(Sprites[,] map);
+
+        List<ILabyrinthComponent> GetComponentListCopy();
     }
 }

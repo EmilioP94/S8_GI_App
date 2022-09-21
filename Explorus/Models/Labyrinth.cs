@@ -10,7 +10,7 @@ namespace Explorus.Models
     internal class Labyrinth: ILabyrinth
     {
         public Sprites[,] map { get; private set; }
-        public BlockingCollection<ILabyrinthComponent> labyrinthComponentList { get; private set; }
+        public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
         public Slimus playerCharacter { get; private set; }
 
         public List<MiniSlime> miniSlimes { get; private set; }
@@ -28,7 +28,7 @@ namespace Explorus.Models
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
             this.map = map;
-            labyrinthComponentList = new BlockingCollection<ILabyrinthComponent>();
+            labyrinthComponentList = new List<ILabyrinthComponent>();
             
 
             for (int i = 0; i < map.GetLength(0); i++)
@@ -56,7 +56,7 @@ namespace Explorus.Models
         public void Reload(Sprites[,] map)
         {
             this.map = map;
-            labyrinthComponentList = new BlockingCollection<ILabyrinthComponent>();
+            labyrinthComponentList = new List<ILabyrinthComponent>();
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
 
@@ -103,6 +103,11 @@ namespace Explorus.Models
         {
             ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.gem, x, y);
             labyrinthComponentList.Add(comp);
+        }
+
+        public List<ILabyrinthComponent> GetComponentListCopy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

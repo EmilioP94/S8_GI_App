@@ -181,6 +181,9 @@
     <None Include="Resources\Audio\sound20.WAV">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Resources\Audio\music.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\TilesSheet.png" />
   </ItemGroup>
   <ItemGroup />
