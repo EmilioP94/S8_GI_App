@@ -1,5 +1,6 @@
 ﻿using Explorus.Models;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -25,5 +26,7 @@ namespace Explorus.Controllers
         [MethodImpl(MethodImplOptions.Synchronized)]
         void CreateGems(int x,int y);
         void Reload(Sprites[,] map);
+
+        List<ILabyrinthComponent> GetComponentListCopy();
     }
 }

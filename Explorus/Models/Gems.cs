@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using Explorus.Threads;
+using System.Drawing;
 
 
 namespace Explorus.Models
@@ -28,6 +29,14 @@ namespace Explorus.Models
             isCollected = true;
             image = null;
             hitbox = new Rectangle();
+            if (player.gems.acquired == player.gems.total)
+            {
+                AudioThread.GetInstance().QueueSound(SoundTypes.allGems);
+            }
+            else
+            {
+                AudioThread.GetInstance().QueueSound(SoundTypes.gemCollection);
+            }
             return false;
         }
     }

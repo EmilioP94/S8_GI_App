@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Threads;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -34,6 +35,7 @@ namespace Explorus.Models
 
         public void PopBubble()
         {
+            AudioThread.GetInstance().QueueSound(SoundTypes.bubbleExplode);
             isMoving = false;
             base.image = poppedBubbleImage;
             hitbox = new Rectangle();
@@ -74,7 +76,6 @@ namespace Explorus.Models
             {
                 x -= (int)(deltaT * Constants.playerSpeed * 2);
             }
-
             hitbox = new Rectangle(x, y, Constants.unit, Constants.unit);
         }
     }

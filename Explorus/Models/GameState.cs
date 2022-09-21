@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Threads;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,11 +26,13 @@ namespace Explorus.Models
         {
             state = GameStates.Pause;
             this.manual = manual;
+            AudioThread.GetInstance().Pause();
         }
 
         public void Play()
         {
             state = GameStates.Play;
+            AudioThread.GetInstance().Resume();
         }
 
         public void Resume()
@@ -46,6 +49,8 @@ namespace Explorus.Models
         public void GameOver()
         {
             state = GameStates.Over;
+            AudioThread.GetInstance().StopMusic();
+            AudioThread.GetInstance().QueueSound(SoundTypes.gameOver);
         }
 
         public void NextLevel()
