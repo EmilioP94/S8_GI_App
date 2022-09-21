@@ -60,22 +60,24 @@ namespace Explorus.Models
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
 
-
-            for (int i = 0; i < map.GetLength(0); i++)
+            lock (labyrinthComponentList)
             {
-                for (int j = 0; j < map.GetLength(1); j++)
+                for (int i = 0; i < map.GetLength(0); i++)
                 {
-                    if(map[i, j] != Sprites.slimusDownLarge)
+                    for (int j = 0; j < map.GetLength(1); j++)
                     {
-                        ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
-                        labyrinthComponentList.Add(comp);
-                    }
-                    else
-                    {
-                        if(playerCharacter != null)
+                        if (map[i, j] != Sprites.slimusDownLarge)
                         {
-                            playerCharacter.NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
-                            labyrinthComponentList.Add(playerCharacter);
+                            ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
+                            labyrinthComponentList.Add(comp);
+                        }
+                        else
+                        {
+                            if (playerCharacter != null)
+                            {
+                                playerCharacter.NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
+                                labyrinthComponentList.Add(playerCharacter);
+                            }
                         }
                     }
                 }
@@ -103,12 +105,18 @@ namespace Explorus.Models
         public void CreateGems(int x, int y)
         {
             ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.gem, x, y);
-            labyrinthComponentList.Add(comp);
+            lock (labyrinthComponentList)
+            {
+                labyrinthComponentList.Add(comp);
+            }
         }
 
         public List<ILabyrinthComponent> GetComponentListCopy()
         {
-            throw new NotImplementedException();
+            lock (labyrinthComponentList)
+            {
+                return labyrinthComponentList.ToList();
+            }
         }
     }
 }

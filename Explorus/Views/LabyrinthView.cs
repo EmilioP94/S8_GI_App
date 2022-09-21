@@ -24,7 +24,7 @@ namespace Explorus.Views
         {
             if (lab != null)
             {
-                foreach (ILabyrinthComponent component in lab.labyrinthComponentList)
+                foreach (ILabyrinthComponent component in lab.GetComponentListCopy())
                 {
                     if(component.image != null)
                     {

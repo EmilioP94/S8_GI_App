@@ -30,7 +30,7 @@ namespace Explorus.Threads
 
         private void MoveBubbles(int elapseTime)
         {
-            foreach (Bubble bubble in lab.labyrinthComponentList.OfType<Bubble>().ToList())
+            foreach (Bubble bubble in lab.GetComponentListCopy().OfType<Bubble>().ToList())
             {
                 bubble.DeleteCheck();
                 bubble.Move(elapseTime);
@@ -50,7 +50,7 @@ namespace Explorus.Threads
         }
         private bool CheckForCollision(ILabyrinthComponent srcComp)
         {
-            foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
+            foreach (ILabyrinthComponent comp in lab.GetComponentListCopy())
             {
                 if (srcComp == comp)//ignore  collision with itself
                     continue;

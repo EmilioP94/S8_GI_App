@@ -179,7 +179,7 @@ namespace Explorus.Models
                     break;
             }
             Rectangle newPosition = new Rectangle(newX, newY, Constants.unit * 2, Constants.unit * 2);
-            foreach (ILabyrinthComponent comp in lab.labyrinthComponentList)
+            foreach (ILabyrinthComponent comp in lab.GetComponentListCopy())
             {
                 if (comp.hitbox.IntersectsWith(newPosition))
                 {
