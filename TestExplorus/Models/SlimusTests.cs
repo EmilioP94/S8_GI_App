@@ -82,5 +82,31 @@ namespace TestExplorus.Models
             Assert.AreEqual(expectedX, slimus.x);
             Assert.AreEqual(originalY, slimus.y);
         }
+
+        [TestMethod]
+        public void TestNewLevel()
+        {
+            int newX = 55;
+            int newY = 60;
+            Assert.AreEqual(originalX, slimus.x);
+            Assert.AreEqual(originalY, slimus.y);
+
+            slimus.NewLevel(newX, newY);
+
+            Assert.AreEqual(newX, slimus.x);
+            Assert.AreEqual(newY, slimus.y);
+        }
+
+        [TestMethod]
+        public void TestLifeDecrease()
+        {
+            Assert.AreEqual(slimus.hearts.acquired, 6);
+
+            ToxicSlime toxicSlime = new ToxicSlime(0,0);                        
+            slimus.Collide(toxicSlime);
+
+            Assert.AreEqual(slimus.hearts.acquired, 5);
+        }
     }
 }
+
