@@ -29,7 +29,13 @@ namespace TestExplorus.Models
             Assert.AreEqual(6, collection.total);
             Assert.AreEqual(0, collection.acquired);
             collection.Acquire();
+            collection.Acquire();
+            Assert.AreEqual(2, collection.acquired);
+            collection.Decrement();
             Assert.AreEqual(1, collection.acquired);
+            collection.Empty();
+            Assert.AreEqual(0, collection.acquired);
+
         }
     }
 }

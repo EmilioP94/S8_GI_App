@@ -7,6 +7,8 @@ namespace TestExplorus.Models
     [TestClass]
     public class GemsTests
     {
+        [TestInitialize]
+
         [TestMethod]
         public void TestMethod()
         {
@@ -18,8 +20,9 @@ namespace TestExplorus.Models
             Assert.AreEqual(6, slimus.gems.total);
             Assert.AreEqual(0, slimus.gems.acquired);
 
-            gem1.Collide(slimus);
+            bool gem1Collected = gem1.Collide(slimus);
             Assert.AreEqual(1, slimus.gems.acquired);
+            Assert.IsFalse(gem1Collected);
 
             gem2.Collide(slimus);
             Assert.AreEqual(2, slimus.gems.acquired);
