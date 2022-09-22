@@ -53,8 +53,8 @@ namespace Explorus.Threads
         private void Update(int elapseTime)
         {
             view.framerate = 1000 / elapseTime;
-            view.state = labyrinthController.gameState.state;
-            view.level = labyrinthController.gameState.level;
+            view.state = GameState.GetInstance().state;
+            view.level = GameState.GetInstance().level;
 
             view.Render();
 
