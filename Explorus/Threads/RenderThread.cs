@@ -1,4 +1,11 @@
-﻿using Explorus.Controllers;
+﻿/*
+FSP:
+
+RENDERTHREAD = (start -> RUNNING),
+RUNNING = (doRender -> RENDER | stop -> RENDERTHREAD),
+RENDER = (stop -> RENDERTHREAD | update -> RENDER).
+ */
+using Explorus.Controllers;
 using Explorus.Models;
 using Explorus.Views;
 using System;
