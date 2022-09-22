@@ -12,6 +12,7 @@ namespace Explorus.Controllers
     {
         GameView oView;
         LabyrinthController labyrinthController;
+        PauseMenuController pauseMenuController;
         HeaderController headerController;
         PhysicsThread physicsThread;
         AudioThread audioThread;
@@ -23,6 +24,7 @@ namespace Explorus.Controllers
         public GameEngine()
         {
             labyrinthController = new LabyrinthController();
+            pauseMenuController = new PauseMenuController();
             headerController = new HeaderController(labyrinthController.lab);
             labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
             labyrinthController.lab.playerCharacter.bubbles.Subscribe(headerController);
@@ -30,7 +32,7 @@ namespace Explorus.Controllers
             oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
-            physicsThread = new PhysicsThread(labyrinthController.lab, labyrinthController.gameState);
+            physicsThread = new PhysicsThread(labyrinthController.lab, GameState.GetInstance());
             physicsThread.Start();
             audioThread = AudioThread.GetInstance();
             renderThread = new RenderThread(oView, labyrinthController);
@@ -43,15 +45,23 @@ namespace Explorus.Controllers
 
         private void ProcessInput(object sender, KeyEventArgs e)
         {
-            labyrinthController.ProcessInput(e);
+            switch(GameState.GetInstance().state)
+            {
+                case GameStates.Play:
+                case GameStates.Resume:
+                    labyrinthController.ProcessInput(sender, e);
+                    break;
+                case GameStates.Pause:
+                    pauseMenuController.ProcessInput(sender, e);
+                    break;
+            }
         }
 
         private void Update(int elapseTime)
         {
             oView.framerate = 1000 / elapseTime;
-            oView.state = labyrinthController.gameState.state;
-            oView.level = labyrinthController.gameState.level;
-            //labyrinthController.ProcessMovement(elapseTime);
+            oView.state = GameState.GetInstance().state;
+            oView.level = GameState.GetInstance().level;
         }
 
         private void GameLoop()
@@ -66,7 +76,7 @@ namespace Explorus.Controllers
                     if (!labyrinthController.NextLevel())
                     {
                         Console.WriteLine("Stop");
-                        labyrinthController.gameState.Stop();
+                        GameState.GetInstance().Stop();
                         endTimer = new System.Timers.Timer(3000);
                         endTimer.Elapsed += OnGameEnded;
                         endTimer.Start();
@@ -88,13 +98,13 @@ namespace Explorus.Controllers
         public void OnNext(WindowEvents value)
         {
             Console.WriteLine(Enum.GetName(typeof(WindowEvents), value));
-            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && labyrinthController.gameState.state != GameStates.Pause)
+            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && GameState.GetInstance().state != GameStates.Pause)
             {
-                labyrinthController.gameState.Pause(false);
+                GameState.GetInstance().Pause(false);
             }
-            else if(labyrinthController.gameState.state == GameStates.Pause && !labyrinthController.gameState.manual)
+            else if(GameState.GetInstance().state == GameStates.Pause && !GameState.GetInstance().manual)
             {
-                labyrinthController.gameState.Resume();
+                GameState.GetInstance().Resume();
             }
         }
     }
