@@ -47,7 +47,7 @@ namespace Explorus.Threads
             }
         }
 
-        public void MoveToxicSlimes(int elapseTime)
+        private void MoveToxicSlimes(int elapseTime)
         {
             Random random = new Random();
             foreach (ToxicSlime slime in lab.toxicSlimes)
@@ -116,10 +116,6 @@ namespace Explorus.Threads
 
         public void Start()
         {
-            if (thread == null)
-            {
-                return;
-            }
             thread.Start();
         }
 
