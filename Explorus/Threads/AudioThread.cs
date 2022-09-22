@@ -1,4 +1,12 @@
-﻿using Explorus.Views;
+﻿/*
+FSP:
+
+AUDIOTHREAD = (start -> PLAYNEWSOUND),
+RUNNING = (checkForNewSound -> PLAYNEWSOUND | stop -> AUDIOTHREAD),
+PLAYNEWSOUND = (createNewSong -> PLAYNEWSOUND | checkForEvents -> DOEVENTS),
+DOEVENTS = (handleEvent -> DOEVENTS | waitForNextLoop -> RUNNING).
+*/
+using Explorus.Views;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

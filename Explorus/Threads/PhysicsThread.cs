@@ -1,4 +1,13 @@
-﻿using Explorus.Controllers;
+﻿/*
+ *
+PHYSICSTHREAD = (start -> RUNNING),
+RUNNING = (pause -> PAUSED | checkForCollision -> CHECKCOLLISION),
+CHECKCOLLISION = (moveComponents -> MOVECOMPONENTS),
+MOVECOMPONENTS = (nextLoop -> RUNNING),
+PAUSED = (stop -> PHYSICSTHREAD | resume -> RUNNING). 
+ * 
+ */
+using Explorus.Controllers;
 using Explorus.Models;
 using System;
 using System.Collections.Generic;
