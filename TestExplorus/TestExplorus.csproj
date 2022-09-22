@@ -59,6 +59,7 @@
     <Compile Include="Models\LabyrinthComponentTest.cs" />
     <Compile Include="Models\LabyrinthTest.cs" />
     <Compile Include="Models\MiniSlimeTest.cs" />
+    <Compile Include="Models\BubblesTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\SlimusTests.cs" />
     <Compile Include="TestConstants.cs" />

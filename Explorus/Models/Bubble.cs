@@ -20,7 +20,7 @@ namespace Explorus.Models
         {
             this.x += Constants.unit / 2;
             this.y += Constants.unit / 2;
-            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+            hitbox = new Rectangle(this.x, this.y, Constants.unit, Constants.unit);
 
             direction = dir;
             isMoving = true;

@@ -89,7 +89,7 @@ namespace TestExplorus.Models
             Assert.AreEqual(0, GameState.GetInstance().menuIndex);
             GameState.GetInstance().NavigateMenu();
             Assert.AreEqual(1, GameState.GetInstance().menuIndex);
-            GameState.GetInstance().Reset();
+            GameState.GetInstance().NavigateMenu();
             Assert.AreEqual(0, GameState.GetInstance().menuIndex);
         }
     }
