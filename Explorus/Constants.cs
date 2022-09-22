@@ -27,6 +27,24 @@ namespace Explorus
 
         public static readonly Models.Sprites[,] level_1 =
         {
+            {Sprites.wall, Sprites.wall,               Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,               Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,               Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.toxicSlimeDownLarge,Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.wall,  Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,               Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,  Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.toxicSlimeDownLarge,Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.toxicSlimeDownLarge,Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.empty,              Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.toxicSlimeDownLarge,Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,  Sprites.door,               Sprites.wall,  Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.wall,               Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.miniSlime,          Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.wall,               Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,  Sprites.wall,               Sprites.wall,  Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.empty,              Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.toxicSlimeDownLarge,Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.toxicSlimeDownLarge,Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.wall,  Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,               Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.wall,  Sprites.wall,  Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.empty,              Sprites.empty, Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.slimusDownLarge,    Sprites.empty, Sprites.empty, Sprites.wall,  Sprites.empty, Sprites.empty, Sprites.empty, Sprites.empty,              Sprites.wall},
+            {Sprites.wall, Sprites.wall,               Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,               Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,  Sprites.wall,               Sprites.wall},
+        };
+        public static readonly Models.Sprites[,] level_2 =
+        {
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.empty, Models.Sprites.toxicSlimeDownLarge, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall },
@@ -38,7 +56,7 @@ namespace Explorus
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall},
         };
         
-        public static readonly Models.Sprites[,] level_2 =
+        public static readonly Models.Sprites[,] level_3 =
         {
             {Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall, Models.Sprites.wall },
             {Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.wall, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.empty, Models.Sprites.wall },
