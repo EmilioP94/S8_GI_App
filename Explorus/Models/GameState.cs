@@ -71,6 +71,12 @@ namespace Explorus.Models
             level++;
         }
 
+        public void Reset()
+        {
+            level = 0;
+            menuIndex = 0;
+        }
+
         public void NavigateMenu()
         {
             if (menuIndex == 0)
