@@ -30,9 +30,9 @@ namespace Explorus.Controllers
             lab = new Labyrinth(Constants.levels[GameState.GetInstance().level].map);
         }
 
-        public void ProcessInput(object sender, KeyEventArgs e)
+        public void ProcessInput(object sender, KeyEventArgs e, GameMenu menu = null)
         {
-            switch (GameState.GetInstance().state)
+            switch (GameState.GetInstance().state) 
             {
                 case GameStates.Play:
                     ProcessPlayControls((char)e.KeyValue);
