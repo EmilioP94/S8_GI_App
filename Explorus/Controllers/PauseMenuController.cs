@@ -11,7 +11,7 @@ namespace Explorus.Controllers
 {
     internal class PauseMenuController : IInputController
     {
-        public void ProcessInput(object sender, KeyEventArgs e)
+        public void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown = true)
         {
             switch ((char)e.KeyValue)
             {

@@ -29,7 +29,7 @@ namespace Explorus.Controllers
             labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
             labyrinthController.lab.playerCharacter.bubbles.Subscribe(headerController);
             labyrinthController.lab.playerCharacter.hearts.Subscribe(headerController);
-            oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
+            oView = new GameView(ProcessInputKeyDown, ProcessInputKeyUp, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             physicsThread = new PhysicsThread(labyrinthController.lab, GameState.GetInstance());
@@ -43,7 +43,7 @@ namespace Explorus.Controllers
             oView.Show();
         }
 
-        private void ProcessInput(object sender, KeyEventArgs e)
+        private void ProcessInputKeyDown(object sender, KeyEventArgs e)
         {
             switch(GameState.GetInstance().state)
             {
@@ -53,6 +53,18 @@ namespace Explorus.Controllers
                     break;
                 case GameStates.Pause:
                     pauseMenuController.ProcessInput(sender, e);
+                    break;
+            }
+        }
+        private void ProcessInputKeyUp(object sender, KeyEventArgs e)
+        {
+            switch (GameState.GetInstance().state)
+            {
+                case GameStates.Play:
+                case GameStates.Resume:
+                    labyrinthController.ProcessInput(sender, e, false);
+                    break;
+                case GameStates.Pause:                    
                     break;
             }
         }
@@ -69,6 +81,7 @@ namespace Explorus.Controllers
             System.Timers.Timer endTimer = null;
             while (oView.running)
             {
+                labyrinthController.InputLoop();
                 if (labyrinthController.lab.gameEnded && endTimer == null)
                 {
                     // need to figure out how to reload the next level map when a level is completed 
