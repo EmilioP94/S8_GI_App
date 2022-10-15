@@ -50,7 +50,7 @@ namespace Explorus.Views
         }
 
         GameForm oGameForm;
-        public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
+        public GameView(HandleInput keyDown, HandleInput keyUp, ILabyrinth lab, HeaderController headerController)
         {
             offset = new Point(0, 0);
             //add header in calculation ( its 2 units )
@@ -62,7 +62,8 @@ namespace Explorus.Views
             gameOverView = new GameOverView(originalWidth, originalHeight);
             DoProcessResize();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
-            oGameForm.KeyDown += new KeyEventHandler(doHandle);
+            oGameForm.KeyDown += new KeyEventHandler(keyDown);
+            oGameForm.KeyUp += new KeyEventHandler(keyUp);
             oGameForm.Resize += new EventHandler(ProcessResize);
             labyrinthView = new LabyrinthView(lab);
             headerView = new HeaderView(headerController);

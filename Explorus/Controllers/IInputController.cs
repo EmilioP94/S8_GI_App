@@ -9,6 +9,6 @@ namespace Explorus.Controllers
 {
     internal interface IInputController
     {
-        void ProcessInput(object sender, KeyEventArgs e);
+        void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown);
     }
 }

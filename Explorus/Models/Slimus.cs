@@ -74,7 +74,7 @@ namespace Explorus.Models
 
         public Direction GetDirection()
         {
-            return LastNotNoneDirection;
+            return currentDirection;
         }
 
         private void ToggleTransparency()
@@ -129,7 +129,7 @@ namespace Explorus.Models
                    y,
                    SpriteFactory.GetInstance().GetSprite(Sprites.bigBubble),
                    SpriteFactory.GetInstance().GetSprite(Sprites.poppedBubble),
-                   GetDirection()
+                   LastNotNoneDirection
                    );
             }
             else return null;
