@@ -11,7 +11,7 @@ namespace Explorus.Controllers
 {
     internal class MenuController : IInputController
     {
-        public void ProcessInput(object sender, KeyEventArgs e, GameMenu menu)
+        public void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown, GameMenu menu)
         {
             switch ((char)e.KeyValue)
             {
