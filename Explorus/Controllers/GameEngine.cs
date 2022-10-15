@@ -5,6 +5,7 @@ using System;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
+using MainMenu = Explorus.Models.MainMenu;
 
 namespace Explorus.Controllers
 {
@@ -12,11 +13,13 @@ namespace Explorus.Controllers
     {
         GameView oView;
         LabyrinthController labyrinthController;
-        PauseMenuController pauseMenuController;
+        MenuController menuController;
         HeaderController headerController;
         PhysicsThread physicsThread;
         AudioThread audioThread;
         RenderThread renderThread;
+        GameMenu mainMenu;
+        GameMenu audioMenu;
 
         private int lastGameLoop;
 
@@ -24,7 +27,9 @@ namespace Explorus.Controllers
         public GameEngine()
         {
             labyrinthController = new LabyrinthController();
-            pauseMenuController = new PauseMenuController();
+            menuController = new MenuController();
+            mainMenu = MainMenu.GetInstance();
+            audioMenu = AudioMenu.GetInstance();
             headerController = new HeaderController(labyrinthController.lab);
             labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
             labyrinthController.lab.playerCharacter.bubbles.Subscribe(headerController);
@@ -52,7 +57,17 @@ namespace Explorus.Controllers
                     labyrinthController.ProcessInput(sender, e);
                     break;
                 case GameStates.Pause:
-                    pauseMenuController.ProcessInput(sender, e);
+                case GameStates.New:
+                    switch(GameState.GetInstance().menu)
+                    {
+                        // enables extending with more menus in the future
+                        case MenuTypes.Main:
+                            menuController.ProcessInput(sender, e, true, mainMenu);
+                            break;
+                        case MenuTypes.Audio:
+                            menuController.ProcessInput(sender, e, true, audioMenu);
+                            break;
+                    }
                     break;
             }
         }
@@ -62,7 +77,7 @@ namespace Explorus.Controllers
             {
                 case GameStates.Play:
                 case GameStates.Resume:
-                    labyrinthController.ProcessInput(sender, e, false);
+                    labyrinthController.ProcessInput(sender, e, false, null);
                     break;
                 case GameStates.Pause:                    
                     break;
@@ -88,7 +103,6 @@ namespace Explorus.Controllers
 
                     if (!labyrinthController.NextLevel())
                     {
-                        Console.WriteLine("Stop");
                         GameState.GetInstance().Stop();
                         endTimer = new System.Timers.Timer(3000);
                         endTimer.Elapsed += OnGameEnded;
@@ -110,7 +124,6 @@ namespace Explorus.Controllers
 
         public void OnNext(WindowEvents value)
         {
-            Console.WriteLine(Enum.GetName(typeof(WindowEvents), value));
             if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && GameState.GetInstance().state != GameStates.Pause)
             {
                 GameState.GetInstance().Pause(false);

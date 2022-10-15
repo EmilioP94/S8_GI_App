@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Explorus.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,6 @@ namespace Explorus.Controllers
 {
     internal interface IInputController
     {
-        void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown);
+        void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown, GameMenu menu = null);
     }
 }

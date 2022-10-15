@@ -56,6 +56,8 @@ namespace Explorus.Threads
         DecrementMusic,
         ResumeMusic,
         ResumeSounds,
+        MuteMusic,
+        MuteSounds
     }
     internal class AudioThread
     {
@@ -94,7 +96,11 @@ namespace Explorus.Threads
         private readonly object playingSoundsListLock = new object();
 
         public double musicVolume = 0.5;
+        public double savedMusicVolume = 0.5;
+        public bool musicMuted = false;
         public double soundVolume = 0.5;
+        public double savedSoundVolume = 0.5;
+        public bool soundsMuted = false;
 
         private bool _isPaused = false;
         private AudioThread()
@@ -196,6 +202,12 @@ namespace Explorus.Threads
                             case SoundsEvents.DecrementMusic:
                                 DecrementMusicVolume();
                                 break;
+                            case SoundsEvents.MuteMusic:
+                                ToggleMuteMusic();
+                                break;
+                            case SoundsEvents.MuteSounds:
+                                ToggleMuteSounds();
+                                break;
                         }
                     }
                 }
@@ -246,14 +258,14 @@ namespace Explorus.Threads
 
         private void IncrementMusicVolume()
         {
-            if (musicVolume <= 1)
+            if (musicVolume <= 1 && !musicMuted)
             {
                 SetMusicVolume(musicVolume + 0.01);
             }
         }
         private void IncrementSoundVolume()
         {
-            if (soundVolume <= 1)
+            if (soundVolume <= 1 && !soundsMuted)
             {
                 SetSoundsVolume(soundVolume + 0.01);
             }
@@ -261,17 +273,44 @@ namespace Explorus.Threads
         
         private void DecrementMusicVolume()
         {
-            if (musicVolume >= 0)
+            if (musicVolume >= 0 && !musicMuted)
             {
                 SetMusicVolume(musicVolume - 0.01);
             }
         }
         private void DecrementSoundVolume()
         {
-            if (soundVolume >= 0)
+            if (soundVolume >= 0 && !soundsMuted)
             {
                 SetSoundsVolume(soundVolume - 0.01);
             }
+        }
+
+        private void ToggleMuteMusic()
+        {
+            if(musicMuted)
+            {
+                SetMusicVolume(savedMusicVolume);
+            } else
+            {
+                savedMusicVolume = musicVolume;
+                SetMusicVolume(0);
+            }
+            musicMuted = !musicMuted;
+
+        }
+
+        private void ToggleMuteSounds()
+        {
+            if (soundsMuted)
+            {
+                SetSoundsVolume(savedSoundVolume);
+            } else
+            {
+                savedSoundVolume = soundVolume;
+                SetSoundsVolume(0);
+            }
+            soundsMuted = !soundsMuted;
         }
 
         private void SetMusicVolume(double newVolume)
