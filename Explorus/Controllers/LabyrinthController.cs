@@ -126,7 +126,6 @@ namespace Explorus.Controllers
                     player2DirectionInput |= DirectionInput.Right;
                     break;
                 case (char)Keys.Q:
-                    Console.WriteLine("g pesé su Q caliss");
                     lab.CreateBubble(lab.player2);
                     break;
             }

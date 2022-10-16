@@ -14,11 +14,11 @@ namespace Explorus.Models
             menuOptions = new List<MenuOption>();
             MenuOption playOption = new MenuOption(GetPlayResumeString(), delegate () { SelectPlay(); });
             MenuOption audioOption = new MenuOption("Audio Options", delegate () { SelectAudioMenu(); });
-            MenuOption multiplayerOption = new MenuOption(GetMultiplayerString(), delegate () { SelectMultiplayer(); });
+            //MenuOption multiplayerOption = new MenuOption(GetMultiplayerString(), delegate () { SelectMultiplayer(); });
             MenuOption exitOption = new MenuOption("Exit Game", delegate () { SelectExit(); });
             menuOptions.Add(playOption);
             menuOptions.Add(audioOption);
-            menuOptions.Add(multiplayerOption);
+            //menuOptions.Add(multiplayerOption);
             menuOptions.Add(exitOption);
         }
 

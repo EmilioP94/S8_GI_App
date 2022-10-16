@@ -25,7 +25,7 @@ namespace Explorus.Views
         {
             foreach (HeaderComponent component in _components)
             {
-                e.Graphics.DrawImage(component.image.image, component.x + Constants.unit + offset.X, component.y + Constants.unit / 2 + offset.Y);
+                e.Graphics.DrawImage(component.image.image, component.x + Constants.unit / 2, component.y + Constants.unit / 2 + offset.Y);
             }
         }
 

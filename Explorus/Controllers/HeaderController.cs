@@ -19,7 +19,7 @@ namespace Explorus.Controllers
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
-        private List<ICollection> barList = new List<ICollection>(3);
+        private List<ICollection> barList = new List<ICollection>(5);
         private ICollection redBar;
         private ICollection blueBar;
         private ICollection yellowBar;
@@ -30,14 +30,14 @@ namespace Explorus.Controllers
 
         public HeaderController(ILabyrinth lab)
         {
+            yellowBar = lab.playerCharacter.gems;
             redBar = lab.playerCharacter.hearts;
             blueBar = lab.playerCharacter.bubbles;
-            yellowBar = lab.playerCharacter.gems;
             redBar2 = lab.player2.hearts;
             blueBar2 = lab.player2.bubbles;
+            barList.Add(yellowBar);
             barList.Add(redBar);
             barList.Add(blueBar);
-            barList.Add(yellowBar);
             barList.Add(redBar2);
             barList.Add(blueBar2);
             GenerateBars();
@@ -71,7 +71,7 @@ namespace Explorus.Controllers
             components = new List<HeaderComponent>();
             components.Add(GetComponent(0, Sprites.title, Bars.none, "title"));
             int position = 4; // starts after the title position
-            foreach (ICollection bar in barList)
+            foreach ((ICollection bar, int index) in barList.Select((value, i) => (value, i)))
             {
                 BarPieces[] barContents = new BarPieces[3];
                 switch (bar.acquired)
@@ -113,6 +113,11 @@ namespace Explorus.Controllers
                         break;
                 }
 
+                if(index == 1 || index == 3)
+                {
+                    components.Add(GetComponent(position, index == 1 ? Sprites.miniSlime : Sprites.miniSlime, bar.barName, "", true));
+                    position++;
+                }
                 components.Add(GetComponent(position, bar.sprite, bar.barName, $"{bar.barName} icon", true));
                 position++;
                 components.Add(GetComponent(position, Sprites.leftBarTip, bar.barName, $"{bar.barName} left"));
