@@ -17,12 +17,13 @@ namespace Explorus.Controllers
         List<ILabyrinthComponent> labyrinthComponentList { get; }
 
         Slimus playerCharacter { get; }
+        Slimus player2 { get; }
 
         List<ToxicSlime> toxicSlimes { get; }
 
         bool gameEnded { get; }
         [MethodImpl(MethodImplOptions.Synchronized)]
-        void CreateBubble();
+        void CreateBubble(Slimus player);
         [MethodImpl(MethodImplOptions.Synchronized)]
         void CreateGems(int x,int y);
         void Reload(Sprites[,] map);

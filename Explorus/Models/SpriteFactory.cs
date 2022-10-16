@@ -29,6 +29,18 @@ namespace Explorus.Models
         slimusLeftLarge,
         slimusLeftMedium,
         slimusLeftSmall,
+        player2DownLarge,
+        player2DownMedium,
+        player2DownSmall,
+        player2UpLarge,
+        player2UpMedium,
+        player2UpSmall,
+        player2RightLarge,
+        player2RightMedium,
+        player2RightSmall,
+        player2LeftLarge,
+        player2LeftMedium,
+        player2LeftSmall,
         toxicSlimeDownLarge,
         toxicSlimeDownMedium,
         toxicSlimeDownSmall,
@@ -50,7 +62,8 @@ namespace Explorus.Models
         yellowBarHalf,
         emptyBar,
         rightBarTip,
-        miniSlime
+        miniSlime,
+        pinkMiniSlime
     }
     internal class SpriteFactory
     {
