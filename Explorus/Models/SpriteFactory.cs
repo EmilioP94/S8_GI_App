@@ -62,7 +62,8 @@ namespace Explorus.Models
         yellowBarHalf,
         emptyBar,
         rightBarTip,
-        miniSlime
+        miniSlime,
+        pinkMiniSlime
     }
     internal class SpriteFactory
     {

@@ -47,6 +47,7 @@ namespace Explorus.Game
                 { Sprites.emptyBar, new Rectangle(unit * 9, unit, unit, unit) },
                 { Sprites.rightBarTip, new Rectangle(unit * 10, unit, unit, unit) },
                 { Sprites.miniSlime, new Rectangle(unit * 11, unit, unit, unit) },
+                { Sprites.pinkMiniSlime, new Rectangle(unit * 12, unit, unit, unit) },
                 { Sprites.toxicSlimeDownLarge, new Rectangle(0, unit * 6, unit * 2, unit * 2) },
                 { Sprites.toxicSlimeDownMedium, new Rectangle(unit * 2, unit * 6, unit * 2, unit * 2) },
                 { Sprites.toxicSlimeDownSmall, new Rectangle(unit * 4, unit * 6, unit * 2, unit * 2) },
