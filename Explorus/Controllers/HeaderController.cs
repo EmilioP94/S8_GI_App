@@ -35,11 +35,11 @@ namespace Explorus.Controllers
             blueBar = lab.playerCharacter.bubbles;
             redBar2 = lab.player2.hearts;
             blueBar2 = lab.player2.bubbles;
-            barList.Add(yellowBar);
             barList.Add(redBar);
             barList.Add(blueBar);
             barList.Add(redBar2);
             barList.Add(blueBar2);
+            barList.Add(yellowBar);
             GenerateBars();
         }
 
@@ -113,10 +113,9 @@ namespace Explorus.Controllers
                         break;
                 }
 
-                if(index == 1 || index == 3)
+                if(index == 0 || index == 2)
                 {
-                    position++;
-                    components.Add(GetComponent(position, index == 1 ? Sprites.miniSlime : Sprites.pinkMiniSlime, bar.barName, "", false));
+                    components.Add(GetComponent(position, index == 0 ? Sprites.miniSlime : Sprites.pinkMiniSlime, bar.barName, "", true));
                     position++;
                 }
                 components.Add(GetComponent(position, bar.sprite, bar.barName, $"{bar.barName} icon", true));
