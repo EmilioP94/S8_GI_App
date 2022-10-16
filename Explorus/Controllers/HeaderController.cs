@@ -35,13 +35,11 @@ namespace Explorus.Controllers
             yellowBar = lab.playerCharacter.gems;
             redBar2 = lab.player2.hearts;
             blueBar2 = lab.player2.bubbles;
-            //yellowBar2 = lab.player2.gems;
             barList.Add(redBar);
             barList.Add(blueBar);
             barList.Add(yellowBar);
             barList.Add(redBar2);
             barList.Add(blueBar2);
-            //barList.Add(yellowBar2);
             GenerateBars();
         }
 
