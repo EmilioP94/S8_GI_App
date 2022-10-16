@@ -89,6 +89,7 @@ namespace Explorus.Models
 
         public void ExitGame()
         {
+            AudioThread.GetInstance().StopMusic();
             System.Windows.Forms.Application.Exit();
         }
 

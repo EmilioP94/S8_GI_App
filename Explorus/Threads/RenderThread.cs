@@ -56,6 +56,7 @@ namespace Explorus.Threads
                     Thread.Sleep(1);
                 }
             }
+            Console.WriteLine("render thread stopping");
         }
         private void Update(int elapseTime)
         {

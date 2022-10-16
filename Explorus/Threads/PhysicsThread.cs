@@ -112,6 +112,7 @@ namespace Explorus.Threads
                     Thread.Sleep(1);
                 }
             }
+            Console.WriteLine("physics thread stopping");
         }
 
         public void Start()

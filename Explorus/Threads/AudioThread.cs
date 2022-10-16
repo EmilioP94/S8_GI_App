@@ -213,6 +213,7 @@ namespace Explorus.Threads
                 }
                 Thread.Sleep(10);
             }
+            Console.WriteLine("audio thread stopping");
         }
 
         public void QueueSound(SoundTypes sound)
