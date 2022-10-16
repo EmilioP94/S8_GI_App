@@ -152,6 +152,7 @@ namespace Explorus.Threads
                             };
                             player.Volume = soundVolume;
                             player.Play();
+                            playingSounds.Add(player);
                         }
                     }
                 }
@@ -210,6 +211,11 @@ namespace Explorus.Threads
                                 break;
                         }
                     }
+                }
+                if (playingSounds.Count > Constants.maxNumberOfSound)
+                {
+                    playingSounds[0].Close();
+                    playingSounds.RemoveAt(0);
                 }
                 Thread.Sleep(10);
             }
