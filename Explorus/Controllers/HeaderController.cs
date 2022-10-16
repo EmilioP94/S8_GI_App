@@ -115,7 +115,8 @@ namespace Explorus.Controllers
 
                 if(index == 1 || index == 3)
                 {
-                    components.Add(GetComponent(position, index == 1 ? Sprites.miniSlime : Sprites.pinkMiniSlime, bar.barName, "", true));
+                    position++;
+                    components.Add(GetComponent(position, index == 1 ? Sprites.miniSlime : Sprites.pinkMiniSlime, bar.barName, "", false));
                     position++;
                 }
                 components.Add(GetComponent(position, bar.sprite, bar.barName, $"{bar.barName} icon", true));
