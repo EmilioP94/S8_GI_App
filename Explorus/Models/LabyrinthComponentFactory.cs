@@ -13,7 +13,9 @@ namespace Explorus.Models
                 case Sprites.door:
                     return new Door(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.door));
                 case Sprites.slimusDownLarge:
-                    return new Slimus(x, y);
+                    return new Slimus(x, y, false);
+                case Sprites.player2DownLarge:
+                    return new Slimus(x, y, true);
                 case Sprites.toxicSlimeDownLarge:
                     return new ToxicSlime(x, y);
                 case Sprites.miniSlime:

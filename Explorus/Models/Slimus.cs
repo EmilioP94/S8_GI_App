@@ -31,7 +31,7 @@ namespace Explorus.Models
                 _invincible = value;
             }
         }
-        public Slimus(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge))
+        public Slimus(int x, int y, bool isPlayerTwo) : base(x, y, SpriteFactory.GetInstance().GetSprite(isPlayerTwo ? Sprites.player2DownLarge : Sprites.slimusDownLarge))
         {
             isDead = false;
             flickerTimer.Elapsed += (sender, e) => ToggleTransparency();
@@ -44,21 +44,21 @@ namespace Explorus.Models
 
             var SFInstance = SpriteFactory.GetInstance();
 
-            animationImages[0, 0] = SFInstance.GetSprite(Sprites.slimusUpLarge);
-            animationImages[1, 0] = SFInstance.GetSprite(Sprites.slimusUpMedium);
-            animationImages[2, 0] = SFInstance.GetSprite(Sprites.slimusUpSmall);
+            animationImages[0, 0] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2UpLarge : Sprites.slimusUpLarge);
+            animationImages[1, 0] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2UpMedium : Sprites.slimusUpMedium);
+            animationImages[2, 0] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2UpSmall : Sprites.slimusUpSmall);
 
-            animationImages[0, 1] = SFInstance.GetSprite(Sprites.slimusRightLarge);
-            animationImages[1, 1] = SFInstance.GetSprite(Sprites.slimusRightMedium);
-            animationImages[2, 1] = SFInstance.GetSprite(Sprites.slimusRightSmall);
+            animationImages[0, 1] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2RightLarge : Sprites.slimusRightLarge);
+            animationImages[1, 1] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2RightMedium : Sprites.slimusRightMedium);
+            animationImages[2, 1] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2RightSmall : Sprites.slimusRightSmall);
 
-            animationImages[0, 2] = SFInstance.GetSprite(Sprites.slimusDownLarge);
-            animationImages[1, 2] = SFInstance.GetSprite(Sprites.slimusDownMedium);
-            animationImages[2, 2] = SFInstance.GetSprite(Sprites.slimusDownSmall);
+            animationImages[0, 2] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2DownLarge : Sprites.slimusDownLarge);
+            animationImages[1, 2] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2DownMedium : Sprites.slimusDownMedium);
+            animationImages[2, 2] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2DownSmall : Sprites.slimusDownSmall);
 
-            animationImages[0, 3] = SFInstance.GetSprite(Sprites.slimusLeftLarge);
-            animationImages[1, 3] = SFInstance.GetSprite(Sprites.slimusLeftMedium);
-            animationImages[2, 3] = SFInstance.GetSprite(Sprites.slimusLeftSmall);
+            animationImages[0, 3] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2LeftLarge : Sprites.slimusLeftLarge);
+            animationImages[1, 3] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2LeftMedium : Sprites.slimusLeftMedium);
+            animationImages[2, 3] = SFInstance.GetSprite(isPlayerTwo ? Sprites.player2LeftSmall : Sprites.slimusLeftSmall);
 
             movementSound = SoundTypes.slimusMovement;
             wallCollisionSound = SoundTypes.wallCollision;
@@ -102,7 +102,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if(!invincible && comp is ToxicSlime)
+            if (!invincible && comp is ToxicSlime)
             {
                 flickerTimer.Enabled = true;
                 _isTransparent = true;
@@ -110,10 +110,10 @@ namespace Explorus.Models
                 invincible = true;
                 AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
                 hearts.Decrement();
-                if(hearts.acquired == 0)
+                if (hearts.acquired == 0)
                 {
                     isDead = true;
-                } 
+                }
                 else
                 {
                     Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
@@ -145,7 +145,7 @@ namespace Explorus.Models
         public void RechargeBubbles(int elapsedTime)
         {
             this.elapsedTime = this.elapsedTime + elapsedTime;
-            if(this.elapsedTime > rechargeTime)
+            if (this.elapsedTime > rechargeTime)
             {
                 bubbles.Acquire();
                 this.elapsedTime = 0;
