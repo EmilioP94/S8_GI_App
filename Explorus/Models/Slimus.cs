@@ -11,7 +11,7 @@ namespace Explorus.Models
 {
     internal class Slimus : Slime
     {
-        public Collection gems { get; private set; }
+        public Collection gems { get; set; }
         public Collection hearts { get; private set; }
         public Collection bubbles { get; private set; }
 
@@ -33,10 +33,11 @@ namespace Explorus.Models
         }
         public Slimus(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.slimusDownLarge))
         {
+            isDead = false;
             flickerTimer.Elapsed += (sender, e) => ToggleTransparency();
             flickerTimer.AutoReset = true;
             flickerTimer.Enabled = false;
-            gems = new Collection(Sprites.gem, Bars.yellow, false);
+            //gems = new Collection(Sprites.gem, Bars.yellow, false);
             hearts = new Collection(Sprites.heart, Bars.red, true);
             bubbles = new Collection(Sprites.smallBubble, Bars.blue, true);
             animationImages = new Image2D[3, 4];
@@ -109,19 +110,26 @@ namespace Explorus.Models
                 invincible = true;
                 AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
                 hearts.Decrement();
-                Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
+                if(hearts.acquired == 0)
                 {
-                    invincible = false;
-                    flickerTimer.Enabled = false;
-                    SetTransparency(false);
-                });
+                    isDead = true;
+                } 
+                else
+                {
+                    Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
+                    {
+                        invincible = false;
+                        flickerTimer.Enabled = false;
+                        SetTransparency(false);
+                    });
+                }
             }
             return false;
         }
 
         public Bubble Shoot()
         {
-            if (bubbles.acquired == bubbles.total)
+            if (bubbles.acquired == bubbles.total && !isDead)
             {
                 bubbles.Empty();
                 return new Bubble(

@@ -34,6 +34,9 @@ namespace Explorus.Controllers
             labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
             labyrinthController.lab.playerCharacter.bubbles.Subscribe(headerController);
             labyrinthController.lab.playerCharacter.hearts.Subscribe(headerController);
+            labyrinthController.lab.player2.gems.Subscribe(headerController);
+            labyrinthController.lab.player2.bubbles.Subscribe(headerController);
+            labyrinthController.lab.player2.hearts.Subscribe(headerController);
             oView = new GameView(ProcessInputKeyDown, ProcessInputKeyUp, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
@@ -97,6 +100,10 @@ namespace Explorus.Controllers
             while (oView.running)
             {
                 labyrinthController.InputLoop();
+                if(GameState.GetInstance().multiplayerSwitched)
+                {
+                    labyrinthController.lab.Reload(Constants.levels[GameState.GetInstance().level].map);
+                }
                 if (labyrinthController.lab.gameEnded && endTimer == null)
                 {
                     // need to figure out how to reload the next level map when a level is completed 
@@ -109,6 +116,7 @@ namespace Explorus.Controllers
                         endTimer.Start();
                     }
                 }
+
             }
             AudioThread.GetInstance().Stop();
             physicsThread.Stop();

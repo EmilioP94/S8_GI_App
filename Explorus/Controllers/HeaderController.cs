@@ -23,6 +23,9 @@ namespace Explorus.Controllers
         private ICollection redBar;
         private ICollection blueBar;
         private ICollection yellowBar;
+        private ICollection redBar2;
+        private ICollection blueBar2;
+        //private ICollection yellowBar2;
         private List<Models.IObserver<List<HeaderComponent>>> _observers = new List<Models.IObserver<List<HeaderComponent>>>();
 
         public HeaderController(ILabyrinth lab)
@@ -30,9 +33,15 @@ namespace Explorus.Controllers
             redBar = lab.playerCharacter.hearts;
             blueBar = lab.playerCharacter.bubbles;
             yellowBar = lab.playerCharacter.gems;
+            redBar2 = lab.player2.hearts;
+            blueBar2 = lab.player2.bubbles;
+            //yellowBar2 = lab.player2.gems;
             barList.Add(redBar);
             barList.Add(blueBar);
             barList.Add(yellowBar);
+            barList.Add(redBar2);
+            barList.Add(blueBar2);
+            //barList.Add(yellowBar2);
             GenerateBars();
         }
 
