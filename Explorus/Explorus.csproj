@@ -55,7 +55,7 @@
     <Compile Include="Controllers\IInputController.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
     <Compile Include="Controllers\LabyrinthController.cs" />
-    <Compile Include="Controllers\PauseMenuController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
     <Compile Include="GameForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +80,8 @@
     <Compile Include="Models\ICollection.cs" />
     <Compile Include="Models\ILabyrinthComponent.cs" />
     <Compile Include="Models\Image2D.cs" />
+    <Compile Include="Models\Menus\AudioMenu.cs" />
+    <Compile Include="Models\Menus\Menu.cs" />
     <Compile Include="Models\IObservable.cs" />
     <Compile Include="Models\IObserver.cs" />
     <Compile Include="Models\GameEvents\IGameEvent.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="Models\LabyrinthComponent.cs" />
     <Compile Include="Models\LabyrinthComponentFactory.cs" />
     <Compile Include="Models\Level.cs" />
+    <Compile Include="Models\Menus\MainMenu.cs" />
+    <Compile Include="Models\Menus\MenuOption.cs" />
     <Compile Include="Models\MiniSlime.cs" />
     <Compile Include="Models\Slime.cs" />
     <Compile Include="Models\Slimus.cs" />
@@ -106,7 +110,7 @@
     <Compile Include="Views\HeaderView.cs" />
     <Compile Include="Views\IRenderableComponent.cs" />
     <Compile Include="Views\LabyrinthView.cs" />
-    <Compile Include="Views\PauseView.cs" />
+    <Compile Include="Views\MenuView.cs" />
     <EmbeddedResource Include="GameForm.resx">
       <DependentUpon>GameForm.cs</DependentUpon>
     </EmbeddedResource>

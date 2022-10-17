@@ -70,7 +70,7 @@ namespace Explorus.Threads
                     if (comp.GetType() == typeof(ToxicSlime) && srcComp.GetType() == typeof(Slimus))
                     {
                         result = srcComp.Collide(comp);
-                        if (lab.playerCharacter.hearts.acquired == 0)
+                        if (lab.playerCharacter.hearts.acquired == 0 && lab.player2.hearts.acquired == 0)
                         {
                             gameState.GameOver();
                         }
@@ -99,6 +99,12 @@ namespace Explorus.Threads
                     MoveToxicSlimes(elapseTime);
                     MoveBubbles(elapseTime);
                     lab.playerCharacter.RechargeBubbles(elapseTime);
+                    if (GameState.GetInstance().multiplayer)
+                    {
+                        CheckForCollision(lab.player2);
+                        lab.player2.UpdatePosition(elapseTime);
+                        lab.player2.RechargeBubbles(elapseTime);
+                    }
                 }
                 if(gameState.state == GameStates.Replay)
                 {
@@ -116,6 +122,7 @@ namespace Explorus.Threads
                     Thread.Sleep(1);
                 }
             }
+            Console.WriteLine("physics thread stopping");
         }
 
         public void Start()

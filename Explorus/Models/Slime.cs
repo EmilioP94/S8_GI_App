@@ -252,7 +252,8 @@ namespace Explorus.Models
             }
             else if (wallCollisionSound != SoundTypes.None)
             {
-                AudioThread.GetInstance().QueueSound(wallCollisionSound);
+                //TODO: Le son est pas jouer, on dirais que AudioThread est pas accessible a partir de ce thread, et la memoire explose quand on essaye de queueSound
+                //AudioThread.GetInstance().QueueSound(wallCollisionSound);
             }
         }
     }

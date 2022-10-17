@@ -8,18 +8,21 @@ using System.Linq;
 
 namespace Explorus.Models
 {
-    internal class Labyrinth: ILabyrinth
+    internal class Labyrinth : ILabyrinth
     {
         public Sprites[,] map { get; private set; }
         public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
-        public Slimus playerCharacter { get; private set; }
+        public Slimus playerCharacter { get; private set; } = null;
+        public Slimus player2 { get; private set; } = null;
 
         public List<MiniSlime> miniSlimes { get; private set; }
 
-        public bool gameEnded { get
+        public bool gameEnded
+        {
+            get
             {
                 return miniSlimes.All(slime => slime.isCollected);
-            } 
+            }
         }
 
         public List<ToxicSlime> toxicSlimes { get; private set; }
@@ -30,25 +33,61 @@ namespace Explorus.Models
             toxicSlimes = new List<ToxicSlime>();
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
-            
+            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
 
             for (int i = 0; i < map.GetLength(0); i++)
             {
+                bool p1Added = false;
+                bool p2Added = false;
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
                     ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
-                    labyrinthComponentList.Add(comp);
+                    if(comp is Slimus)
+                    {
+                        if(!p1Added)
+                        {
+                            p1Added = true;
+                            labyrinthComponentList.Add(comp);
+                        }
+                        else if (!p2Added && GameState.GetInstance().multiplayer)
+                        {
+                            p2Added = true;
+                            labyrinthComponentList.Add(comp);
+                        }
+                        else
+                        {
+                            labyrinthComponentList.Add(LabyrinthComponentFactory.GetLabyrinthComponent(Sprites.empty, comp.x, comp.y));
+                        }
+                    }
+                    else
+                    {
+                        labyrinthComponentList.Add(comp);
+                    }
                 }
             }
-            foreach(Slimus player in labyrinthComponentList.OfType<Slimus>())
+            foreach ((Slimus player, int index) in labyrinthComponentList.OfType<Slimus>().Select((value, i) => (value, i)))
             {
-                playerCharacter = player;
+                if (playerCharacter == null)
+                {
+                    playerCharacter = player;
+                    playerCharacter.gems = gems;
+                }
+                else if (GameState.GetInstance().multiplayer)
+                {
+                    Console.WriteLine("Game is multiplayer");
+                    if (player2 == null)
+                    {
+                        Console.WriteLine("adding player 2");
+                        player2 = player;
+                        player.gems = gems;
+                    }
+                }
             }
             foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
             {
                 miniSlimes.Add(slime);
             }
-            foreach(ToxicSlime slime in labyrinthComponentList.OfType<ToxicSlime>())
+            foreach (ToxicSlime slime in labyrinthComponentList.OfType<ToxicSlime>())
             {
                 toxicSlimes.Add(slime);
             }
@@ -92,11 +131,10 @@ namespace Explorus.Models
                 toxicSlimes.Add(slime);
             }
         }
-        public void CreateBubble()
+        public void CreateBubble(Slimus player)
         {
-            GameRecorder.GetInstance().AddEvent(new ShootEvent(playerCharacter.id));
-            Bubble bubble = playerCharacter.Shoot();
-            if(bubble != null)
+            Bubble bubble = player.Shoot();
+            if (bubble != null)
             {
                 labyrinthComponentList.Add(bubble);
                 AudioThread.GetInstance().QueueSound(SoundTypes.bubbleShoot);

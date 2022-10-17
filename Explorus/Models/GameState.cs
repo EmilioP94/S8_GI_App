@@ -9,6 +9,7 @@ namespace Explorus.Models
 {
     enum GameStates
     {
+        New,
         Play,
         Replay,
         Pause,
@@ -17,20 +18,29 @@ namespace Explorus.Models
         Over
     }
 
+    enum MenuTypes
+    {
+        Main,
+        Audio
+    }
+
     internal class GameState
     {
-        public GameStates state { get; private set; } = GameStates.Play;
+        public GameStates state { get; private set; } = GameStates.New;
+        public MenuTypes menu { get; private set; } = MenuTypes.Main;
         public int level { get; private set; } = 0;
         public int maxLevel = Constants.levels.Length;
         public bool manual;
+        public bool multiplayerSwitched { get; private set; } = false;
+        public bool multiplayer = true;
         public int menuIndex = 0;
-        public int maxMenuIndex = 1;
+        public int maxMenuIndex = 3;
 
         private static GameState _instance = null;
 
         public static GameState GetInstance()
         {
-            if(_instance == null)
+            if (_instance == null)
             {
                 _instance = new GameState();
             }
@@ -38,6 +48,7 @@ namespace Explorus.Models
         }
         public void Pause(bool manual)
         {
+            MainMenu();
             state = GameStates.Pause;
             this.manual = manual;
             AudioThread.GetInstance().Pause();
@@ -45,14 +56,28 @@ namespace Explorus.Models
 
         public void Play()
         {
-            state = GameStates.Play;
-            AudioThread.GetInstance().Resume();
+            if (multiplayerSwitched)
+            {
+                // en prévision de faire qu'on puisse switch dans les settings
+            }
+            else
+            {
+                state = GameStates.Play;
+                AudioThread.GetInstance().Resume();
+            }
         }
 
         public void Resume()
         {
-            state = GameStates.Resume;
-            Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o => { if (state == GameStates.Resume) Play(); });
+            if (multiplayerSwitched)
+            {
+                // en prévision de faire qu'on puisse switch dans les settings
+            }
+            else
+            {
+                state = GameStates.Resume;
+                Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o => { if (state == GameStates.Resume) Play(); });
+            }
         }
 
         public void Stop()
@@ -78,12 +103,31 @@ namespace Explorus.Models
             menuIndex = 0;
         }
 
-        public void NavigateMenu()
+        public void ExitGame()
         {
-            if (menuIndex == 0)
-            {
-                menuIndex = 1;
-            } else menuIndex = 0;
+            AudioThread.GetInstance().StopMusic();
+            System.Windows.Forms.Application.Exit();
+        }
+
+        public void MainMenu()
+        {
+            menu = MenuTypes.Main;
+        }
+
+        public void AudioMenu()
+        {
+            menu = MenuTypes.Audio;
+        }
+
+        public void ToggleMultiplayer()
+        {
+            multiplayerSwitched = true;
+            multiplayer = !multiplayer;
+        }
+
+        public void resetMultiplayerSwitched()
+        {
+            multiplayerSwitched = false;
         }
     }
 }

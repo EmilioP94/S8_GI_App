@@ -20,22 +20,37 @@ namespace Explorus.Controllers
         Left,
         None
     }
-    internal class LabyrinthController: IInputController
+    enum DirectionInput
+    {
+        None = 0,
+        Up = 1,
+        Right = 2,
+        Down = 4,
+        Left = 8
+    }
+    internal class LabyrinthController : IInputController
     {
         public ILabyrinth lab { get; private set; }
         public Point playerDestinationPoint;
+        public Point player2DestinationPoint;
+
+        DirectionInput slimusDirectionInput;
+        DirectionInput player2DirectionInput;
 
         public LabyrinthController()
         {
             lab = new Labyrinth(Constants.levels[GameState.GetInstance().level].map);
         }
 
-        public void ProcessInput(object sender, KeyEventArgs e)
+        public void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown = true, GameMenu menu = null)
         {
             switch (GameState.GetInstance().state)
             {
                 case GameStates.Play:
-                    ProcessPlayControls((char)e.KeyValue);
+                    if (isKeyDown)
+                        ProcessPlayControlsKeyDown((char)e.KeyValue);
+                    else
+                        ProcessPlayControlsKeyUp((char)e.KeyValue);
                     break;
                 case GameStates.Resume:
                     ProcessResumeControls((char)e.KeyValue);
@@ -45,14 +60,38 @@ namespace Explorus.Controllers
             }
         }
 
+        public void InputLoop()
+        {
+            handlePlayerInput(lab.playerCharacter, slimusDirectionInput);
+            if (GameState.GetInstance().multiplayer)
+            {
+                handlePlayerInput(lab.player2, player2DirectionInput);
+            }
+        }
+
+        private void handlePlayerInput(Slimus player, DirectionInput playerDirectionInput)
+        {
+            if (player.GetDirection() == Direction.None)
+            {
+                if ((playerDirectionInput & DirectionInput.Up) == DirectionInput.Up)
+                    player.MoveToValidDestination(Direction.Up, lab);
+
+                else if ((playerDirectionInput & DirectionInput.Right) == DirectionInput.Right)
+                    player.MoveToValidDestination(Direction.Right, lab);
+
+                else if ((playerDirectionInput & DirectionInput.Down) == DirectionInput.Down)
+                    player.MoveToValidDestination(Direction.Down, lab);
+
+                else if ((playerDirectionInput & DirectionInput.Left) == DirectionInput.Left)
+                    player.MoveToValidDestination(Direction.Left, lab);
+            }
+        }
+
         // processes input when the game is in the "Play" state
-        private void ProcessPlayControls(char keyValue)
+        private void ProcessPlayControlsKeyDown(char keyValue)
         {
             switch (keyValue)
             {
-                case (char)Keys.V:
-                    lab.Reload(Constants.level_2);
-                    break;
                 case (char)Keys.P:
                     if (GameState.GetInstance().state == GameStates.Play)
                     {
@@ -60,19 +99,65 @@ namespace Explorus.Controllers
                     }
                     break;
                 case (char)Keys.Up:
-                    lab.playerCharacter.MoveToValidDestination(Direction.Up, lab);
+                    slimusDirectionInput |= DirectionInput.Up;
                     break;
                 case (char)Keys.Left:
-                    lab.playerCharacter.MoveToValidDestination(Direction.Left, lab);
+                    slimusDirectionInput |= DirectionInput.Left;
                     break;
                 case (char)Keys.Right:
-                    lab.playerCharacter.MoveToValidDestination(Direction.Right, lab);
+                    slimusDirectionInput |= DirectionInput.Right;
                     break;
                 case (char)Keys.Down:
-                    lab.playerCharacter.MoveToValidDestination(Direction.Down, lab);
+                    slimusDirectionInput |= DirectionInput.Down;
                     break;
                 case (char)Keys.Space:
-                    lab.CreateBubble();
+                    lab.CreateBubble(lab.playerCharacter);
+                    break;
+                case (char)Keys.W:
+                    player2DirectionInput |= DirectionInput.Up;
+                    break;
+                case (char)Keys.A:
+                    player2DirectionInput |= DirectionInput.Left;
+                    break;
+                case (char)Keys.S:
+                    player2DirectionInput |= DirectionInput.Down;
+                    break;
+                case (char)Keys.D:
+                    player2DirectionInput |= DirectionInput.Right;
+                    break;
+                case (char)Keys.Q:
+                    lab.CreateBubble(lab.player2);
+                    break;
+            }
+        }
+
+        private void ProcessPlayControlsKeyUp(char keyValue)
+        {
+            switch (keyValue)
+            {
+                case (char)Keys.Up:
+                    slimusDirectionInput &= ~DirectionInput.Up;
+                    break;
+                case (char)Keys.Left:
+                    slimusDirectionInput &= ~DirectionInput.Left;
+                    break;
+                case (char)Keys.Right:
+                    slimusDirectionInput &= ~DirectionInput.Right;
+                    break;
+                case (char)Keys.Down:
+                    slimusDirectionInput &= ~DirectionInput.Down;
+                    break;
+                case (char)Keys.W:
+                    player2DirectionInput &= ~DirectionInput.Up;
+                    break;
+                case (char)Keys.A:
+                    player2DirectionInput &= ~DirectionInput.Left;
+                    break;
+                case (char)Keys.S:
+                    player2DirectionInput &= ~DirectionInput.Down;
+                    break;
+                case (char)Keys.D:
+                    player2DirectionInput &= ~DirectionInput.Right;
                     break;
             }
         }

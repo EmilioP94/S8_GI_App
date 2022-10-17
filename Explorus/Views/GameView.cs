@@ -1,11 +1,12 @@
 ﻿using Explorus.Controllers;
 using Explorus.Models;
+using Explorus.Views.Menus;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Windows.Forms;
-
+using MainMenu = Explorus.Models.MainMenu;
 
 namespace Explorus.Views
 {
@@ -28,7 +29,8 @@ namespace Explorus.Views
         private int originalHeight { get; set; }
 
         private HeaderView headerView;
-        private PauseView pauseView;
+        private MenuView mainMenuView;
+        private MenuView audioMenuView;
         private GameOverView gameOverView;
         private Point offset { get; set; }
         public GameStates state;
@@ -50,7 +52,7 @@ namespace Explorus.Views
         }
 
         GameForm oGameForm;
-        public GameView(HandleInput doHandle, ILabyrinth lab, HeaderController headerController)
+        public GameView(HandleInput keyDown, HandleInput keyUp, ILabyrinth lab, HeaderController headerController)
         {
             offset = new Point(0, 0);
             //add header in calculation ( its 2 units )
@@ -58,11 +60,13 @@ namespace Explorus.Views
             originalWidth = lab.map.GetLength(1) * 2 * Constants.unit;
             oGameForm = new GameForm();
             oGameForm.MinimumSize = new Size(600, 600);
-            pauseView = new PauseView(originalWidth, originalHeight);
+            mainMenuView = new MenuView(originalWidth, originalHeight, MenuTypes.Main);
+            audioMenuView = new MenuView(originalWidth, originalHeight, MenuTypes.Audio);
             gameOverView = new GameOverView(originalWidth, originalHeight);
             DoProcessResize();
             oGameForm.Paint += new PaintEventHandler(this.GameRenderer);
-            oGameForm.KeyDown += new KeyEventHandler(doHandle);
+            oGameForm.KeyDown += new KeyEventHandler(keyDown);
+            oGameForm.KeyUp += new KeyEventHandler(keyUp);
             oGameForm.Resize += new EventHandler(ProcessResize);
             labyrinthView = new LabyrinthView(lab);
             headerView = new HeaderView(headerController);
@@ -116,9 +120,16 @@ namespace Explorus.Views
             labyrinthView.Render(sender, e, offset);
             oGameForm.Text = string.Format("Explorus     - FPS {0} - {1} - level {2}", framerate.ToString(), Enum.GetName(typeof(GameStates), state), level + 1);
 
-            if (state == GameStates.Pause)
+            if (state == GameStates.Pause || state == GameStates.New)
             {
-                pauseView.Render(sender, e, offset);
+                if(GameState.GetInstance().menu == MenuTypes.Main)
+                {
+                    mainMenuView.Render(sender, e, offset);
+                }
+                if(GameState.GetInstance().menu == MenuTypes.Audio)
+                {
+                    audioMenuView.Render(sender, e, offset);
+                }
             }
 
             if(state == GameStates.Over)
