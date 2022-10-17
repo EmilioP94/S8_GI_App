@@ -15,10 +15,11 @@ namespace Explorus.Models.GameEvents
 
         public override void Execute(ILabyrinth lab, bool fastForward)
         {
-            if (!fastForward)
+            if (fastForward)
             {
-                lab.CreateBubble();
+                return;
             }
+            //lab.CreateBubble();
         }
     }
 }
