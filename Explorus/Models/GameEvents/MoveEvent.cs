@@ -11,9 +11,11 @@ namespace Explorus.Models.GameEvents
     internal class MoveEvent : GameEvent
     {
         Point destination;
-        public MoveEvent(Guid id, Point destination) : base(id)
+        Direction direction;
+        public MoveEvent(Guid id, Point destination, Direction direction) : base(id)
         {
             this.destination = destination;
+            this.direction = direction;
         }
 
         public override void Execute(ILabyrinth lab, bool fastForward)
@@ -26,7 +28,7 @@ namespace Explorus.Models.GameEvents
             }
             else
             {
-                slime.SetDestination(destination);
+                slime.SetDestination(destination, direction);
             }
         }
     }
