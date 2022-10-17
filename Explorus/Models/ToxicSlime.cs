@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -37,6 +38,7 @@ namespace Explorus.Models
 
         public void Hit()
         {
+            GameRecorder.GetInstance().AddEvent(new ToxicSlimeHitEvent(id));
             hp--;
             if (hp == 1)
             {

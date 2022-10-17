@@ -1,4 +1,6 @@
-﻿using Explorus.Threads;
+﻿using Explorus.Controllers;
+using Explorus.Models.GameEvents;
+using Explorus.Threads;
 using System.Drawing;
 
 
@@ -26,6 +28,7 @@ namespace Explorus.Models
                 return false;
             }
             player.gems.Acquire();
+            GameRecorder.GetInstance().AddEvent(new CollectGemEvent(player.id));
             isCollected = true;
             image = null;
             hitbox = new Rectangle();

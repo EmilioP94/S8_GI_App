@@ -15,7 +15,16 @@ namespace Explorus.Models.GameEvents
 
         public override void Execute(ILabyrinth lab, bool fastForward)
         {
-            throw new NotImplementedException();
+            if (!fastForward)
+            {
+                return;
+            }
+            ILabyrinthComponent component = FindComponent(lab);
+            Slimus slimus = component as Slimus;
+            if(slimus != null)
+            {
+                slimus.gems.Acquire();
+            }
         }
     }
 }

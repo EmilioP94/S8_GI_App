@@ -19,7 +19,12 @@ namespace Explorus.Models.GameEvents
             {
                 return;
             }
-            //lab.CreateBubble();
+            ILabyrinthComponent component = FindComponent(lab);
+            Slimus slimus = component as Slimus;
+            if(slimus != null)
+            {
+                lab.CreateBubble(slimus);
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using Explorus.Threads;
 
 namespace Explorus.Models
@@ -109,6 +110,7 @@ namespace Explorus.Models
                 SetTransparency(true);
                 invincible = true;
                 AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
+                GameRecorder.GetInstance().AddEvent(new SlimusDamageTakenEvent(id));
                 hearts.Decrement();
                 if (hearts.acquired == 0)
                 {
@@ -129,6 +131,7 @@ namespace Explorus.Models
 
         public Bubble Shoot()
         {
+            GameRecorder.GetInstance().AddEvent(new ShootEvent(id));
             if (bubbles.acquired == bubbles.total && !isDead)
             {
                 bubbles.Empty();
