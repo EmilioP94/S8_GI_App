@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using Explorus.Threads;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,19 @@ namespace Explorus.Models
             destinationPoint = new Point(x, y);
         }
 
+        public void Teleport(Point newLocation)
+        {
+            this.x = newLocation.X;
+            this.y = newLocation.Y;
+            this.destinationPoint = newLocation;
+            currentDirection = Direction.None;
+        }
+
+        public void SetDestination(Point newDestination)
+        {
+            destinationPoint = newDestination;
+        }
+
         public void Move(Direction direction)
         {
             if (currentDirection != Direction.None)
@@ -69,10 +83,38 @@ namespace Explorus.Models
                     destinationPoint = new Point(x, y);
                     break;
             }
+            GameRecorder.GetInstance().AddEvent(new MoveEvent(id, destinationPoint));
             if (movementSound != SoundTypes.None)
             {
                 AudioThread.GetInstance().QueueSound(movementSound);
             }
+        }
+
+        private bool ShouldSnapX()
+        {
+            if(currentDirection == Direction.Left)
+            {
+                return ((x - Constants.snapDistance) <= destinationPoint.X);
+            }
+            else if(currentDirection == Direction.Right)
+            {
+                return ((x + Constants.snapDistance) >= destinationPoint.X);
+            }
+            return true;
+        }
+
+        private bool ShouldSnapY()
+        {
+            if (currentDirection == Direction.Up)
+            {
+                return ((y - Constants.snapDistance) <= destinationPoint.Y);
+            }
+            else if (currentDirection == Direction.Down)
+            {
+                return ((y + Constants.snapDistance) >= destinationPoint.Y);
+            }
+
+            return true;
         }
 
         public void UpdatePosition(int deltaT)
@@ -93,17 +135,28 @@ namespace Explorus.Models
                 UpdateHitbox();
                 return;
             }
+            //Process vertical movements
+            if (ShouldSnapY())
+            {
+                y = destinationPoint.Y;
+            }
             else if (currentDirection == Direction.Up)
             {
                 y -= (int)(deltaT * Constants.playerSpeed);
             }
-            else if (currentDirection == Direction.Right)
-            {
-                x += (int)(deltaT * Constants.playerSpeed);
-            }
             else if (currentDirection == Direction.Down)
             {
                 y += (int)(deltaT * Constants.playerSpeed);
+            }
+
+            //Process horizontal movements
+            if (ShouldSnapX())
+            {
+                x = destinationPoint.X;
+            }
+            else if (currentDirection == Direction.Right)
+            {
+                x += (int)(deltaT * Constants.playerSpeed);
             }
             else if (currentDirection == Direction.Left)
             {
@@ -129,7 +182,8 @@ namespace Explorus.Models
 
         public void ChangeDirection(Direction dir)
         {
-            if(currentDirection == Direction.None && dir != Direction.None)
+            GameRecorder.GetInstance().AddEvent(new DirectionEvent(id, dir));
+            if (currentDirection == Direction.None && dir != Direction.None)
             {
                 _image = animationImages[0, (int)dir];
                 LastNotNoneDirection = dir;

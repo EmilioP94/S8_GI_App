@@ -35,6 +35,20 @@ namespace Explorus.Models
             animationImages[2, 3] = SFInstance.GetSprite(Sprites.toxicSlimeLeftSmall);
         }
 
+        public void Hit()
+        {
+            hp--;
+            if (hp == 1)
+            {
+                ColorMatrix matrix = new ColorMatrix();
+                matrix.Matrix33 = 0.5f;
+                ImageAttributes attributes = new ImageAttributes();
+                attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+                this.attributes = attributes;
+            }
+            if (hp == 0) isDead = true;
+        }
+
 
         public override bool Collide(ILabyrinthComponent comp)
         {
@@ -42,17 +56,7 @@ namespace Explorus.Models
             {
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();
-
-                hp--;
-                if(hp == 1)
-                {
-                    ColorMatrix matrix = new ColorMatrix();
-                    matrix.Matrix33 = 0.5f;
-                    ImageAttributes attributes = new ImageAttributes();
-                    attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
-                    this.attributes = attributes;
-                }
-                if (hp == 0) isDead = true;
+                Hit();
                 hitbox = new System.Drawing.Rectangle();
                 return isDead;
             }

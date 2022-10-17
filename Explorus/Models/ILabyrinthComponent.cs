@@ -1,16 +1,13 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 
 namespace Explorus.Models
 {
-    internal interface ILabyrinthComponent
+    internal interface ILabyrinthComponent: IRenderableModel
     {
-        int x { get; }
-        int y { get; }
-        Image2D image { get; }
-        ImageAttributes attributes { get; }
-
+        Guid id { get; }
         bool isSolid { get; }
 
         Rectangle hitbox { get; }

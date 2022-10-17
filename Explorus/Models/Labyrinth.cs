@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using Explorus.Threads;
 using System;
 using System.Collections.Concurrent;
@@ -93,6 +94,7 @@ namespace Explorus.Models
         }
         public void CreateBubble()
         {
+            GameRecorder.GetInstance().AddEvent(new ShootEvent(playerCharacter.id));
             Bubble bubble = playerCharacter.Shoot();
             if(bubble != null)
             {

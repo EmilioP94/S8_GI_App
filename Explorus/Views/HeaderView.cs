@@ -23,7 +23,7 @@ namespace Explorus.Views
 
         public void Render(object sender, PaintEventArgs e, Point offset)
         {
-            foreach (HeaderComponent component in _components)
+            foreach (IRenderableModel component in _components)
             {
                 e.Graphics.DrawImage(component.image.image, component.x + Constants.unit + offset.X, component.y + Constants.unit / 2 + offset.Y);
             }

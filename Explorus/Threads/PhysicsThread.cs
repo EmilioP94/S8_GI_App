@@ -100,6 +100,10 @@ namespace Explorus.Threads
                     MoveBubbles(elapseTime);
                     lab.playerCharacter.RechargeBubbles(elapseTime);
                 }
+                if(gameState.state == GameStates.Replay)
+                {
+
+                }
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 int waitTime = startFrameTime + msPerFrame - endFrameTime;
                 lastVerification = startFrameTime;

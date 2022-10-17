@@ -10,6 +10,7 @@ namespace Explorus.Models
     enum GameStates
     {
         Play,
+        Replay,
         Pause,
         Resume,
         Stop,

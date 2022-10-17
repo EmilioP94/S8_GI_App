@@ -35,7 +35,7 @@ namespace Explorus.Controllers
             physicsThread = new PhysicsThread(labyrinthController.lab, GameState.GetInstance());
             physicsThread.Start();
             audioThread = AudioThread.GetInstance();
-            renderThread = new RenderThread(oView, labyrinthController);
+            renderThread = new RenderThread(oView);
             renderThread.Start();
 
             Thread thread = new Thread(new ThreadStart(GameLoop));

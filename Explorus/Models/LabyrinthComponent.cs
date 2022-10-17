@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace Explorus.Models
@@ -6,6 +7,7 @@ namespace Explorus.Models
     internal class LabyrinthComponent : ILabyrinthComponent
     {
         public int x { get; protected set; }
+        public Guid id { get; private set; }
 
         public int y { get; protected set; }
 
@@ -21,6 +23,19 @@ namespace Explorus.Models
             this.x = x;
             this.y = y;
             this.image = image;
+            id = Guid.NewGuid();
+        }
+
+        //Prototype, create a copy from another object
+        public LabyrinthComponent(ILabyrinthComponent component)
+        {
+            this.x = component.x;
+            this.y = component.y;
+            this.image = component.image;
+            this.attributes = component.attributes;
+            this.isSolid = component.isSolid;
+            this.hitbox = component.hitbox;
+            this.id = component.id;
         }
 
         public virtual bool Collide(ILabyrinthComponent comp)

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\GameEngine.cs" />
+    <Compile Include="Controllers\GameRecorder.cs" />
     <Compile Include="Controllers\HeaderController.cs" />
     <Compile Include="Controllers\IInputController.cs" />
     <Compile Include="Controllers\ILabyrinth.cs" />
@@ -64,6 +65,13 @@
     <Compile Include="Game\ImageCutter.cs" />
     <Compile Include="Game\SpritesManagement.cs" />
     <Compile Include="Models\Bubble.cs" />
+    <Compile Include="Models\GameEvents\CollectGemEvent.cs" />
+    <Compile Include="Models\GameEvents\DirectionEvent.cs" />
+    <Compile Include="Models\GameEvents\GameEvent.cs" />
+    <Compile Include="Models\GameEvents\MoveEvent.cs" />
+    <Compile Include="Models\GameEvents\ShootEvent.cs" />
+    <Compile Include="Models\GameEvents\SlimusDamageTakenEvent.cs" />
+    <Compile Include="Models\GameEvents\ToxicSlimeHitEvent.cs" />
     <Compile Include="Models\GameState.cs" />
     <Compile Include="Models\Gems.cs" />
     <Compile Include="Models\Collection.cs" />
@@ -74,6 +82,8 @@
     <Compile Include="Models\Image2D.cs" />
     <Compile Include="Models\IObservable.cs" />
     <Compile Include="Models\IObserver.cs" />
+    <Compile Include="Models\GameEvents\IGameEvent.cs" />
+    <Compile Include="Models\IRenderableModel.cs" />
     <Compile Include="Models\Labyrinth.cs" />
     <Compile Include="Models\LabyrinthComponent.cs" />
     <Compile Include="Models\LabyrinthComponentFactory.cs" />
