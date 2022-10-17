@@ -18,5 +18,14 @@ namespace Explorus.Models
             image = null;
             return false;
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            isCollected = false;
+            this.x += Constants.unit / 2;
+            this.y += Constants.unit / 2;
+            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+        }
     }
 }

@@ -13,7 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
-    internal abstract class Slime: LabyrinthComponent
+    internal abstract class Slime : LabyrinthComponent
     {
         private int hitboxXOffset;
         private int hitboxYOffset;
@@ -21,7 +21,7 @@ namespace Explorus.Models
         protected Point destinationPoint;
         protected Direction currentDirection = Direction.None;
         protected Direction LastNotNoneDirection = Direction.Down;
-        protected bool isDead = false;
+        public bool isDead { get; protected set; }  = false;
         private Image2D _image;
         protected SoundTypes movementSound = SoundTypes.None;
         protected SoundTypes wallCollisionSound = SoundTypes.None;
@@ -43,6 +43,7 @@ namespace Explorus.Models
             hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
             hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
             destinationPoint = new Point(x, y);
+            UpdateHitbox();
         }
 
         public void Teleport(Point newLocation)
@@ -51,11 +52,13 @@ namespace Explorus.Models
             this.y = newLocation.Y;
             this.destinationPoint = newLocation;
             currentDirection = Direction.None;
+            UpdateHitbox();
         }
 
-        public void SetDestination(Point newDestination)
+        public void SetDestination(Point newDestination, Direction dir)
         {
             destinationPoint = newDestination;
+            currentDirection = dir;
         }
 
         public void Move(Direction direction)
@@ -83,7 +86,7 @@ namespace Explorus.Models
                     destinationPoint = new Point(x, y);
                     break;
             }
-            GameRecorder.GetInstance().AddEvent(new MoveEvent(id, destinationPoint));
+            GameRecorder.GetInstance().AddEvent(new MoveEvent(id, destinationPoint, currentDirection));
             if (movementSound != SoundTypes.None)
             {
                 AudioThread.GetInstance().QueueSound(movementSound);
@@ -92,11 +95,11 @@ namespace Explorus.Models
 
         private bool ShouldSnapX()
         {
-            if(currentDirection == Direction.Left)
+            if (currentDirection == Direction.Left)
             {
                 return ((x - Constants.snapDistance) <= destinationPoint.X);
             }
-            else if(currentDirection == Direction.Right)
+            else if (currentDirection == Direction.Right)
             {
                 return ((x + Constants.snapDistance) >= destinationPoint.X);
             }
@@ -246,7 +249,7 @@ namespace Explorus.Models
         public void MoveToValidDestination(Direction direction, ILabyrinth lab)
         {
             ChangeDirection(direction);
-            if (CheckValidDestination(direction,  lab))
+            if (CheckValidDestination(direction, lab))
             {
                 Move(direction);
             }
@@ -255,6 +258,16 @@ namespace Explorus.Models
                 //TODO: Le son est pas jouer, on dirais que AudioThread est pas accessible a partir de ce thread, et la memoire explose quand on essaye de queueSound
                 //AudioThread.GetInstance().QueueSound(wallCollisionSound);
             }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            destinationPoint = new Point(x, y);
+            currentDirection = Direction.None;
+            LastNotNoneDirection = Direction.None;
+            isDead = false;
+            UpdateHitbox();
         }
     }
 }

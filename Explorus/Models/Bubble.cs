@@ -78,5 +78,11 @@ namespace Explorus.Models
             }
             hitbox = new Rectangle(x, y, Constants.unit, Constants.unit);
         }
+        public override void Reset()
+        {
+            base.Reset();
+            image = null;
+            isMoving = false;
+        }
     }
 }

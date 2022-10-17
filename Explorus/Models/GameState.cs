@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Explorus.Models
@@ -12,6 +13,7 @@ namespace Explorus.Models
         New,
         Play,
         Replay,
+        ReplayPlaying,
         Pause,
         Resume,
         Stop,
@@ -128,6 +130,16 @@ namespace Explorus.Models
         public void resetMultiplayerSwitched()
         {
             multiplayerSwitched = false;
+        }
+
+        public void StartReplay()
+        {
+            state = GameStates.ReplayPlaying;
+        }
+
+        public void Replay()
+        {
+            state = GameStates.Replay;
         }
     }
 }

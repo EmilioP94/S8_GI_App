@@ -10,13 +10,14 @@ namespace Explorus.Models.GameEvents
 {
     internal abstract class GameEvent : IGameEvent
     {
-        public DateTime timestamp { get; private set; }
+        public int timestamp { get; private set; }
         public abstract void Execute(ILabyrinth lab, bool fastForward);
         protected Guid id { get; private set; }
 
         public GameEvent(Guid id)
         {
-            timestamp = DateTime.Now;
+            
+            timestamp = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             this.id = id;
         }
 

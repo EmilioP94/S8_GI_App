@@ -17,10 +17,6 @@ namespace Explorus.Models.GameEvents
 
         public override void Execute(ILabyrinth lab, bool fastForward)
         {
-            if (fastForward)
-            {
-                return;
-            }
             ILabyrinthComponent component = FindComponent(lab);
             Slime slime = component as Slime;
             if (slime != null)

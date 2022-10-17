@@ -49,6 +49,7 @@ namespace Explorus.Models
                 this.attributes = attributes;
             }
             if (hp == 0) isDead = true;
+            hitbox = new System.Drawing.Rectangle();
         }
 
 
@@ -59,10 +60,16 @@ namespace Explorus.Models
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();
                 Hit();
-                hitbox = new System.Drawing.Rectangle();
                 return isDead;
             }
             return false;
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            hp = 2;
+            attributes = null;
         }
     }
 }

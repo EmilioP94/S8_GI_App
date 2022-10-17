@@ -14,6 +14,11 @@ namespace Explorus.Controllers
         private static GameRecorder _instance = null;
         private bool _isRecording = true;
         private int millSinceLast = 5000;
+        private IEnumerator<IGameEvent> replayEnumerator = null;
+        ILabyrinth lab = null;
+        int totalElapsed = 0;
+        IGameEvent firstEvent = null;
+        public bool hasPlayed { get; private set; } = false;
 
         private GameRecorder() { }
 
@@ -42,21 +47,29 @@ namespace Explorus.Controllers
         {
             _isRecording = false;
         }
-        //Start executing the events for replay, blocking call
-        public void StartReplay(ILabyrinth lab)
+
+        public void PrepareLabForReplay(ILabyrinth lab)
         {
+            this.lab = lab;
             bool isFastForward = true;
             _isRecording = false;
             List<IGameEvent> replayEvents = gameEvents.ToList();
-            int lastEvent = replayEvents.Last().timestamp.Millisecond;
-            IEnumerator<IGameEvent> enumerator = replayEvents.GetEnumerator();
+            int lastEvent = replayEvents.Last().timestamp;
+            replayEnumerator = replayEvents.GetEnumerator();
             while (isFastForward)
             {
-                IGameEvent currentEvent = enumerator.Current;
-                if(currentEvent.timestamp.Millisecond < lastEvent - millSinceLast)
+                if(replayEnumerator.Current == null)
                 {
-                    currentEvent.Execute(lab, true);
-                    if (!enumerator.MoveNext())
+                    if (!replayEnumerator.MoveNext())
+                    {
+                        isFastForward = false;
+                    }
+                }
+
+                if (replayEnumerator.Current.timestamp < lastEvent - millSinceLast)
+                {
+                    replayEnumerator.Current.Execute(lab, true);
+                    if (!replayEnumerator.MoveNext())
                     {
                         isFastForward = false;
                     }
@@ -66,19 +79,35 @@ namespace Explorus.Controllers
                     isFastForward = false;
                 }
             }
+            firstEvent = replayEnumerator.Current;
+        }
+
+        //Start executing the events for replay, blocking call
+        public void ExecuteNextEvents(int elapsed)
+        {
+            totalElapsed += elapsed;
+            Console.WriteLine("elapsed {0}, total {1}", elapsed, totalElapsed);
             bool isReplaying = true;
-            DateTime start = DateTime.Now;
-            IGameEvent previousEvent = enumerator.Current;
             while (isReplaying)
             {
-                if(enumerator.Current.timestamp.Millisecond - previousEvent.timestamp.Millisecond <= DateTime.Now.Millisecond - start.Millisecond)
+                if(replayEnumerator.Current == null)
                 {
-                    enumerator.Current.Execute(lab, false);
-                    if (!enumerator.MoveNext())
+                    if (!replayEnumerator.MoveNext())
                     {
+                        hasPlayed = true;
+                        return;
+                    }
+                }
+                if (replayEnumerator.Current.timestamp - firstEvent.timestamp <= totalElapsed)
+                {
+                    replayEnumerator.Current.Execute(lab, false);
+                    if (!replayEnumerator.MoveNext())
+                    {
+                        hasPlayed = true;
                         isReplaying = false;
                     }
                 }
+                else isReplaying = false;
             }
         }
     }

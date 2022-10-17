@@ -158,5 +158,13 @@ namespace Explorus.Models
                 return labyrinthComponentList.ToList();
             }
         }
+
+        public void Reset()
+        {
+            foreach (ILabyrinthComponent comp in labyrinthComponentList)
+            {
+                comp.Reset();
+            }
+        }
     }
 }

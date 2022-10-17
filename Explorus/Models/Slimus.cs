@@ -101,9 +101,18 @@ namespace Explorus.Models
             this.attributes = attributes;
         }
 
+        public void ShouldDie()
+        {
+            if (hearts.acquired == 0)
+            {
+                isDead = true;
+            }
+        }
+
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if (!invincible && comp is ToxicSlime)
+            ToxicSlime toxic = comp as ToxicSlime;
+            if (!invincible && toxic != null && !toxic.isDead)
             {
                 flickerTimer.Enabled = true;
                 _isTransparent = true;
@@ -112,11 +121,8 @@ namespace Explorus.Models
                 AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
                 GameRecorder.GetInstance().AddEvent(new SlimusDamageTakenEvent(id));
                 hearts.Decrement();
-                if (hearts.acquired == 0)
-                {
-                    isDead = true;
-                }
-                else
+                ShouldDie();
+                if(hearts.acquired != 0)
                 {
                     Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
                     {
@@ -153,6 +159,18 @@ namespace Explorus.Models
                 bubbles.Acquire();
                 this.elapsedTime = 0;
             }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            _isTransparent = true;
+            _invincible = false;
+            elapsedTime = 0;
+            gems.Empty();
+            hearts.Fill();
+            bubbles.Fill();
+            flickerTimer.Enabled = false;
         }
     }
 }

@@ -15,5 +15,7 @@ namespace Explorus.Models
         bool Collide(ILabyrinthComponent comp);
 
         bool IsValidDestination(Slime playerCharacter);
+
+        void Reset();
     }
 }

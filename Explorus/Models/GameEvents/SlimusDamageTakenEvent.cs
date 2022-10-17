@@ -24,6 +24,8 @@ namespace Explorus.Models.GameEvents
             if(slimus != null)
             {
                 slimus.hearts.Decrement();
+                slimus.ShouldDie();
+                
             }
         }
     }

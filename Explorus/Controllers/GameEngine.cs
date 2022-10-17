@@ -104,19 +104,27 @@ namespace Explorus.Controllers
                 {
                     labyrinthController.lab.Reload(Constants.levels[GameState.GetInstance().level].map);
                 }
+                if(GameState.GetInstance().state == GameStates.Over && !GameRecorder.GetInstance().hasPlayed)
+                {
+                    labyrinthController.lab.Reset();
+                    GameState.GetInstance().Replay();
+                    GameRecorder.GetInstance().PrepareLabForReplay(labyrinthController.lab);
+                    GameState.GetInstance().StartReplay();
+                }
                 if (labyrinthController.lab.gameEnded && endTimer == null)
                 {
                     // need to figure out how to reload the next level map when a level is completed 
 
                     if (!labyrinthController.NextLevel())
                     {
+                        Console.WriteLine("Game Ended");
                         GameState.GetInstance().Stop();
                         endTimer = new System.Timers.Timer(3000);
                         endTimer.Elapsed += OnGameEnded;
                         endTimer.Start();
                     }
                 }
-
+                Thread.Sleep(1);
             }
             AudioThread.GetInstance().Stop();
             physicsThread.Stop();

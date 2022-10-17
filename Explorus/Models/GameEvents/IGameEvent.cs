@@ -11,7 +11,7 @@ namespace Explorus.Models
     //Command pattern
     internal interface IGameEvent
     {
-        DateTime timestamp { get; }
+        int timestamp { get; }
         void Execute(ILabyrinth lab, bool fastForward);
     }
 }

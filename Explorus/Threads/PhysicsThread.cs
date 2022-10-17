@@ -106,9 +106,25 @@ namespace Explorus.Threads
                         lab.player2.RechargeBubbles(elapseTime);
                     }
                 }
-                if(gameState.state == GameStates.Replay)
+                if(gameState.state == GameStates.ReplayPlaying)
                 {
-
+                    
+                    int elapseTime = startFrameTime - lastVerification;
+                    GameRecorder.GetInstance().ExecuteNextEvents(elapseTime);
+                    CheckForCollision(lab.playerCharacter);
+                    lab.playerCharacter.UpdatePosition(elapseTime);
+                    foreach (ToxicSlime slime in lab.toxicSlimes)
+                    {
+                        slime.UpdatePosition(elapseTime);
+                    }
+                    MoveBubbles(elapseTime);
+                    lab.playerCharacter.RechargeBubbles(elapseTime);
+                    if (GameState.GetInstance().multiplayer)
+                    {
+                        CheckForCollision(lab.player2);
+                        lab.player2.UpdatePosition(elapseTime);
+                        lab.player2.RechargeBubbles(elapseTime);
+                    }
                 }
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 int waitTime = startFrameTime + msPerFrame - endFrameTime;

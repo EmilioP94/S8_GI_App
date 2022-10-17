@@ -5,7 +5,10 @@ namespace Explorus.Models
 {
     internal class Door : LabyrinthComponent
     {
-        private bool isOpen = false;
+        public Door(ILabyrinthComponent component) : base(component)
+        {
+        }
+
         public Door(int x, int y, Image2D image) : base(x, y, image)
         {
             ColorMatrix matrix = new ColorMatrix();
@@ -16,13 +19,13 @@ namespace Explorus.Models
 
             isSolid = true;
             hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+            this.initialState = new Door(this);
         }
 
         public override bool Collide(ILabyrinthComponent comp)
         {
             if (comp.GetType() == typeof(Slimus))
             {
-                isOpen = true;
                 ColorMatrix matrix = new ColorMatrix();
                 matrix.Matrix33 = 0.0f;
                 ImageAttributes attributes = new ImageAttributes();
@@ -55,6 +58,13 @@ namespace Explorus.Models
             {
                 return false;
             }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            isSolid = true;
+            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
         }
     }
 }

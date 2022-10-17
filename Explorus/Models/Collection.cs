@@ -46,6 +46,12 @@ namespace Explorus.Models
             NotifyObservers();
         }
 
+        public void Fill()
+        {
+            acquired = total;
+            NotifyObservers();
+        }
+
         private void NotifyObservers()
         {
             foreach (IObserver<ICollection> observer in observers)
