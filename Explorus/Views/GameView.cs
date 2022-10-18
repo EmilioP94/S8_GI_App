@@ -131,6 +131,17 @@ namespace Explorus.Views
                     audioMenuView.Render(sender, e, offset);
                 }
             }
+            if(state == GameStates.ReplayPlaying)
+            {
+                FontFamily fontFamily = new FontFamily("Arial");
+                Font font = new Font(
+                   fontFamily,
+                   40,
+                   FontStyle.Regular,
+                   GraphicsUnit.Pixel);
+                SolidBrush brush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+                e.Graphics.DrawString("Replay - " + (GameRecorder.GetInstance().millSinceLast/1000 - GameRecorder.GetInstance().totalElapsed/1000) + "seconds", font, brush, 24, 96);
+            }
 
             if(state == GameStates.Over)
             {

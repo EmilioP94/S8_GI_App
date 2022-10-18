@@ -109,26 +109,35 @@ namespace Explorus.Models
             }
         }
 
+        public void IsInvincible(bool shouldBeInvincible)
+        {
+            flickerTimer.Enabled = shouldBeInvincible;
+            _isTransparent = shouldBeInvincible;
+            SetTransparency(shouldBeInvincible);
+            invincible = shouldBeInvincible;
+        }
+
         public override bool Collide(ILabyrinthComponent comp)
         {
+            if(GameState.GetInstance().state == GameStates.ReplayPlaying)
+            {
+                return false;
+            }
             ToxicSlime toxic = comp as ToxicSlime;
             if (!invincible && toxic != null && !toxic.isDead)
             {
-                flickerTimer.Enabled = true;
-                _isTransparent = true;
-                SetTransparency(true);
-                invincible = true;
+                IsInvincible(true);
                 AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
                 GameRecorder.GetInstance().AddEvent(new SlimusDamageTakenEvent(id));
+                GameRecorder.GetInstance().AddEvent(new InvincibilityEvent(id, true));
                 hearts.Decrement();
                 ShouldDie();
                 if(hearts.acquired != 0)
                 {
                     Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
                     {
-                        invincible = false;
-                        flickerTimer.Enabled = false;
-                        SetTransparency(false);
+                        IsInvincible(false);
+                        GameRecorder.GetInstance().AddEvent(new InvincibilityEvent(id, false));
                     });
                 }
             }

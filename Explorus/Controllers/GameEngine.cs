@@ -106,6 +106,7 @@ namespace Explorus.Controllers
                 }
                 if(GameState.GetInstance().state == GameStates.Over && !GameRecorder.GetInstance().hasPlayed)
                 {
+                    Thread.Sleep(2000);
                     labyrinthController.lab.Reset();
                     GameState.GetInstance().Replay();
                     GameRecorder.GetInstance().PrepareLabForReplay(labyrinthController.lab);

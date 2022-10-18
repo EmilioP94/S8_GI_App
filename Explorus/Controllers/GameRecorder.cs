@@ -13,10 +13,10 @@ namespace Explorus.Controllers
         private ConcurrentQueue<IGameEvent> gameEvents = new ConcurrentQueue<IGameEvent> ();
         private static GameRecorder _instance = null;
         private bool _isRecording = true;
-        private int millSinceLast = 5000;
+        public int millSinceLast { get; private set; } = 5000;
         private IEnumerator<IGameEvent> replayEnumerator = null;
         ILabyrinth lab = null;
-        int totalElapsed = 0;
+        public int totalElapsed { get; private set; } = 0;
         IGameEvent firstEvent = null;
         public bool hasPlayed { get; private set; } = false;
 

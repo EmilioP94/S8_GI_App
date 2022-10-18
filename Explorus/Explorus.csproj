@@ -53,6 +53,8 @@
     <Compile Include="Controllers\GameRecorder.cs" />
     <Compile Include="Controllers\HeaderController.cs" />
     <Compile Include="Controllers\IInputController.cs" />
+    <Compile Include="Models\GameEvents\GameOverEvent.cs" />
+    <Compile Include="Models\GameEvents\InvincibilityEvent.cs" />
     <Compile Include="Models\ILabyrinth.cs" />
     <Compile Include="Controllers\LabyrinthController.cs" />
     <Compile Include="Controllers\MenuController.cs" />

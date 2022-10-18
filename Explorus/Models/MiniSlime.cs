@@ -10,6 +10,12 @@ namespace Explorus.Models
             this.x += Constants.unit / 2;
             this.y += Constants.unit / 2;
             hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+            this.initialState = new MiniSlime(this);
+        }
+
+        public MiniSlime(ILabyrinthComponent component) : base(component)
+        {
+            isCollected = false;
         }
 
         public override bool Collide(ILabyrinthComponent comp)
@@ -23,9 +29,6 @@ namespace Explorus.Models
         {
             base.Reset();
             isCollected = false;
-            this.x += Constants.unit / 2;
-            this.y += Constants.unit / 2;
-            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
         }
     }
 }

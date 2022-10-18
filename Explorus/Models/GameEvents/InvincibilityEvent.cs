@@ -1,5 +1,4 @@
 ﻿using Explorus.Controllers;
-using Explorus.Threads;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models.GameEvents
 {
-    internal class SlimusDamageTakenEvent : GameEvent
+    internal class InvincibilityEvent : GameEvent
     {
-        public SlimusDamageTakenEvent(Guid id) : base(id)
+        bool isInvincible;
+        public InvincibilityEvent(Guid id, bool isInvicible) : base(id)
         {
+            this.isInvincible = isInvicible;
         }
 
         public override void Execute(ILabyrinth lab, bool fastForward)
@@ -20,9 +21,7 @@ namespace Explorus.Models.GameEvents
             Slimus slimus = component as Slimus;
             if(slimus != null)
             {
-                slimus.hearts.Decrement();
-                slimus.ShouldDie();
-                AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
+                slimus.IsInvincible(isInvincible);
             }
         }
     }

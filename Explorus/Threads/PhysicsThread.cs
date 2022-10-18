@@ -9,6 +9,7 @@ PAUSED = (stop -> PHYSICSTHREAD | resume -> RUNNING).
  */
 using Explorus.Controllers;
 using Explorus.Models;
+using Explorus.Models.GameEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +74,7 @@ namespace Explorus.Threads
                         if (lab.playerCharacter.hearts.acquired == 0 && lab.player2.hearts.acquired == 0)
                         {
                             gameState.GameOver();
+                            GameRecorder.GetInstance().AddEvent(new GameOverEvent());
                         }
                     }
                     else result = comp.Collide(srcComp);
