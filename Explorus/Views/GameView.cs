@@ -132,7 +132,24 @@ namespace Explorus.Views
                 }
             }
 
-            if(state == GameStates.Over)
+
+            if (state == GameStates.ReplayPlaying)
+            {
+                FontFamily fontFamily = new FontFamily("Arial");
+                Font font = new Font(
+                   fontFamily,
+                   40,
+                   FontStyle.Regular,
+                   GraphicsUnit.Pixel);
+                SolidBrush brush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+                String text = "Replay - " + (GameRecorder.GetInstance().millSinceLast / 1000 - GameRecorder.GetInstance().totalElapsed / 1000) + "seconds";
+                Size sizeOfText = TextRenderer.MeasureText(text, font);
+                Rectangle rect = new Rectangle(new Point(24, 120), sizeOfText);
+                g.FillRectangle(Brushes.Black, rect);
+                e.Graphics.DrawString(text, font, brush, 24, 120);
+            }
+
+            if (state == GameStates.Over)
             {
                 gameOverView.Render(sender, e, offset);
             }

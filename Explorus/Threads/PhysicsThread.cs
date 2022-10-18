@@ -9,6 +9,7 @@ PAUSED = (stop -> PHYSICSTHREAD | resume -> RUNNING).
  */
 using Explorus.Controllers;
 using Explorus.Models;
+using Explorus.Models.GameEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,6 +74,7 @@ namespace Explorus.Threads
                         if (lab.playerCharacter.hearts.acquired == 0 && lab.player2.hearts.acquired == 0)
                         {
                             gameState.GameOver();
+                            GameRecorder.GetInstance().AddEvent(new GameOverEvent());
                         }
                     }
                     else result = comp.Collide(srcComp);
@@ -97,6 +99,26 @@ namespace Explorus.Threads
                     CheckForCollision(lab.playerCharacter);
                     lab.playerCharacter.UpdatePosition(elapseTime);
                     MoveToxicSlimes(elapseTime);
+                    MoveBubbles(elapseTime);
+                    lab.playerCharacter.RechargeBubbles(elapseTime);
+                    if (GameState.GetInstance().multiplayer)
+                    {
+                        CheckForCollision(lab.player2);
+                        lab.player2.UpdatePosition(elapseTime);
+                        lab.player2.RechargeBubbles(elapseTime);
+                    }
+                }
+                if(gameState.state == GameStates.ReplayPlaying)
+                {
+                    
+                    int elapseTime = startFrameTime - lastVerification;
+                    GameRecorder.GetInstance().ExecuteNextEvents(elapseTime);
+                    CheckForCollision(lab.playerCharacter);
+                    lab.playerCharacter.UpdatePosition(elapseTime);
+                    foreach (ToxicSlime slime in lab.toxicSlimes)
+                    {
+                        slime.UpdatePosition(elapseTime);
+                    }
                     MoveBubbles(elapseTime);
                     lab.playerCharacter.RechargeBubbles(elapseTime);
                     if (GameState.GetInstance().multiplayer)

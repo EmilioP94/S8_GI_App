@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using Explorus.Threads;
 using System;
 using System.Collections.Concurrent;
@@ -155,6 +156,14 @@ namespace Explorus.Models
             lock (labyrinthComponentList)
             {
                 return labyrinthComponentList.ToList();
+            }
+        }
+
+        public void Reset()
+        {
+            foreach (ILabyrinthComponent comp in labyrinthComponentList)
+            {
+                comp.Reset();
             }
         }
     }

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Timers;
 using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using Explorus.Threads;
 
 namespace Explorus.Models
@@ -100,27 +101,43 @@ namespace Explorus.Models
             this.attributes = attributes;
         }
 
+        public void ShouldDie()
+        {
+            if (hearts.acquired == 0)
+            {
+                isDead = true;
+            }
+        }
+
+        public void IsInvincible(bool shouldBeInvincible)
+        {
+            flickerTimer.Enabled = shouldBeInvincible;
+            _isTransparent = shouldBeInvincible;
+            SetTransparency(shouldBeInvincible);
+            invincible = shouldBeInvincible;
+        }
+
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if (!invincible && comp is ToxicSlime)
+            if(GameState.GetInstance().state == GameStates.ReplayPlaying)
             {
-                flickerTimer.Enabled = true;
-                _isTransparent = true;
-                SetTransparency(true);
-                invincible = true;
+                return false;
+            }
+            ToxicSlime toxic = comp as ToxicSlime;
+            if (!invincible && toxic != null && !toxic.isDead)
+            {
+                IsInvincible(true);
                 AudioThread.GetInstance().QueueSound(SoundTypes.ennemyCollision);
+                GameRecorder.GetInstance().AddEvent(new SlimusDamageTakenEvent(id));
+                GameRecorder.GetInstance().AddEvent(new InvincibilityEvent(id, true));
                 hearts.Decrement();
-                if (hearts.acquired == 0)
-                {
-                    isDead = true;
-                }
-                else
+                ShouldDie();
+                if(hearts.acquired != 0)
                 {
                     Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o =>
                     {
-                        invincible = false;
-                        flickerTimer.Enabled = false;
-                        SetTransparency(false);
+                        IsInvincible(false);
+                        GameRecorder.GetInstance().AddEvent(new InvincibilityEvent(id, false));
                     });
                 }
             }
@@ -129,6 +146,7 @@ namespace Explorus.Models
 
         public Bubble Shoot()
         {
+            GameRecorder.GetInstance().AddEvent(new ShootEvent(id));
             if (bubbles.acquired == bubbles.total && !isDead)
             {
                 bubbles.Empty();
@@ -150,6 +168,18 @@ namespace Explorus.Models
                 bubbles.Acquire();
                 this.elapsedTime = 0;
             }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            _isTransparent = true;
+            _invincible = false;
+            elapsedTime = 0;
+            gems.Empty();
+            hearts.Fill();
+            bubbles.Fill();
+            flickerTimer.Enabled = false;
         }
     }
 }

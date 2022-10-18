@@ -24,6 +24,11 @@ namespace Explorus.Views
         {
             if (lab != null)
             {
+                //Do not render while calculating positions for replay
+                if(GameState.GetInstance().state == GameStates.Replay)
+                {
+                    return;
+                }
                 foreach (ILabyrinthComponent component in lab.GetComponentListCopy())
                 {
                     if(component.image != null)

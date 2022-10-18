@@ -1,4 +1,5 @@
 ﻿using Explorus.Controllers;
+using Explorus.Models.GameEvents;
 using Explorus.Threads;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Models
 {
-    internal abstract class Slime: LabyrinthComponent
+    internal abstract class Slime : LabyrinthComponent
     {
         private int hitboxXOffset;
         private int hitboxYOffset;
@@ -20,7 +21,7 @@ namespace Explorus.Models
         protected Point destinationPoint;
         protected Direction currentDirection = Direction.None;
         protected Direction LastNotNoneDirection = Direction.Down;
-        protected bool isDead = false;
+        public bool isDead { get; protected set; }  = false;
         private Image2D _image;
         protected SoundTypes movementSound = SoundTypes.None;
         protected SoundTypes wallCollisionSound = SoundTypes.None;
@@ -42,6 +43,22 @@ namespace Explorus.Models
             hitboxXOffset = (Constants.unit * 2 - Constants.slimusHitboxLength) / 2;
             hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
             destinationPoint = new Point(x, y);
+            UpdateHitbox();
+        }
+
+        public void Teleport(Point newLocation)
+        {
+            this.x = newLocation.X;
+            this.y = newLocation.Y;
+            this.destinationPoint = newLocation;
+            currentDirection = Direction.None;
+            UpdateHitbox();
+        }
+
+        public void SetDestination(Point newDestination, Direction dir)
+        {
+            destinationPoint = newDestination;
+            currentDirection = dir;
         }
 
         public void Move(Direction direction)
@@ -69,10 +86,38 @@ namespace Explorus.Models
                     destinationPoint = new Point(x, y);
                     break;
             }
+            GameRecorder.GetInstance().AddEvent(new MoveEvent(id, destinationPoint, currentDirection));
             if (movementSound != SoundTypes.None)
             {
                 AudioThread.GetInstance().QueueSound(movementSound);
             }
+        }
+
+        private bool ShouldSnapX()
+        {
+            if (currentDirection == Direction.Left)
+            {
+                return ((x - Constants.snapDistance) <= destinationPoint.X);
+            }
+            else if (currentDirection == Direction.Right)
+            {
+                return ((x + Constants.snapDistance) >= destinationPoint.X);
+            }
+            return true;
+        }
+
+        private bool ShouldSnapY()
+        {
+            if (currentDirection == Direction.Up)
+            {
+                return ((y - Constants.snapDistance) <= destinationPoint.Y);
+            }
+            else if (currentDirection == Direction.Down)
+            {
+                return ((y + Constants.snapDistance) >= destinationPoint.Y);
+            }
+
+            return true;
         }
 
         public void UpdatePosition(int deltaT)
@@ -93,17 +138,28 @@ namespace Explorus.Models
                 UpdateHitbox();
                 return;
             }
+            //Process vertical movements
+            if (ShouldSnapY())
+            {
+                y = destinationPoint.Y;
+            }
             else if (currentDirection == Direction.Up)
             {
                 y -= (int)(deltaT * Constants.playerSpeed);
             }
-            else if (currentDirection == Direction.Right)
-            {
-                x += (int)(deltaT * Constants.playerSpeed);
-            }
             else if (currentDirection == Direction.Down)
             {
                 y += (int)(deltaT * Constants.playerSpeed);
+            }
+
+            //Process horizontal movements
+            if (ShouldSnapX())
+            {
+                x = destinationPoint.X;
+            }
+            else if (currentDirection == Direction.Right)
+            {
+                x += (int)(deltaT * Constants.playerSpeed);
             }
             else if (currentDirection == Direction.Left)
             {
@@ -129,7 +185,8 @@ namespace Explorus.Models
 
         public void ChangeDirection(Direction dir)
         {
-            if(currentDirection == Direction.None && dir != Direction.None)
+            GameRecorder.GetInstance().AddEvent(new DirectionEvent(id, dir));
+            if (currentDirection == Direction.None && dir != Direction.None)
             {
                 _image = animationImages[0, (int)dir];
                 LastNotNoneDirection = dir;
@@ -192,7 +249,7 @@ namespace Explorus.Models
         public void MoveToValidDestination(Direction direction, ILabyrinth lab)
         {
             ChangeDirection(direction);
-            if (CheckValidDestination(direction,  lab))
+            if (CheckValidDestination(direction, lab))
             {
                 Move(direction);
             }
@@ -201,6 +258,16 @@ namespace Explorus.Models
                 //TODO: Le son est pas jouer, on dirais que AudioThread est pas accessible a partir de ce thread, et la memoire explose quand on essaye de queueSound
                 //AudioThread.GetInstance().QueueSound(wallCollisionSound);
             }
+        }
+
+        public override void Reset()
+        {
+            base.Reset();
+            destinationPoint = new Point(x, y);
+            currentDirection = Direction.None;
+            LastNotNoneDirection = Direction.None;
+            isDead = false;
+            UpdateHitbox();
         }
     }
 }

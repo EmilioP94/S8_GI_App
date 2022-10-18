@@ -81,7 +81,7 @@ namespace TestExplorus.Threads
             lab.playerCharacter.ChangeDirection(Explorus.Controllers.Direction.Right);
             physics.Start();
             int count = lab.labyrinthComponentList.Count;
-            lab.CreateBubble();
+            lab.CreateBubble(lab.playerCharacter);
             Assert.AreNotEqual(count, lab.labyrinthComponentList.Count);
             Bubble bubble = null;
             foreach (Bubble _bubble in lab.labyrinthComponentList.OfType<Bubble>())

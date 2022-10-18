@@ -24,5 +24,12 @@ namespace Explorus.Models
             }
             return false;
         }
+
+        public override void Reset()
+        {
+            base.Reset();
+            isSolid = true;
+            hitbox = new Rectangle(x, y, Constants.unit * 2, Constants.unit * 2);
+        }
     }
 }

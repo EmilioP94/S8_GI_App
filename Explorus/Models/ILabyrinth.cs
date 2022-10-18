@@ -12,7 +12,6 @@ namespace Explorus.Controllers
     internal interface ILabyrinth
     {
         Sprites[,] map { get; }
-        //int[] slimusPosition { get; set; }
 
         List<ILabyrinthComponent> labyrinthComponentList { get; }
 
@@ -29,5 +28,7 @@ namespace Explorus.Controllers
         void Reload(Sprites[,] map);
 
         List<ILabyrinthComponent> GetComponentListCopy();
+
+        void Reset();
     }
 }

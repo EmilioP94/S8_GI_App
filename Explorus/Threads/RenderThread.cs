@@ -23,15 +23,13 @@ namespace Explorus.Threads
         public Thread thread;
         
         GameView view;
-        LabyrinthController labyrinthController;
 
         bool running;
         int lastFrameTime;
 
-        public RenderThread(GameView view, LabyrinthController labyrinthController)
+        public RenderThread(GameView view)
         {
             this.view = view;
-            this.labyrinthController = labyrinthController;
             thread = new Thread(new ThreadStart(DoRender));
             lastFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
             running = true;
