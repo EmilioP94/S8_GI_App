@@ -25,7 +25,7 @@ namespace Explorus
 
         public const int maxNumberOfSound = 10;
 
-        public const bool showHitbox = true; //useful for debugging
+        public const bool showHitbox = false; //useful for debugging
 
         public static readonly Models.Sprites[,] level_1 =
         {
