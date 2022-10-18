@@ -131,7 +131,9 @@ namespace Explorus.Views
                     audioMenuView.Render(sender, e, offset);
                 }
             }
-            if(state == GameStates.ReplayPlaying)
+
+
+            if (state == GameStates.ReplayPlaying)
             {
                 FontFamily fontFamily = new FontFamily("Arial");
                 Font font = new Font(
@@ -140,10 +142,14 @@ namespace Explorus.Views
                    FontStyle.Regular,
                    GraphicsUnit.Pixel);
                 SolidBrush brush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
-                e.Graphics.DrawString("Replay - " + (GameRecorder.GetInstance().millSinceLast/1000 - GameRecorder.GetInstance().totalElapsed/1000) + "seconds", font, brush, 24, 96);
+                String text = "Replay - " + (GameRecorder.GetInstance().millSinceLast / 1000 - GameRecorder.GetInstance().totalElapsed / 1000) + "seconds";
+                Size sizeOfText = TextRenderer.MeasureText(text, font);
+                Rectangle rect = new Rectangle(new Point(24, 120), sizeOfText);
+                g.FillRectangle(Brushes.Black, rect);
+                e.Graphics.DrawString(text, font, brush, 24, 120);
             }
 
-            if(state == GameStates.Over)
+            if (state == GameStates.Over)
             {
                 gameOverView.Render(sender, e, offset);
             }
