@@ -65,28 +65,14 @@ namespace Explorus.Models
 
         public void Play()
         {
-            if (multiplayerSwitched)
-            {
-                // en prévision de faire qu'on puisse switch dans les settings
-            }
-            else
-            {
                 state = GameStates.Play;
                 AudioThread.GetInstance().Resume();
-            }
         }
 
         public void Resume()
         {
-            if (multiplayerSwitched)
-            {
-                // en prévision de faire qu'on puisse switch dans les settings
-            }
-            else
-            {
                 state = GameStates.Resume;
                 Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o => { if (state == GameStates.Resume) Play(); });
-            }
         }
 
         public void Stop()
@@ -134,7 +120,7 @@ namespace Explorus.Models
             multiplayer = !multiplayer;
         }
 
-        public void resetMultiplayerSwitched()
+        public void ResetMultiplayerSwitched()
         {
             multiplayerSwitched = false;
         }

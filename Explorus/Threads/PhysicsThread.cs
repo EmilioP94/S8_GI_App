@@ -65,7 +65,7 @@ namespace Explorus.Threads
                 if (srcComp == comp)//ignore  collision with itself
                     continue;
 
-                if (comp.hitbox.IntersectsWith(srcComp.hitbox))
+                if (srcComp != null && comp.hitbox.IntersectsWith(srcComp.hitbox))
                 {
                     bool result = false;
                     if (comp.GetType() == typeof(ToxicSlime) && srcComp.GetType() == typeof(Slimus))
@@ -92,9 +92,12 @@ namespace Explorus.Threads
         {
             lab.players.ForEach(player =>
             {
-                CheckForCollision(player);
-                player.UpdatePosition(elapseTime);
-                player.RechargeBubbles(elapseTime);
+                if(player != null)
+                {
+                    CheckForCollision(player);
+                    player.UpdatePosition(elapseTime);
+                    player.RechargeBubbles(elapseTime);
+                }
             });
         }
 

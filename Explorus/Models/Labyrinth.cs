@@ -33,8 +33,14 @@ namespace Explorus.Models
             toxicSlimes = new List<ToxicSlime>();
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
-            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
 
+            BuildCompList();
+            BuildSlimeLists();
+        }
+
+        public void BuildCompList()
+        {
+            labyrinthComponentList = new List<ILabyrinthComponent>();
             for (int i = 0; i < map.GetLength(0); i++)
             {
                 bool p1Added = false;
@@ -42,9 +48,9 @@ namespace Explorus.Models
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
                     ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
-                    if(comp is Slimus)
+                    if (comp is Slimus)
                     {
-                        if(!p1Added)
+                        if (!p1Added)
                         {
                             p1Added = true;
                             labyrinthComponentList.Add(comp);
@@ -65,6 +71,11 @@ namespace Explorus.Models
                     }
                 }
             }
+        }
+
+        public void BuildSlimeLists()
+        {
+            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
             foreach ((Slimus player, int index) in labyrinthComponentList.OfType<Slimus>().Select((value, i) => (value, i)))
             {
                 if (players.Count() == 0)
@@ -92,49 +103,20 @@ namespace Explorus.Models
                 toxicSlimes.Add(slime);
             }
         }
-
         public void Reload(Sprites[,] map)
         {
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
+            players = new List<Slimus>(2);
 
             lock (labyrinthComponentList)
             {
-                for (int i = 0; i < map.GetLength(0); i++)
-                {
-                    for (int j = 0; j < map.GetLength(1); j++)
-                    {
-                        if (map[i, j] != Sprites.slimusDownLarge)
-                        {
-                            ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
-                            labyrinthComponentList.Add(comp);
-                        }
-                        else
-                        {
-                            if (players.ElementAt(0) != null)
-                            {
-                                players.ElementAt(0).NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
-                                labyrinthComponentList.Add(players.ElementAt(0));
-                            }
-                            if(GameState.GetInstance().multiplayer && players.ElementAt(1) != null)
-                            {
-                                players.ElementAt(1).NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
-                                labyrinthComponentList.Add(players.ElementAt(1));
-                            }
-                        }
-                    }
-                }
+                BuildCompList();
             }
-            foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
-            {
-                miniSlimes.Add(slime);
-            }
-            foreach (ToxicSlime slime in labyrinthComponentList.OfType<ToxicSlime>())
-            {
-                toxicSlimes.Add(slime);
-            }
+            BuildSlimeLists();
+
         }
         public void CreateBubble(Slimus player)
         {
@@ -158,7 +140,7 @@ namespace Explorus.Models
 
         public void RegisterPlayerCollections(HeaderController hc)
         {
-            foreach(Slimus player in players)
+            foreach (Slimus player in players)
             {
                 player.gems.Subscribe(hc);
                 player.hearts.Subscribe(hc);

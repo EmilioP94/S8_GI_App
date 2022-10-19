@@ -82,13 +82,6 @@ namespace Explorus.Controllers
             }
         }
 
-        private void Update(int elapseTime)
-        {
-            oView.framerate = 1000 / elapseTime;
-            oView.state = GameState.GetInstance().state;
-            oView.level = GameState.GetInstance().level;
-        }
-
         private void GameLoop()
         {
             System.Timers.Timer endTimer = null;
@@ -98,6 +91,8 @@ namespace Explorus.Controllers
                 if(GameState.GetInstance().multiplayerSwitched)
                 {
                     labyrinthController.lab.Reload(Constants.levels[GameState.GetInstance().level].map);
+                    headerController.Reset(labyrinthController.lab);
+                    GameState.GetInstance().ResetMultiplayerSwitched();
                 }
                 if(GameState.GetInstance().state == GameStates.Over && !GameRecorder.GetInstance().hasPlayed)
                 {
@@ -137,7 +132,7 @@ namespace Explorus.Controllers
         public void OnNext(WindowEvents value)
         {
             GameStates gs = GameState.GetInstance().state;
-            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && gs != GameStates.Pause)
+            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && (gs != GameStates.Pause && gs != GameStates.New))
             {
                 GameState.GetInstance().Pause(false);
             }

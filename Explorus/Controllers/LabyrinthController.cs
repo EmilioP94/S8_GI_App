@@ -63,7 +63,7 @@ namespace Explorus.Controllers
         public void InputLoop()
         {
             handlePlayerInput(lab.players.ElementAt(0), slimusDirectionInput);
-            if (GameState.GetInstance().multiplayer)
+            if (GameState.GetInstance().multiplayer && lab.players.Count() == 2)
             {
                 handlePlayerInput(lab.players.ElementAt(1), player2DirectionInput);
             }
@@ -126,7 +126,10 @@ namespace Explorus.Controllers
                     player2DirectionInput |= DirectionInput.Right;
                     break;
                 case (char)Keys.Q:
-                    lab.CreateBubble(lab.players.ElementAt(1));
+                    if (GameState.GetInstance().multiplayer)
+                    {
+                        lab.CreateBubble(lab.players.ElementAt(1));
+                    }
                     break;
             }
         }

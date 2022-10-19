@@ -27,7 +27,7 @@ namespace Explorus
 
         public const bool showHitbox = false; //useful for debugging
 
-        public const bool defaultMultiplayer = true;
+        public const bool defaultMultiplayer = false;
 
         public const int initialToxicSlimeHp = 2;
 
