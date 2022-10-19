@@ -34,7 +34,7 @@ namespace Explorus.Models
         public int maxLevel = Constants.levels.Length;
         public bool manual;
         public bool multiplayerSwitched { get; private set; } = false;
-        public bool multiplayer = true;
+        public bool multiplayer;
         public int menuIndex = 0;
         public int maxMenuIndex = 3;
 
@@ -48,6 +48,12 @@ namespace Explorus.Models
             }
             return _instance;
         }
+
+        private GameState()
+        {
+            multiplayer = Constants.defaultMultiplayer;
+        }
+
         public void Pause(bool manual)
         {
             MainMenu();
@@ -58,28 +64,14 @@ namespace Explorus.Models
 
         public void Play()
         {
-            if (multiplayerSwitched)
-            {
-                // en prévision de faire qu'on puisse switch dans les settings
-            }
-            else
-            {
                 state = GameStates.Play;
                 AudioThread.GetInstance().Resume();
-            }
         }
 
         public void Resume()
         {
-            if (multiplayerSwitched)
-            {
-                // en prévision de faire qu'on puisse switch dans les settings
-            }
-            else
-            {
                 state = GameStates.Resume;
                 Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o => { if (state == GameStates.Resume) Play(); });
-            }
         }
 
         public void Stop()
@@ -127,7 +119,7 @@ namespace Explorus.Models
             multiplayer = !multiplayer;
         }
 
-        public void resetMultiplayerSwitched()
+        public void ResetMultiplayerSwitched()
         {
             multiplayerSwitched = false;
         }

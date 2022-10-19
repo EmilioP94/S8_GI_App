@@ -25,13 +25,13 @@ namespace Explorus.Views
             if (lab != null)
             {
                 //Do not render while calculating positions for replay
-                if(GameState.GetInstance().state == GameStates.Replay)
+                if (GameState.GetInstance().state == GameStates.Replay || GameState.GetInstance().state == GameStates.New)
                 {
                     return;
                 }
                 foreach (ILabyrinthComponent component in lab.GetComponentListCopy())
                 {
-                    if(component.image != null)
+                    if (component.image != null)
                     {
                         e.Graphics.DrawImage(
                         component.image.image,
@@ -48,7 +48,7 @@ namespace Explorus.Views
                     }
 
                     // unreachable code - debug purposes with the switch in Constants
-                    if(Constants.showHitbox)
+                    if (Constants.showHitbox)
                     {
                         if (component.GetType() != typeof(Wall) && component.GetType() != typeof(Door))
                         {

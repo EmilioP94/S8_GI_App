@@ -12,8 +12,8 @@ namespace Explorus.Models
     {
         public Sprites[,] map { get; private set; }
         public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
-        public Slimus playerCharacter { get; private set; } = null;
-        public Slimus player2 { get; private set; } = null;
+
+        public List<Slimus> players { get; private set; } = new List<Slimus>(2);
 
         public List<MiniSlime> miniSlimes { get; private set; }
 
@@ -33,8 +33,14 @@ namespace Explorus.Models
             toxicSlimes = new List<ToxicSlime>();
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
-            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
 
+            BuildCompList();
+            BuildSlimeLists();
+        }
+
+        public void BuildCompList()
+        {
+            labyrinthComponentList = new List<ILabyrinthComponent>();
             for (int i = 0; i < map.GetLength(0); i++)
             {
                 bool p1Added = false;
@@ -42,9 +48,9 @@ namespace Explorus.Models
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
                     ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
-                    if(comp is Slimus)
+                    if (comp is Slimus)
                     {
-                        if(!p1Added)
+                        if (!p1Added)
                         {
                             p1Added = true;
                             labyrinthComponentList.Add(comp);
@@ -65,21 +71,26 @@ namespace Explorus.Models
                     }
                 }
             }
+        }
+
+        public void BuildSlimeLists()
+        {
+            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
             foreach ((Slimus player, int index) in labyrinthComponentList.OfType<Slimus>().Select((value, i) => (value, i)))
             {
-                if (playerCharacter == null)
+                if (players.Count() == 0)
                 {
-                    playerCharacter = player;
-                    playerCharacter.gems = gems;
+                    player.gems = gems;
+                    players.Add(player);
                 }
                 else if (GameState.GetInstance().multiplayer)
                 {
                     Console.WriteLine("Game is multiplayer");
-                    if (player2 == null)
+                    if (players.Count() == 1)
                     {
                         Console.WriteLine("adding player 2");
-                        player2 = player;
                         player.gems = gems;
+                        players.Add(player);
                     }
                 }
             }
@@ -92,44 +103,20 @@ namespace Explorus.Models
                 toxicSlimes.Add(slime);
             }
         }
-
         public void Reload(Sprites[,] map)
         {
             this.map = map;
             labyrinthComponentList = new List<ILabyrinthComponent>();
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
+            players = new List<Slimus>(2);
 
             lock (labyrinthComponentList)
             {
-                for (int i = 0; i < map.GetLength(0); i++)
-                {
-                    for (int j = 0; j < map.GetLength(1); j++)
-                    {
-                        if (map[i, j] != Sprites.slimusDownLarge)
-                        {
-                            ILabyrinthComponent comp = LabyrinthComponentFactory.GetLabyrinthComponent(map[i, j], Constants.unit * j * 2, Constants.unit * i * 2);
-                            labyrinthComponentList.Add(comp);
-                        }
-                        else
-                        {
-                            if (playerCharacter != null)
-                            {
-                                playerCharacter.NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
-                                labyrinthComponentList.Add(playerCharacter);
-                            }
-                        }
-                    }
-                }
+                BuildCompList();
             }
-            foreach (MiniSlime slime in labyrinthComponentList.OfType<MiniSlime>())
-            {
-                miniSlimes.Add(slime);
-            }
-            foreach (ToxicSlime slime in labyrinthComponentList.OfType<ToxicSlime>())
-            {
-                toxicSlimes.Add(slime);
-            }
+            BuildSlimeLists();
+
         }
         public void CreateBubble(Slimus player)
         {
@@ -148,6 +135,16 @@ namespace Explorus.Models
             lock (labyrinthComponentList)
             {
                 labyrinthComponentList.Add(comp);
+            }
+        }
+
+        public void RegisterPlayerCollections(HeaderController hc)
+        {
+            foreach (Slimus player in players)
+            {
+                player.gems.Subscribe(hc);
+                player.hearts.Subscribe(hc);
+                player.bubbles.Subscribe(hc);
             }
         }
 

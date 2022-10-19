@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Explorus.Controllers
 {
@@ -19,7 +20,7 @@ namespace Explorus.Controllers
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
-        private List<ICollection> barList = new List<ICollection>(5);
+        private List<ICollection> barList;
         private ICollection redBar;
         private ICollection blueBar;
         private ICollection yellowBar;
@@ -27,20 +28,31 @@ namespace Explorus.Controllers
         private ICollection blueBar2;
         //private ICollection yellowBar2;
         private List<Models.IObserver<List<HeaderComponent>>> _observers = new List<Models.IObserver<List<HeaderComponent>>>();
+        bool initialMultiplayer = GameState.GetInstance().multiplayer;
 
         public HeaderController(ILabyrinth lab)
         {
-            yellowBar = lab.playerCharacter.gems;
-            redBar = lab.playerCharacter.hearts;
-            blueBar = lab.playerCharacter.bubbles;
-            redBar2 = lab.player2.hearts;
-            blueBar2 = lab.player2.bubbles;
+            Reset(lab);
+        }
+
+        public void Reset(ILabyrinth lab)
+        {
+            barList = new List<ICollection>(GameState.GetInstance().multiplayer ? 5 : 3);
+            yellowBar = lab.players.ElementAt(0).gems;
+            redBar = lab.players.ElementAt(0).hearts;
+            blueBar = lab.players.ElementAt(0).bubbles;
             barList.Add(redBar);
             barList.Add(blueBar);
-            barList.Add(redBar2);
-            barList.Add(blueBar2);
+            if (GameState.GetInstance().multiplayer)
+            {
+                redBar2 = lab.players.ElementAt(1).hearts;
+                blueBar2 = lab.players.ElementAt(1).bubbles;
+                barList.Add(redBar2);
+                barList.Add(blueBar2);
+            }
             barList.Add(yellowBar);
             GenerateBars();
+            NotifyObservers();
         }
 
         private HeaderComponent GetComponent(int xMultiplier, Sprites sprite, Bars barName, string name, bool space = false)
@@ -113,7 +125,7 @@ namespace Explorus.Controllers
                         break;
                 }
 
-                if(index == 0 || index == 2)
+                if (GameState.GetInstance().multiplayer && (index == 0 || index == 2))
                 {
                     components.Add(GetComponent(position, index == 0 ? Sprites.miniSlime : Sprites.pinkMiniSlime, bar.barName, "", true));
                     position++;
@@ -161,10 +173,8 @@ namespace Explorus.Controllers
                 default:
                     break;
             }
-
             GenerateBars();
             NotifyObservers();
-
         }
         private void NotifyObservers()
         {

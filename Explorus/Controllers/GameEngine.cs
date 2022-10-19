@@ -31,12 +31,7 @@ namespace Explorus.Controllers
             mainMenu = MainMenu.GetInstance();
             audioMenu = AudioMenu.GetInstance();
             headerController = new HeaderController(labyrinthController.lab);
-            labyrinthController.lab.playerCharacter.gems.Subscribe(headerController);
-            labyrinthController.lab.playerCharacter.bubbles.Subscribe(headerController);
-            labyrinthController.lab.playerCharacter.hearts.Subscribe(headerController);
-            labyrinthController.lab.player2.gems.Subscribe(headerController);
-            labyrinthController.lab.player2.bubbles.Subscribe(headerController);
-            labyrinthController.lab.player2.hearts.Subscribe(headerController);
+            labyrinthController.lab.RegisterPlayerCollections(headerController);
             oView = new GameView(ProcessInputKeyDown, ProcessInputKeyUp, labyrinthController.lab, headerController);
             oView.Subscribe(this);
             lastGameLoop = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
@@ -87,13 +82,6 @@ namespace Explorus.Controllers
             }
         }
 
-        private void Update(int elapseTime)
-        {
-            oView.framerate = 1000 / elapseTime;
-            oView.state = GameState.GetInstance().state;
-            oView.level = GameState.GetInstance().level;
-        }
-
         private void GameLoop()
         {
             System.Timers.Timer endTimer = null;
@@ -103,6 +91,8 @@ namespace Explorus.Controllers
                 if(GameState.GetInstance().multiplayerSwitched)
                 {
                     labyrinthController.lab.Reload(Constants.levels[GameState.GetInstance().level].map);
+                    headerController.Reset(labyrinthController.lab);
+                    GameState.GetInstance().ResetMultiplayerSwitched();
                 }
                 if(GameState.GetInstance().state == GameStates.Over && !GameRecorder.GetInstance().hasPlayed)
                 {
@@ -141,11 +131,12 @@ namespace Explorus.Controllers
 
         public void OnNext(WindowEvents value)
         {
-            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && GameState.GetInstance().state != GameStates.Pause)
+            GameStates gs = GameState.GetInstance().state;
+            if(value == WindowEvents.Minimize || value == WindowEvents.Unfocus && (gs != GameStates.Pause && gs != GameStates.New))
             {
                 GameState.GetInstance().Pause(false);
             }
-            else if(GameState.GetInstance().state == GameStates.Pause && !GameState.GetInstance().manual)
+            else if(gs != GameStates.New && gs != GameStates.Over && gs == GameStates.Pause && !GameState.GetInstance().manual)
             {
                 GameState.GetInstance().Resume();
             }
