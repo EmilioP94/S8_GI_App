@@ -33,8 +33,9 @@ namespace Explorus.Models
         public int level { get; private set; } = 0;
         public int maxLevel = Constants.levels.Length;
         public bool manual;
+        private bool defaultMultiplayer = Constants.defaultMultiplayer;
         public bool multiplayerSwitched { get; private set; } = false;
-        public bool multiplayer = true;
+        public bool multiplayer;
         public int menuIndex = 0;
         public int maxMenuIndex = 3;
 
@@ -48,6 +49,12 @@ namespace Explorus.Models
             }
             return _instance;
         }
+
+        private GameState()
+        {
+            multiplayer = defaultMultiplayer;
+        }
+
         public void Pause(bool manual)
         {
             MainMenu();

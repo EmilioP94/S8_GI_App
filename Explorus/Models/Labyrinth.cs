@@ -12,8 +12,8 @@ namespace Explorus.Models
     {
         public Sprites[,] map { get; private set; }
         public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
-        public Slimus playerCharacter { get; private set; } = null;
-        public Slimus player2 { get; private set; } = null;
+
+        public List<Slimus> players { get; private set; } = new List<Slimus>(2);
 
         public List<MiniSlime> miniSlimes { get; private set; }
 
@@ -67,19 +67,19 @@ namespace Explorus.Models
             }
             foreach ((Slimus player, int index) in labyrinthComponentList.OfType<Slimus>().Select((value, i) => (value, i)))
             {
-                if (playerCharacter == null)
+                if (players.Count() == 0)
                 {
-                    playerCharacter = player;
-                    playerCharacter.gems = gems;
+                    player.gems = gems;
+                    players.Add(player);
                 }
                 else if (GameState.GetInstance().multiplayer)
                 {
                     Console.WriteLine("Game is multiplayer");
-                    if (player2 == null)
+                    if (players.Count() == 1)
                     {
                         Console.WriteLine("adding player 2");
-                        player2 = player;
                         player.gems = gems;
+                        players.Add(player);
                     }
                 }
             }
@@ -113,10 +113,15 @@ namespace Explorus.Models
                         }
                         else
                         {
-                            if (playerCharacter != null)
+                            if (players.ElementAt(0) != null)
                             {
-                                playerCharacter.NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
-                                labyrinthComponentList.Add(playerCharacter);
+                                players.ElementAt(0).NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
+                                labyrinthComponentList.Add(players.ElementAt(0));
+                            }
+                            if(GameState.GetInstance().multiplayer && players.ElementAt(1) != null)
+                            {
+                                players.ElementAt(1).NewLevel(Constants.unit * j * 2, Constants.unit * i * 2);
+                                labyrinthComponentList.Add(players.ElementAt(1));
                             }
                         }
                     }
@@ -148,6 +153,16 @@ namespace Explorus.Models
             lock (labyrinthComponentList)
             {
                 labyrinthComponentList.Add(comp);
+            }
+        }
+
+        public void RegisterPlayerCollections(HeaderController hc)
+        {
+            foreach(Slimus player in players)
+            {
+                player.gems.Subscribe(hc);
+                player.hearts.Subscribe(hc);
+                player.bubbles.Subscribe(hc);
             }
         }
 

@@ -71,7 +71,7 @@ namespace Explorus.Threads
                     if (comp.GetType() == typeof(ToxicSlime) && srcComp.GetType() == typeof(Slimus))
                     {
                         result = srcComp.Collide(comp);
-                        if (lab.playerCharacter.hearts.acquired == 0 && lab.player2.hearts.acquired == 0)
+                        if ((GameState.GetInstance().multiplayer && lab.players.ElementAt(0).hearts.acquired == 0 && lab.players.ElementAt(1).hearts.acquired == 0) ||(!GameState.GetInstance().multiplayer && lab.players.ElementAt(0).hearts.acquired == 0))
                         {
                             gameState.GameOver();
                             GameRecorder.GetInstance().AddEvent(new GameOverEvent());
@@ -88,6 +88,16 @@ namespace Explorus.Threads
             return false;
         }
 
+        private void UpdatePlayers(int elapseTime)
+        {
+            lab.players.ForEach(player =>
+            {
+                CheckForCollision(player);
+                player.UpdatePosition(elapseTime);
+                player.RechargeBubbles(elapseTime);
+            });
+        }
+
         private void DoPhysics()
         {
             while (running)
@@ -96,37 +106,21 @@ namespace Explorus.Threads
                 if (gameState.state == GameStates.Play)
                 {
                     int elapseTime = startFrameTime - lastVerification;
-                    CheckForCollision(lab.playerCharacter);
-                    lab.playerCharacter.UpdatePosition(elapseTime);
+                    UpdatePlayers(elapseTime);
                     MoveToxicSlimes(elapseTime);
                     MoveBubbles(elapseTime);
-                    lab.playerCharacter.RechargeBubbles(elapseTime);
-                    if (GameState.GetInstance().multiplayer)
-                    {
-                        CheckForCollision(lab.player2);
-                        lab.player2.UpdatePosition(elapseTime);
-                        lab.player2.RechargeBubbles(elapseTime);
-                    }
                 }
-                if(gameState.state == GameStates.ReplayPlaying)
+                if (gameState.state == GameStates.ReplayPlaying)
                 {
-                    
+
                     int elapseTime = startFrameTime - lastVerification;
                     GameRecorder.GetInstance().ExecuteNextEvents(elapseTime);
-                    CheckForCollision(lab.playerCharacter);
-                    lab.playerCharacter.UpdatePosition(elapseTime);
+                    UpdatePlayers(elapseTime);
                     foreach (ToxicSlime slime in lab.toxicSlimes)
                     {
                         slime.UpdatePosition(elapseTime);
                     }
                     MoveBubbles(elapseTime);
-                    lab.playerCharacter.RechargeBubbles(elapseTime);
-                    if (GameState.GetInstance().multiplayer)
-                    {
-                        CheckForCollision(lab.player2);
-                        lab.player2.UpdatePosition(elapseTime);
-                        lab.player2.RechargeBubbles(elapseTime);
-                    }
                 }
                 int endFrameTime = (int)((DateTimeOffset)DateTime.Now).ToUnixTimeMilliseconds();
                 int waitTime = startFrameTime + msPerFrame - endFrameTime;

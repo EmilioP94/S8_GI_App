@@ -27,6 +27,8 @@ namespace Explorus
 
         public const bool showHitbox = false; //useful for debugging
 
+        public const bool defaultMultiplayer = true;
+
         public const int initialToxicSlimeHp = 2;
 
         public static readonly Models.Sprites[,] level_1 =

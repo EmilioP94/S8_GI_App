@@ -19,7 +19,7 @@ namespace Explorus.Controllers
         public List<HeaderComponent> components { get; set; }
         private int spacing = Constants.unit / 2;
         private int unit = Constants.unit;
-        private List<ICollection> barList = new List<ICollection>(5);
+        private List<ICollection> barList;
         private ICollection redBar;
         private ICollection blueBar;
         private ICollection yellowBar;
@@ -30,15 +30,19 @@ namespace Explorus.Controllers
 
         public HeaderController(ILabyrinth lab)
         {
-            yellowBar = lab.playerCharacter.gems;
-            redBar = lab.playerCharacter.hearts;
-            blueBar = lab.playerCharacter.bubbles;
-            redBar2 = lab.player2.hearts;
-            blueBar2 = lab.player2.bubbles;
+            barList = new List<ICollection>(GameState.GetInstance().multiplayer ? 5 : 3);
+            yellowBar = lab.players.ElementAt(0).gems;
+            redBar = lab.players.ElementAt(0).hearts;
+            blueBar = lab.players.ElementAt(0).bubbles;
             barList.Add(redBar);
             barList.Add(blueBar);
-            barList.Add(redBar2);
-            barList.Add(blueBar2);
+            if (GameState.GetInstance().multiplayer)
+            {
+                redBar2 = lab.players.ElementAt(1).hearts;
+                blueBar2 = lab.players.ElementAt(1).bubbles;
+                barList.Add(redBar2);
+                barList.Add(blueBar2);
+            }
             barList.Add(yellowBar);
             GenerateBars();
         }
@@ -113,7 +117,7 @@ namespace Explorus.Controllers
                         break;
                 }
 
-                if(index == 0 || index == 2)
+                if (index == 0 || index == 2)
                 {
                     components.Add(GetComponent(position, index == 0 ? Sprites.miniSlime : Sprites.pinkMiniSlime, bar.barName, "", true));
                     position++;

@@ -15,8 +15,7 @@ namespace Explorus.Controllers
 
         List<ILabyrinthComponent> labyrinthComponentList { get; }
 
-        Slimus playerCharacter { get; }
-        Slimus player2 { get; }
+        List<Slimus> players { get; }
 
         List<ToxicSlime> toxicSlimes { get; }
 
@@ -26,6 +25,7 @@ namespace Explorus.Controllers
         [MethodImpl(MethodImplOptions.Synchronized)]
         void CreateGems(int x,int y);
         void Reload(Sprites[,] map);
+        void RegisterPlayerCollections(HeaderController hc);
 
         List<ILabyrinthComponent> GetComponentListCopy();
 
