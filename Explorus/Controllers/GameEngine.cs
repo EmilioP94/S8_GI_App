@@ -92,6 +92,7 @@ namespace Explorus.Controllers
                 {
                     labyrinthController.lab.Reload(Constants.levels[GameState.GetInstance().level].map);
                     headerController.Reset(labyrinthController.lab);
+                    labyrinthController.lab.RegisterPlayerCollections(headerController);
                     GameState.GetInstance().ResetMultiplayerSwitched();
                 }
                 if(GameState.GetInstance().state == GameStates.Over && !GameRecorder.GetInstance().hasPlayed)
