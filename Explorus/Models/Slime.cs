@@ -25,6 +25,7 @@ namespace Explorus.Models
         private Image2D _image;
         protected SoundTypes movementSound = SoundTypes.None;
         protected SoundTypes wallCollisionSound = SoundTypes.None;
+        private Random random;
 
         public override Image2D image
         {
@@ -44,6 +45,7 @@ namespace Explorus.Models
             hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
             destinationPoint = new Point(x, y);
             UpdateHitbox();
+            random = new Random();
         }
 
         public void Teleport(Point newLocation)
@@ -269,5 +271,51 @@ namespace Explorus.Models
             isDead = false;
             UpdateHitbox();
         }
+
+        public void RandomMovement(ILabyrinth lab)
+        {
+            List<Direction> validDirections = new List<Direction>();
+            if (CheckValidDestination(Direction.Up, lab))
+                validDirections.Add(Direction.Up);
+            if (CheckValidDestination(Direction.Right, lab))
+                validDirections.Add(Direction.Right);
+            if (CheckValidDestination(Direction.Down, lab))
+                validDirections.Add(Direction.Down);
+            if (CheckValidDestination(Direction.Left, lab))
+                validDirections.Add(Direction.Left);
+
+            if (validDirections.Count >= 3)
+            {
+                int number = random.Next(0, validDirections.Count);
+                MoveToValidDestination(validDirections[number], lab);
+            }
+            else if (validDirections.Count == 2)
+            {
+                validDirections.Remove(GetOppositeDirection(LastNotNoneDirection));
+                MoveToValidDestination(validDirections[0], lab);
+            }
+            else
+            {
+                MoveToValidDestination(validDirections[0], lab);
+            }
+        }
+
+        private Direction GetOppositeDirection(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.Left:
+                    return Direction.Right;                    
+                case Direction.Up:
+                    return Direction.Down;                   
+                case Direction.Down:
+                    return Direction.Up;
+                case Direction.Right:
+                    return Direction.Left;
+                default:
+                    return Direction.None;
+            }
+        }
+
     }
 }
