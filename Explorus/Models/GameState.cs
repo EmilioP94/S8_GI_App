@@ -95,6 +95,8 @@ namespace Explorus.Models
         {
             level = 0;
             menuIndex = 0;
+            multiplayer = Constants.defaultMultiplayer;
+            state = GameStates.New;
         }
 
         public void ExitGame()

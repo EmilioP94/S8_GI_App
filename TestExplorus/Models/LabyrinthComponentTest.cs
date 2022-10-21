@@ -14,7 +14,7 @@ namespace TestExplorus.Models
             Assert.AreEqual(0, comp.x);
             Assert.AreEqual(0, comp.y);
             Assert.IsNull(comp.image);
-            Slimus player = new Slimus(0, 0);
+            Slimus player = new Slimus(0, 0, false);
             Assert.IsFalse(comp.Collide(player));
             Assert.IsNull(comp.attributes);
         }

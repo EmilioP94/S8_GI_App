@@ -82,9 +82,6 @@
     <Compile Include="Threads\RenderThreadTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Explorus\Explorus.csproj">
       <Project>{a5891dd1-0233-46eb-b9d1-1f7cd6e495d9}</Project>
       <Name>Explorus</Name>

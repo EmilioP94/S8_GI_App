@@ -22,8 +22,8 @@ namespace TestExplorus.Threads
             LabyrinthController labyrinthController = new LabyrinthController();
             HeaderController headerController = new HeaderController(labyrinthController.lab);
 
-            GameView oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
-            RenderThread renderThread = new RenderThread(oView, labyrinthController);
+            GameView oView = new GameView(ProcessInputKeyDown, ProcessInputKeyUp, labyrinthController.lab, headerController);
+            RenderThread renderThread = new RenderThread(oView);
 
             renderThread.Start();
             Thread.Sleep(200);
@@ -32,9 +32,14 @@ namespace TestExplorus.Threads
             renderThread.Stop();
         }
 
-        private void ProcessInput(object sender, KeyEventArgs e)
+        private void ProcessInputKeyUp(object sender, KeyEventArgs e)
         {
            
+        }
+
+        private void ProcessInputKeyDown(object sender, KeyEventArgs e)
+        {
+            
         }
     }
 }
