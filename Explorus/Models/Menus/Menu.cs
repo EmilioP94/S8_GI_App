@@ -45,5 +45,10 @@ namespace Explorus.Models
         {
             menuOptions.ElementAt(optionIndex).ExecuteDecrement();
         }
+
+        public void Reset()
+        {
+            selectedMenuOptionIndex = 0;
+        }
     }
 }
