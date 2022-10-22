@@ -17,11 +17,12 @@ namespace TestExplorus.Controllers
     public class LabyrinthControllerTest
     {
         LabyrinthController labController;
+        PhysicsThread physicsThread;
         Slimus player;
         int loopTime = 16;
         int originalX;
         int originalY;
-        bool assert; // so we can use the test methods to move without failing on position assertions on subsequent calls
+        bool assert;
 
         [TestInitialize]
         public void Init()
@@ -32,6 +33,7 @@ namespace TestExplorus.Controllers
             GameState.GetInstance().Play();
             originalX = player.x;
             originalY = player.y;
+            physicsThread = new PhysicsThread(labController.lab, GameState.GetInstance());
             assert = true;
             //Console.WriteLine($"original position is ({originalX}, {originalY})");
         }
@@ -121,9 +123,11 @@ namespace TestExplorus.Controllers
         [TestMethod]
         public void TestCollideWithWall()
         {
-            // allows going up only once because of the wall, assert stays true
             TestProcessInputUp();
             TestProcessInputUp();
+            PrivateObject prPhysTh = new PrivateObject(physicsThread);
+            var collision = prPhysTh.Invoke("CheckForCollision", player);
+            Assert.IsFalse((bool)collision);
         }
 
         [TestMethod]
@@ -132,14 +136,18 @@ namespace TestExplorus.Controllers
             assert = false;
             TestProcessInputRight();
             TestProcessInputRight();
+            PrivateObject prPhysTh = new PrivateObject(physicsThread);
+            var collision = prPhysTh.Invoke("CheckForCollision", player);
+            Assert.IsFalse((bool)collision);
             Assert.AreEqual(5, player.hearts.acquired);
         }
 
         [TestMethod]
         public void TestCollideWithGem()
         {
-            Assert.AreEqual(0, player.gems.acquired);
             TestProcessInputDown();
+            PrivateObject prPhysTh = new PrivateObject(physicsThread);
+            prPhysTh.Invoke("CheckForCollision", player);
             Assert.AreEqual(1, player.gems.acquired);
         }
 
