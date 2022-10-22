@@ -50,7 +50,7 @@ namespace Explorus.Views
                     // unreachable code - debug purposes with the switch in Constants
                     if (Constants.showHitbox)
                     {
-                        if (component.GetType() != typeof(Wall) && component.GetType() != typeof(Door))
+                        if (/*component.GetType() != typeof(Wall) && component.GetType() != typeof(Door)*/true)
                         {
                             Pen pen = new Pen(Color.Red, 3);
 

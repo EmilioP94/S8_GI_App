@@ -53,8 +53,7 @@ namespace Explorus.Threads
             Random random = new Random();
             foreach (ToxicSlime slime in lab.toxicSlimes)
             {
-                Direction direction = (Direction)random.Next(0, 4);
-                slime.MoveToValidDestination(direction, lab);
+                slime.MoveToNextDestination(lab);
                 slime.UpdatePosition(elapseTime);
             }
         }
