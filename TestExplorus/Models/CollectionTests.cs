@@ -1,4 +1,5 @@
-﻿using Explorus.Controllers;
+﻿using Explorus;
+using Explorus.Controllers;
 using Explorus.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -23,7 +24,7 @@ namespace TestExplorus.Models
             Assert.AreEqual<int>(0, collection.acquired);
             collection.Acquire();
             Assert.AreEqual<int>(1, collection.acquired);
-            Labyrinth lab = new Labyrinth(TestConstants.level_1);
+            Labyrinth lab = new Labyrinth(Constants.level_1);
             HeaderController observer = new HeaderController(lab);
             collection = new Collection(Sprites.gem, Bars.yellow, false);
             Assert.AreEqual(6, collection.total);

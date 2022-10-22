@@ -12,9 +12,9 @@ namespace Explorus.Models
 {
     internal abstract class ToxicSlime : Slime, IToxicSlime
     {
-        int hp = Constants.initialToxicSlimeHp;
         Random random = new Random();
         protected int fieldOfView = 24;//how many pixels off center will the toxic slime see a player
+        public int hp { get; private set; } = Constants.initialToxicSlimeHp;
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
             isDead = false;

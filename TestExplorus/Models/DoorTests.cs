@@ -14,7 +14,7 @@ namespace TestExplorus.Models
             Door door = new Door(0, 0, image);
             Sprites[,] testMap = new Sprites[1, 1];
             testMap[0, 0] = Sprites.gem;
-            Slimus slimus = new Slimus(0, 0);
+            Slimus slimus = new Slimus(0, 0, false) ;
             door.Collide(slimus);            
         }
 
@@ -26,7 +26,7 @@ namespace TestExplorus.Models
             Sprites[,] testMap = new Sprites[1, 1];
             testMap[0, 0] = Sprites.gem;
             Collection gems = new Collection(Sprites.gem, Bars.yellow, true);
-            Slimus slimus = new Slimus(0, 0);      
+            Slimus slimus = new Slimus(0, 0, false);      
             door.Collide(slimus);
             door.Collide(slimus);
             Assert.IsTrue(door.isSolid);

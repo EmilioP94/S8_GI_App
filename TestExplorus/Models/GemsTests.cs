@@ -7,7 +7,15 @@ namespace TestExplorus.Models
     [TestClass]
     public class GemsTests
     {
+        Slimus slimus;
+
         [TestInitialize]
+        public void Init()
+        {
+            slimus = new Slimus(0, 0, false);
+            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
+            slimus.gems = gems;
+        }
 
         [TestMethod]
         public void TestMethod()
@@ -15,7 +23,6 @@ namespace TestExplorus.Models
             Gems gem1 = new Gems(0, 0, null);
             Gems gem2 = new Gems(0, 1, null);
 
-            Slimus slimus = new Slimus(0, 0);
 
             Assert.AreEqual(6, slimus.gems.total);
             Assert.AreEqual(0, slimus.gems.acquired);

@@ -1,4 +1,5 @@
-﻿using Explorus.Controllers;
+﻿using Explorus;
+using Explorus.Controllers;
 using Explorus.Models;
 using Explorus.Threads;
 using Explorus.Views;
@@ -19,11 +20,11 @@ namespace TestExplorus.Threads
         [TestMethod]
         public void TestInitRender()
         {
-            LabyrinthController labyrinthController = new LabyrinthController();
+            LabyrinthController labyrinthController = new LabyrinthController(Constants.level_1);
             HeaderController headerController = new HeaderController(labyrinthController.lab);
 
-            GameView oView = new GameView(ProcessInput, labyrinthController.lab, headerController);
-            RenderThread renderThread = new RenderThread(oView, labyrinthController);
+            GameView oView = new GameView(ProcessInputKeyDown, ProcessInputKeyUp, labyrinthController.lab, headerController);
+            RenderThread renderThread = new RenderThread(oView);
 
             renderThread.Start();
             Thread.Sleep(200);
@@ -32,9 +33,14 @@ namespace TestExplorus.Threads
             renderThread.Stop();
         }
 
-        private void ProcessInput(object sender, KeyEventArgs e)
+        private void ProcessInputKeyUp(object sender, KeyEventArgs e)
         {
            
+        }
+
+        private void ProcessInputKeyDown(object sender, KeyEventArgs e)
+        {
+            
         }
     }
 }

@@ -57,7 +57,7 @@ namespace Explorus.Threads
                 slime.UpdatePosition(elapseTime);
             }
         }
-        private bool CheckForCollision(ILabyrinthComponent srcComp)
+        protected bool CheckForCollision(ILabyrinthComponent srcComp)
         {
             foreach (ILabyrinthComponent comp in lab.GetComponentListCopy())
             {

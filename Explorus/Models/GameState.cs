@@ -35,8 +35,6 @@ namespace Explorus.Models
         public bool manual;
         public bool multiplayerSwitched { get; private set; } = false;
         public bool multiplayer;
-        public int menuIndex = 0;
-        public int maxMenuIndex = 3;
 
         private static GameState _instance = null;
 
@@ -94,7 +92,8 @@ namespace Explorus.Models
         public void Reset()
         {
             level = 0;
-            menuIndex = 0;
+            multiplayer = Constants.defaultMultiplayer;
+            state = GameStates.New;
         }
 
         public void ExitGame()
