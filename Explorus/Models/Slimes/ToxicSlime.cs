@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal abstract class ToxicSlime : Slime, IToxicSlime
+    internal class ToxicSlime : Slime, IToxicSlime
     {
         Random random = new Random();
         protected int fieldOfView = 24;//how many pixels off center will the toxic slime see a player
