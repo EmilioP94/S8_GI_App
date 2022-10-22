@@ -13,11 +13,13 @@ namespace TestExplorus.Models
         int originalX = 0;
         int originalY = 10;
         int elapseTime = 16;
-
+        
         [TestInitialize]
         public void Initialize()
         {
-            slimus = new Slimus(originalX, originalY);
+            slimus = new Slimus(originalX, originalY, false);
+            Collection gems = new Collection(Sprites.gem, Bars.yellow, false);
+            slimus.gems = gems;
         }
 
         [TestMethod]

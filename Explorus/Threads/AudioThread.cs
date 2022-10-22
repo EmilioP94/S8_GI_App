@@ -102,7 +102,7 @@ namespace Explorus.Threads
         public double savedSoundVolume = 0.5;
         public bool soundsMuted = false;
 
-        private bool _isPaused = false;
+        public bool isPaused { get; private set; } = false;
         private AudioThread()
         {
             thread = new Thread(new ThreadStart(()=> PlaySounds()));
@@ -133,7 +133,7 @@ namespace Explorus.Threads
             while (!_isStopping)
             {
                 int count = soundsQueue.Count;
-                if (!_isPaused)
+                if (!isPaused)
                 {
                     //Create new sounds
                     for (int i = 0; i < count; i++)
@@ -162,6 +162,7 @@ namespace Explorus.Threads
                     SoundsEvents newEvent;
                     if (soundsEventsQueue.TryDequeue(out newEvent))
                     {
+                        Console.WriteLine($"executing event: {newEvent}");
                         List<MediaPlayer> sounds;
                         switch (newEvent)
                         {
@@ -198,9 +199,11 @@ namespace Explorus.Threads
                                 DecrementSoundVolume();
                                 break;
                             case SoundsEvents.IncrementMusic:
+                                Console.WriteLine("incrementing music");
                                 IncrementMusicVolume();
                                 break;
                             case SoundsEvents.DecrementMusic:
+                                Console.WriteLine("decrementing music");
                                 DecrementMusicVolume();
                                 break;
                             case SoundsEvents.MuteMusic:
@@ -228,25 +231,26 @@ namespace Explorus.Threads
         }
 
         public void QueueEvent(SoundsEvents e) {
+            Console.WriteLine($"enqueuing event: {e}");
             soundsEventsQueue.Enqueue(e);
         }
 
         public void Resume()
         {
-            if (_isPaused)
+            if (isPaused)
             {
                 soundsEventsQueue.Enqueue(SoundsEvents.ResumeSounds);
             }
 
-            _isPaused = false;
+            isPaused = false;
         }
         public void Pause()
         {
-            if (!_isPaused)
+            if (!isPaused)
             {
                 soundsEventsQueue.Enqueue(SoundsEvents.StopSounds);
             }
-            _isPaused = true;
+            isPaused = true;
         }
         public void StopMusic()
         {
@@ -268,6 +272,7 @@ namespace Explorus.Threads
             if (musicVolume <= 1 && !musicMuted)
             {
                 SetMusicVolume(musicVolume + 0.01);
+                Console.WriteLine($"music volume is now {musicVolume}");
             }
         }
         private void IncrementSoundVolume()
@@ -283,6 +288,7 @@ namespace Explorus.Threads
             if (musicVolume >= 0 && !musicMuted)
             {
                 SetMusicVolume(musicVolume - 0.01);
+                Console.WriteLine($"music volume is now {musicVolume}");
             }
         }
         private void DecrementSoundVolume()

@@ -13,7 +13,7 @@ namespace Explorus.Models
         public Sprites[,] map { get; private set; }
         public List<ILabyrinthComponent> labyrinthComponentList { get; private set; }
 
-        public List<Slimus> players { get; private set; } = new List<Slimus>(2);
+        public List<Slimus> players { get; private set; }
 
         public List<MiniSlime> miniSlimes { get; private set; }
 
@@ -29,6 +29,7 @@ namespace Explorus.Models
 
         public Labyrinth(Sprites[,] map)
         {
+            players = new List<Slimus>(2);
             miniSlimes = new List<MiniSlime>();
             toxicSlimes = new List<ToxicSlime>();
             this.map = map;

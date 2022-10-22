@@ -11,7 +11,7 @@ namespace Explorus.Models
 {
     internal class ToxicSlime : Slime
     {
-        int hp = Constants.initialToxicSlimeHp;
+        public int hp { get; private set; } = Constants.initialToxicSlimeHp;
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
             isDead = false;

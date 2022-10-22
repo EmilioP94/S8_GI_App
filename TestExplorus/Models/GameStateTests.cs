@@ -3,6 +3,7 @@ using Explorus.Threads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Threading.Tasks;
+using static System.Windows.Forms.AxHost;
 
 namespace TestExplorus.Models
 {
@@ -16,18 +17,19 @@ namespace TestExplorus.Models
             GameState gameState = GameState.GetInstance();
             Assert.IsNotNull(gameState);
             Assert.AreEqual(0, GameState.GetInstance().level);
+            Assert.AreEqual(GameState.GetInstance().state, GameStates.New);
         }
 
         [TestCleanup]
         public void ResetTest()
         {
-            GameState.GetInstance().Play();
             GameState.GetInstance().Reset();
         }
 
         [TestMethod]
         public void PauseTestManual()
         {
+            GameState.GetInstance().Play();
             Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
             GameState.GetInstance().Pause(true);
             Assert.AreEqual(GameStates.Pause, GameState.GetInstance().state);
@@ -37,6 +39,7 @@ namespace TestExplorus.Models
         [TestMethod]
         public void PauseTestAuto()
         {
+            GameState.GetInstance().Play();
             Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
             GameState.GetInstance().Pause(false);
             Assert.AreEqual(GameStates.Pause, GameState.GetInstance().state);
@@ -46,19 +49,19 @@ namespace TestExplorus.Models
         [TestMethod]
         public void ResumeTest()
         {
+            GameState.GetInstance().Play();
             Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
             GameState.GetInstance().Pause(false);
             Assert.AreEqual(GameStates.Pause, GameState.GetInstance().state);
             GameState.GetInstance().Resume();
             Assert.AreEqual(GameStates.Resume, GameState.GetInstance().state);
             Task.Delay(new TimeSpan(0, 0, 3)).ContinueWith(o => { Assert.AreEqual(GameStates.Play, GameState.GetInstance().state); });
-
-
         }
 
         [TestMethod]
         public void StopTest()
         {
+            GameState.GetInstance().Play();
             Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
             GameState.GetInstance().Stop();
             Assert.AreEqual(GameStates.Stop, GameState.GetInstance().state);
@@ -67,7 +70,7 @@ namespace TestExplorus.Models
         [TestMethod]
         public void GameOverTest()
         {
-            Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
+            Assert.AreEqual(GameStates.New, GameState.GetInstance().state);
             GameState.GetInstance().GameOver();
             Assert.AreEqual(GameStates.Over, GameState.GetInstance().state);
         }
@@ -75,22 +78,12 @@ namespace TestExplorus.Models
         [TestMethod]
         public void LevelTest()
         {
+            GameState.GetInstance().Play();
             Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
             GameState.GetInstance().NextLevel();
             Assert.AreEqual(1, GameState.GetInstance().level);
             GameState.GetInstance().Reset();
             Assert.AreEqual(0, GameState.GetInstance().level);
-        }
-
-        [TestMethod]
-        public void MenuTest()
-        {
-            Assert.AreEqual(GameStates.Play, GameState.GetInstance().state);
-            Assert.AreEqual(0, GameState.GetInstance().menuIndex);
-            GameState.GetInstance().NavigateMenu();
-            Assert.AreEqual(1, GameState.GetInstance().menuIndex);
-            GameState.GetInstance().NavigateMenu();
-            Assert.AreEqual(0, GameState.GetInstance().menuIndex);
         }
     }
 }
