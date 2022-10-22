@@ -63,6 +63,7 @@ namespace Explorus.Models
 
         public void Move(Direction direction)
         {
+            //Console.WriteLine($"current direction as i move: {currentDirection}");
             if (currentDirection != Direction.None)
             {
                 return;
@@ -86,6 +87,7 @@ namespace Explorus.Models
                     destinationPoint = new Point(x, y);
                     break;
             }
+            //Console.WriteLine($"new destination point: ({destinationPoint.X}, {destinationPoint.Y})");
             GameRecorder.GetInstance().AddEvent(new MoveEvent(id, destinationPoint, currentDirection));
             if (movementSound != SoundTypes.None)
             {
@@ -125,6 +127,7 @@ namespace Explorus.Models
             if (isDead)
                 return;
             double distance = GetCurrentDistanceWithDestinationPoint();
+            //Console.WriteLine($"updating position... distance is {distance} and current direction is {currentDirection}");
             if (currentDirection == Direction.None)
             {
                 return;
@@ -149,7 +152,9 @@ namespace Explorus.Models
             }
             else if (currentDirection == Direction.Down)
             {
+                //Console.WriteLine("moving down!");
                 y += (int)(deltaT * Constants.playerSpeed);
+                //Console.WriteLine($"new position in y is {y}");
             }
 
             //Process horizontal movements
@@ -248,9 +253,11 @@ namespace Explorus.Models
 
         public void MoveToValidDestination(Direction direction, ILabyrinth lab)
         {
+            //Console.WriteLine($"inside move to valid destination with direction {direction}");
             ChangeDirection(direction);
             if (CheckValidDestination(direction, lab))
             {
+                //Console.WriteLine("destination is valid. moving...");
                 Move(direction);
             }
             else if (wallCollisionSound != SoundTypes.None)

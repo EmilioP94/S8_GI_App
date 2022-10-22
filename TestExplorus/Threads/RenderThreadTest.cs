@@ -1,4 +1,5 @@
-﻿using Explorus.Controllers;
+﻿using Explorus;
+using Explorus.Controllers;
 using Explorus.Models;
 using Explorus.Threads;
 using Explorus.Views;
@@ -19,7 +20,7 @@ namespace TestExplorus.Threads
         [TestMethod]
         public void TestInitRender()
         {
-            LabyrinthController labyrinthController = new LabyrinthController();
+            LabyrinthController labyrinthController = new LabyrinthController(Constants.level_1);
             HeaderController headerController = new HeaderController(labyrinthController.lab);
 
             GameView oView = new GameView(ProcessInputKeyDown, ProcessInputKeyUp, labyrinthController.lab, headerController);

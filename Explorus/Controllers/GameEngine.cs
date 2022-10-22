@@ -26,7 +26,7 @@ namespace Explorus.Controllers
 
         public GameEngine()
         {
-            labyrinthController = new LabyrinthController();
+            labyrinthController = new LabyrinthController(Constants.levels[GameState.GetInstance().level].map);
             menuController = new MenuController();
             mainMenu = MainMenu.GetInstance();
             audioMenu = AudioMenu.GetInstance();

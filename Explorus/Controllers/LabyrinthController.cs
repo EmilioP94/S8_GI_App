@@ -34,25 +34,28 @@ namespace Explorus.Controllers
         public Point playerDestinationPoint;
         public Point player2DestinationPoint;
 
-        DirectionInput slimusDirectionInput;
-        DirectionInput player2DirectionInput;
+        public DirectionInput slimusDirectionInput { get; private set; }
+        public DirectionInput player2DirectionInput { get; private set; }
 
-        public LabyrinthController()
+        public LabyrinthController(Sprites[,] map)
         {
-            lab = new Labyrinth(Constants.levels[GameState.GetInstance().level].map);
+            lab = new Labyrinth(map);
         }
 
         public void ProcessInput(object sender, KeyEventArgs e, bool isKeyDown = true, GameMenu menu = null)
         {
+            //Console.WriteLine("processing input");
             switch (GameState.GetInstance().state)
             {
                 case GameStates.Play:
+                    //Console.WriteLine("processing play input");
                     if (isKeyDown)
                         ProcessPlayControlsKeyDown((char)e.KeyValue);
                     else
                         ProcessPlayControlsKeyUp((char)e.KeyValue);
                     break;
                 case GameStates.Resume:
+                    Console.WriteLine("processing resume input");
                     ProcessResumeControls((char)e.KeyValue);
                     break;
                 default:
@@ -69,10 +72,12 @@ namespace Explorus.Controllers
             }
         }
 
-        private void handlePlayerInput(Slimus player, DirectionInput playerDirectionInput)
+        public void handlePlayerInput(Slimus player, DirectionInput playerDirectionInput)
         {
+            //Console.WriteLine($"handling player input for {player} with direction {playerDirectionInput}");
             if (player.GetDirection() == Direction.None)
             {
+                //Console.WriteLine($"inside handle player input if");
                 if ((playerDirectionInput & DirectionInput.Up) == DirectionInput.Up)
                     player.MoveToValidDestination(Direction.Up, lab);
 
@@ -90,6 +95,7 @@ namespace Explorus.Controllers
         // processes input when the game is in the "Play" state
         private void ProcessPlayControlsKeyDown(char keyValue)
         {
+            //Console.WriteLine($"processing input with keydown on {keyValue}");
             switch (keyValue)
             {
                 case (char)Keys.P:
@@ -136,6 +142,7 @@ namespace Explorus.Controllers
 
         private void ProcessPlayControlsKeyUp(char keyValue)
         {
+            //Console.WriteLine($"keyup control for {keyValue}");
             switch (keyValue)
             {
                 case (char)Keys.Up:
@@ -163,6 +170,7 @@ namespace Explorus.Controllers
                     player2DirectionInput &= ~DirectionInput.Right;
                     break;
             }
+            //Console.WriteLine($"direction input is now {slimusDirectionInput}");
         }
 
         private void ProcessResumeControls(char keyValue)
