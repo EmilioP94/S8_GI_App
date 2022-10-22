@@ -24,7 +24,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if (comp.GetType() == typeof(Slimus))
+            if (comp is Slimus)
             {
                 ColorMatrix matrix = new ColorMatrix();
                 matrix.Matrix33 = 0.0f;
@@ -32,7 +32,7 @@ namespace Explorus.Models
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                 this.attributes = attributes;
             }
-            else if (comp.GetType() == typeof(Bubble))
+            else if (comp is Bubble)
             {
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();

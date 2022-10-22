@@ -25,7 +25,6 @@ namespace Explorus.Models.Slimes
             {
                 if (!IsWallBetweenSlimus(player, lab))
                 {
-                    Console.WriteLine("No Wall");
                     chasedPlayer = player;
                     lastSlimusPosition = player.hitbox;
                     directionToSlimus = GetRelativePlayerPosition(player);
@@ -33,7 +32,6 @@ namespace Explorus.Models.Slimes
             }
             if (directionToSlimus.HasValue && lastSlimusPosition.HasValue)
             {
-                Console.WriteLine("Chase to {0}", directionToSlimus);
                 if (lastSlimusPosition.Value.IntersectsWith(hitbox))
                 {
                     lastSlimusPosition = null;

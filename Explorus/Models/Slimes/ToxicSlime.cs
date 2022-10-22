@@ -58,7 +58,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if (comp.GetType() == typeof(Bubble))
+            if (comp is Bubble)
             {
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();
