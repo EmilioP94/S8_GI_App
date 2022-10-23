@@ -1,4 +1,6 @@
 ﻿
+using Explorus.Models.Slimes;
+
 namespace Explorus.Models
 {
     internal static class LabyrinthComponentFactory
@@ -16,8 +18,12 @@ namespace Explorus.Models
                     return new Slimus(x, y, false);
                 case Sprites.player2DownLarge:
                     return new Slimus(x, y, true);
-                case Sprites.toxicSlimeDownLarge:
-                    return new ToxicSlime(x, y);
+                case Sprites.toxicSlimeFollow:
+                    return new ToxicSlimeFollow(x, y);
+                case Sprites.toxicSlimeParallel:
+                    return new ToxicSlimeParallel(x, y);
+                case Sprites.toxicSlimeRunAndFollow:
+                    return new ToxicSlimeRunAndFollow(x, y);
                 case Sprites.miniSlime:
                     return new MiniSlime(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.miniSlime));
                 case Sprites.gem:

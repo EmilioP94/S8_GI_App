@@ -14,7 +14,7 @@ namespace TestExplorus.Threads
         [TestMethod]
         public void TestToxicSlime()
         {
-            Sprites[,] map = { { Sprites.toxicSlimeDownLarge, Sprites.slimusDownLarge } };
+            Sprites[,] map = { { Sprites.toxicSlimeFollow, Sprites.slimusDownLarge } };
             Labyrinth lab = new Labyrinth(map);
             Assert.IsTrue(lab.toxicSlimes.Count > 0);
             GameState.GetInstance().Play();

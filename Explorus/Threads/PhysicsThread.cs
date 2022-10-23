@@ -53,8 +53,7 @@ namespace Explorus.Threads
             Random random = new Random();
             foreach (ToxicSlime slime in lab.toxicSlimes)
             {
-                Direction direction = (Direction)random.Next(0, 4);
-                slime.MoveToValidDestination(direction, lab);
+                slime.MoveToNextDestination(lab);
                 slime.UpdatePosition(elapseTime);
             }
         }
@@ -68,7 +67,7 @@ namespace Explorus.Threads
                 if (srcComp != null && comp.hitbox.IntersectsWith(srcComp.hitbox))
                 {
                     bool result = false;
-                    if (comp.GetType() == typeof(ToxicSlime) && srcComp.GetType() == typeof(Slimus))
+                    if (comp is ToxicSlime && srcComp is Slimus)
                     {
                         result = srcComp.Collide(comp);
                         if ((GameState.GetInstance().multiplayer && lab.players.ElementAt(0).hearts.acquired == 0 && lab.players.ElementAt(1).hearts.acquired == 0) ||(!GameState.GetInstance().multiplayer && lab.players.ElementAt(0).hearts.acquired == 0))

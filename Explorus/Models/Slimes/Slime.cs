@@ -25,6 +25,8 @@ namespace Explorus.Models
         private Image2D _image;
         protected SoundTypes movementSound = SoundTypes.None;
         protected SoundTypes wallCollisionSound = SoundTypes.None;
+        public bool IsMoving {  get { return currentDirection != Direction.None;  } }
+        public Direction SlimeDirection { get { return currentDirection; } }
 
         public override Image2D image
         {
@@ -217,7 +219,7 @@ namespace Explorus.Models
             }
         }
 
-        private bool CheckValidDestination(Direction direction, ILabyrinth lab)
+        protected bool CheckValidDestination(Direction direction, ILabyrinth lab)
         {
             int newX = x;
             int newY = y;
@@ -251,7 +253,7 @@ namespace Explorus.Models
             return true;
         }
 
-        public void MoveToValidDestination(Direction direction, ILabyrinth lab)
+        public bool MoveToValidDestination(Direction direction, ILabyrinth lab)
         {
             //Console.WriteLine($"inside move to valid destination with direction {direction}");
             ChangeDirection(direction);
@@ -259,12 +261,14 @@ namespace Explorus.Models
             {
                 //Console.WriteLine("destination is valid. moving...");
                 Move(direction);
+                return true;
             }
             else if (wallCollisionSound != SoundTypes.None)
             {
                 //TODO: Le son est pas jouer, on dirais que AudioThread est pas accessible a partir de ce thread, et la memoire explose quand on essaye de queueSound
                 //AudioThread.GetInstance().QueueSound(wallCollisionSound);
             }
+            return false;
         }
 
         public override void Reset()

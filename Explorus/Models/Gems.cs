@@ -24,7 +24,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if (comp.GetType() != typeof(Slimus))
+            if (!(comp is Slimus))
                 return false;
 
             Slimus player = (Slimus)comp;

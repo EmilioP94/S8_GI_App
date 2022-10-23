@@ -1,5 +1,6 @@
 ﻿using Explorus.Controllers;
 using Explorus.Models.GameEvents;
+using Explorus.Models.Slimes;
 using System;
 using System.Collections.Generic;
 using System.Drawing.Imaging;
@@ -9,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace Explorus.Models
 {
-    internal class ToxicSlime : Slime
+    internal class ToxicSlime : Slime, IToxicSlime
     {
+        protected Random random = new Random();
+        protected int fieldOfView = 24;//how many pixels off center will the toxic slime see a player
         public int hp { get; private set; } = Constants.initialToxicSlimeHp;
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
         {
@@ -48,14 +51,17 @@ namespace Explorus.Models
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                 this.attributes = attributes;
             }
-            if (hp == 0) isDead = true;
-            hitbox = new System.Drawing.Rectangle();
+            if (hp == 0)
+            {
+                isDead = true;
+                hitbox = new System.Drawing.Rectangle();
+            }
         }
 
 
         public override bool Collide(ILabyrinthComponent comp)
         {
-            if(comp.GetType() == typeof(Bubble))
+            if (comp is Bubble)
             {
                 Bubble bubble = (Bubble)comp;
                 bubble.PopBubble();
@@ -70,6 +76,56 @@ namespace Explorus.Models
             base.Reset();
             hp = Constants.initialToxicSlimeHp;
             attributes = null;
+        }
+
+        public virtual void MoveToNextDestination(ILabyrinth lab)
+        {
+            Direction direction = (Direction)random.Next(0, 4);
+            MoveToValidDestination(direction, lab);
+        }
+
+        protected Slimus GetParallelPlayer(ILabyrinth lab)
+        {
+            foreach (Slimus player in lab.players)
+            {
+                if (GetRelativePlayerPosition(player) != Direction.None)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
+
+        protected Direction GetRelativePlayerPosition(Slimus player)
+        {
+            if (IsWithinRange(player.x, x, fieldOfView))
+            {
+                if(player.y < y)
+                {
+                    return Direction.Up;
+                }
+                if(player.y > y)
+                {
+                    return Direction.Down;
+                }
+            }
+            if (IsWithinRange(player.y, y, fieldOfView))
+            {
+                if (player.x < x)
+                {
+                    return Direction.Left;
+                }
+                if (player.x > x)
+                {
+                    return Direction.Right;
+                }
+            }
+            return Direction.None;
+        }
+
+        protected bool IsWithinRange(int value1, int value2, int range)
+        {
+            return value1 <= value2 + range && value1 >= value2 - range;
         }
     }
 }
