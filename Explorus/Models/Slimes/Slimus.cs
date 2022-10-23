@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using Explorus.Controllers;
 using Explorus.Models.GameEvents;
+using Explorus.Models.Slimes;
 using Explorus.Threads;
 
 namespace Explorus.Models
@@ -119,6 +120,7 @@ namespace Explorus.Models
 
         public override bool Collide(ILabyrinthComponent comp)
         {
+            Console.WriteLine("Collide with {0}", comp);
             if(GameState.GetInstance().state == GameStates.ReplayPlaying)
             {
                 return false;

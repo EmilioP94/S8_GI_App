@@ -3,7 +3,6 @@ using Explorus.Threads;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System;
-using Moq;
 using TestExplorus.Models;
 using System.Linq;
 
@@ -15,13 +14,12 @@ namespace TestExplorus.Threads
         [TestMethod]
         public void TestToxicSlime()
         {
-            Sprites[,] map = { { Sprites.toxicSlimeDownLarge, Sprites.slimusDownLarge } };
+            Sprites[,] map = { { Sprites.toxicSlimeFollow, Sprites.slimusDownLarge } };
             Labyrinth lab = new Labyrinth(map);
             Assert.IsTrue(lab.toxicSlimes.Count > 0);
-            GameState gameState = new GameState();
-            gameState.Play();
-            Assert.AreEqual(gameState.state, GameStates.Play);
-            PhysicsThread physics = new PhysicsThread(lab, gameState);
+            GameState.GetInstance().Play();
+            Assert.AreEqual(GameState.GetInstance().state, GameStates.Play);
+            PhysicsThread physics = new PhysicsThread(lab, GameState.GetInstance());
             Assert.IsNotNull(physics);
             int x = lab.toxicSlimes[0].x;
             int y = lab.toxicSlimes[0].y;
@@ -44,22 +42,21 @@ namespace TestExplorus.Threads
         {
             Sprites[,] map = { { Sprites.slimusDownLarge } };
             Labyrinth lab = new Labyrinth(map);
-            Assert.IsNotNull(lab.playerCharacter);
-            GameState gameState = new GameState();
-            gameState.Play();
-            Assert.AreEqual(gameState.state, GameStates.Play);
-            PhysicsThread physics = new PhysicsThread(lab, gameState);
+            Assert.IsNotNull(lab.players[0]);
+            GameState.GetInstance().Play();
+            Assert.AreEqual(GameState.GetInstance().state, GameStates.Play);
+            PhysicsThread physics = new PhysicsThread(lab, GameState.GetInstance());
             Assert.IsNotNull(physics);
-            int x = lab.playerCharacter.x;
-            int y = lab.playerCharacter.y;
+            int x = lab.players[0].x;
+            int y = lab.players[0].y;
             Thread.Sleep(200);
-            Assert.AreEqual(x, lab.playerCharacter.x);
-            Assert.AreEqual(y, lab.playerCharacter.y);
-            lab.playerCharacter.Move(Explorus.Controllers.Direction.Right);
+            Assert.AreEqual(x, lab.players[0].x);
+            Assert.AreEqual(y, lab.players[0].y);
+            lab.players[0].Move(Explorus.Controllers.Direction.Right);
             physics.Start();
             Thread.Sleep(200);
-            Assert.AreEqual(y, lab.playerCharacter.y);
-            Assert.AreNotEqual(x, lab.playerCharacter.x);
+            Assert.AreEqual(y, lab.players[0].y);
+            Assert.AreNotEqual(x, lab.players[0].x);
         }
 
         [TestMethod]
@@ -67,21 +64,20 @@ namespace TestExplorus.Threads
         {
             Sprites[,] map = { { Sprites.slimusDownLarge, Sprites.empty, Sprites.empty, Sprites.wall } };
             Labyrinth lab = new Labyrinth(map);
-            Assert.IsNotNull(lab.playerCharacter);
-            GameState gameState = new GameState();
-            gameState.Play();
-            Assert.AreEqual(gameState.state, GameStates.Play);
-            PhysicsThread physics = new PhysicsThread(lab, gameState);
+            Assert.IsNotNull(lab.players[0]);
+            GameState.GetInstance().Play();
+            Assert.AreEqual(GameState.GetInstance().state, GameStates.Play);
+            PhysicsThread physics = new PhysicsThread(lab, GameState.GetInstance());
             Assert.IsNotNull(physics);
-            int x = lab.playerCharacter.x;
-            int y = lab.playerCharacter.y;
+            int x = lab.players[0].x;
+            int y = lab.players[0].y;
             Thread.Sleep(200);
-            Assert.AreEqual(x, lab.playerCharacter.x);
-            Assert.AreEqual(y, lab.playerCharacter.y);
-            lab.playerCharacter.ChangeDirection(Explorus.Controllers.Direction.Right);
+            Assert.AreEqual(x, lab.players[0].x);
+            Assert.AreEqual(y, lab.players[0].y);
+            lab.players[0].ChangeDirection(Explorus.Controllers.Direction.Right);
             physics.Start();
             int count = lab.labyrinthComponentList.Count;
-            lab.CreateBubble(lab.playerCharacter);
+            lab.CreateBubble(lab.players[0]);
             Assert.AreNotEqual(count, lab.labyrinthComponentList.Count);
             Bubble bubble = null;
             foreach (Bubble _bubble in lab.labyrinthComponentList.OfType<Bubble>())

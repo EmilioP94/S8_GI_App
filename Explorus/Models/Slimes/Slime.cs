@@ -25,7 +25,8 @@ namespace Explorus.Models
         private Image2D _image;
         protected SoundTypes movementSound = SoundTypes.None;
         protected SoundTypes wallCollisionSound = SoundTypes.None;
-        private Random random;
+        public bool IsMoving {  get { return currentDirection != Direction.None;  } }
+        public Direction SlimeDirection { get { return currentDirection; } }
 
         public override Image2D image
         {
@@ -45,7 +46,6 @@ namespace Explorus.Models
             hitboxYOffset = (Constants.unit * 2 - Constants.slimusHitboxHeight) / 2;
             destinationPoint = new Point(x, y);
             UpdateHitbox();
-            random = new Random();
         }
 
         public void Teleport(Point newLocation)
@@ -65,6 +65,7 @@ namespace Explorus.Models
 
         public void Move(Direction direction)
         {
+            //Console.WriteLine($"current direction as i move: {currentDirection}");
             if (currentDirection != Direction.None)
             {
                 return;
@@ -88,6 +89,7 @@ namespace Explorus.Models
                     destinationPoint = new Point(x, y);
                     break;
             }
+            //Console.WriteLine($"new destination point: ({destinationPoint.X}, {destinationPoint.Y})");
             GameRecorder.GetInstance().AddEvent(new MoveEvent(id, destinationPoint, currentDirection));
             if (movementSound != SoundTypes.None)
             {
@@ -127,6 +129,7 @@ namespace Explorus.Models
             if (isDead)
                 return;
             double distance = GetCurrentDistanceWithDestinationPoint();
+            //Console.WriteLine($"updating position... distance is {distance} and current direction is {currentDirection}");
             if (currentDirection == Direction.None)
             {
                 return;
@@ -151,7 +154,9 @@ namespace Explorus.Models
             }
             else if (currentDirection == Direction.Down)
             {
+                //Console.WriteLine("moving down!");
                 y += (int)(deltaT * Constants.playerSpeed);
+                //Console.WriteLine($"new position in y is {y}");
             }
 
             //Process horizontal movements
@@ -214,7 +219,7 @@ namespace Explorus.Models
             }
         }
 
-        private bool CheckValidDestination(Direction direction, ILabyrinth lab)
+        protected bool CheckValidDestination(Direction direction, ILabyrinth lab)
         {
             int newX = x;
             int newY = y;
@@ -248,18 +253,22 @@ namespace Explorus.Models
             return true;
         }
 
-        public void MoveToValidDestination(Direction direction, ILabyrinth lab)
+        public bool MoveToValidDestination(Direction direction, ILabyrinth lab)
         {
+            //Console.WriteLine($"inside move to valid destination with direction {direction}");
             ChangeDirection(direction);
             if (CheckValidDestination(direction, lab))
             {
+                //Console.WriteLine("destination is valid. moving...");
                 Move(direction);
+                return true;
             }
             else if (wallCollisionSound != SoundTypes.None)
             {
                 //TODO: Le son est pas jouer, on dirais que AudioThread est pas accessible a partir de ce thread, et la memoire explose quand on essaye de queueSound
                 //AudioThread.GetInstance().QueueSound(wallCollisionSound);
             }
+            return false;
         }
 
         public override void Reset()
@@ -271,51 +280,5 @@ namespace Explorus.Models
             isDead = false;
             UpdateHitbox();
         }
-
-        public void RandomMovement(ILabyrinth lab)
-        {
-            List<Direction> validDirections = new List<Direction>();
-            if (CheckValidDestination(Direction.Up, lab))
-                validDirections.Add(Direction.Up);
-            if (CheckValidDestination(Direction.Right, lab))
-                validDirections.Add(Direction.Right);
-            if (CheckValidDestination(Direction.Down, lab))
-                validDirections.Add(Direction.Down);
-            if (CheckValidDestination(Direction.Left, lab))
-                validDirections.Add(Direction.Left);
-
-            if (validDirections.Count >= 3)
-            {
-                int number = random.Next(0, validDirections.Count);
-                MoveToValidDestination(validDirections[number], lab);
-            }
-            else if (validDirections.Count == 2)
-            {
-                validDirections.Remove(GetOppositeDirection(LastNotNoneDirection));
-                MoveToValidDestination(validDirections[0], lab);
-            }
-            else
-            {
-                MoveToValidDestination(validDirections[0], lab);
-            }
-        }
-
-        private Direction GetOppositeDirection(Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.Left:
-                    return Direction.Right;                    
-                case Direction.Up:
-                    return Direction.Down;                   
-                case Direction.Down:
-                    return Direction.Up;
-                case Direction.Right:
-                    return Direction.Left;
-                default:
-                    return Direction.None;
-            }
-        }
-
     }
 }

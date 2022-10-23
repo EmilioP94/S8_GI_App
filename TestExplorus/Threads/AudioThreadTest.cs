@@ -19,6 +19,9 @@ namespace TestExplorus.Threads
         public void TestGetAudioThread()
         {
             AudioThread audioThread = AudioThread.GetInstance();
+            audioThread.musicVolume = 0.5;
+            audioThread.soundVolume = 0.5;
+            audioThread.musicMuted = false;
             Assert.IsTrue(audioThread != null);
 
         }
@@ -45,7 +48,7 @@ namespace TestExplorus.Threads
             audioThread.QueueEvent(SoundsEvents.DecrementMusic);
 
             Thread.Sleep(100);
-            Assert.AreEqual(audioThread.musicVolume, volume - 0.01);
+            Assert.AreEqual(volume - 0.01, audioThread.musicVolume);
         }
 
         [TestMethod]

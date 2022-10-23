@@ -1,4 +1,5 @@
 ﻿using Explorus;
+using Explorus.Controllers;
 using Explorus.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -14,7 +15,7 @@ namespace TestExplorus.Models
         {
             lab = new Labyrinth(Constants.level_1);
             Assert.AreEqual(1, lab.miniSlimes.Count);
-            Assert.IsNotNull(lab.playerCharacter);
+            Assert.IsNotNull(lab.players[0]);
             Assert.IsFalse(lab.gameEnded);
         }
 
@@ -23,7 +24,7 @@ namespace TestExplorus.Models
         {
             lab.Reload(Constants.level_1);
             Assert.AreEqual(1, lab.miniSlimes.Count);
-            Assert.IsNotNull(lab.playerCharacter);
+            Assert.IsNotNull(lab.players[0]);
             Assert.IsFalse(lab.gameEnded);
         }
     }
