@@ -80,8 +80,7 @@ namespace Explorus.Models
 
         public virtual void MoveToNextDestination(ILabyrinth lab)
         {
-            Direction direction = (Direction)random.Next(0, 4);
-            MoveToValidDestination(direction, lab);
+            RandomMovement(lab);
         }
 
         protected Slimus GetParallelPlayer(ILabyrinth lab)
@@ -126,6 +125,51 @@ namespace Explorus.Models
         protected bool IsWithinRange(int value1, int value2, int range)
         {
             return value1 <= value2 + range && value1 >= value2 - range;
+        }
+
+        public void RandomMovement(ILabyrinth lab)
+        {
+            List<Direction> validDirections = new List<Direction>();
+            if (CheckValidDestination(Direction.Up, lab))
+                validDirections.Add(Direction.Up);
+            if (CheckValidDestination(Direction.Right, lab))
+                validDirections.Add(Direction.Right);
+            if (CheckValidDestination(Direction.Down, lab))
+                validDirections.Add(Direction.Down);
+            if (CheckValidDestination(Direction.Left, lab))
+                validDirections.Add(Direction.Left);
+
+            if (validDirections.Count >= 3)
+            {
+                int number = random.Next(0, validDirections.Count);
+                MoveToValidDestination(validDirections[number], lab);
+            }
+            else if (validDirections.Count == 2)
+            {
+                validDirections.Remove(GetOppositeDirection(LastNotNoneDirection));
+                MoveToValidDestination(validDirections[0], lab);
+            }
+            else
+            {
+                MoveToValidDestination(validDirections[0], lab);
+            }
+        }
+
+        private static Direction GetOppositeDirection(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.Left:
+                    return Direction.Right;
+                case Direction.Up:
+                    return Direction.Down;
+                case Direction.Down:
+                    return Direction.Up;
+                case Direction.Right:
+                    return Direction.Left;
+                default:
+                    return Direction.None;
+            }
         }
     }
 }
