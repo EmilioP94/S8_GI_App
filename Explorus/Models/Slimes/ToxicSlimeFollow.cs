@@ -13,11 +13,22 @@ namespace Explorus.Models.Slimes
         protected Rectangle? lastSlimusPosition = null;
         protected Direction? directionToSlimus = null;
         protected Slimus chasedPlayer = null;
+
         public ToxicSlimeFollow(int x, int y) : base(x, y)
         {
         }
 
         public override void MoveToNextDestination(ILabyrinth lab)
+        {
+            if(!FollowPlayer(lab))
+            {
+                base.MoveToNextDestination(lab);
+            }
+        }
+
+        protected void RandomMovements(ILabyrinth lab) { base.MoveToNextDestination(lab); }
+
+        protected bool FollowPlayer(ILabyrinth lab)
         {
             Slimus player = GetParallelPlayer(lab);
 
@@ -44,11 +55,9 @@ namespace Explorus.Models.Slimes
                     directionToSlimus = null;
                     chasedPlayer = null;
                 }
+                return true;
             }
-            else
-            {
-                base.MoveToNextDestination(lab);
-            }
+            return false;
         }
 
         protected bool IsWallBetweenSlimus(Slimus player, ILabyrinth lab)

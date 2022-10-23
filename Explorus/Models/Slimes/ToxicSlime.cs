@@ -12,7 +12,7 @@ namespace Explorus.Models
 {
     internal class ToxicSlime : Slime, IToxicSlime
     {
-        Random random = new Random();
+        protected Random random = new Random();
         protected int fieldOfView = 24;//how many pixels off center will the toxic slime see a player
         public int hp { get; private set; } = Constants.initialToxicSlimeHp;
         public ToxicSlime(int x, int y) : base(x, y, SpriteFactory.GetInstance().GetSprite(Sprites.toxicSlimeDownLarge))
@@ -51,8 +51,11 @@ namespace Explorus.Models
                 attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                 this.attributes = attributes;
             }
-            if (hp == 0) isDead = true;
-            hitbox = new System.Drawing.Rectangle();
+            if (hp == 0)
+            {
+                isDead = true;
+                hitbox = new System.Drawing.Rectangle();
+            }
         }
 
 
